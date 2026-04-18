@@ -152,23 +152,29 @@
             <!-- eMobilityHub -->
             <div class="project-card">
                 <div class="project-img">
-                    <div class="project-img-placeholder">
-                        <i class="fas fa-car-side"></i>
-                        <span>SCREENSHOT COMING SOON</span>
-                    </div>
+                    <picture>
+                        <source srcset="assets/e-Mobility-Hub/emobility-hub-employee.gif" type="image/gif">
+                        <img src="assets/e-Mobility-Hub/emobility-hub-employee.jpeg" alt="eMobilityHub demo"
+                            style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">01 / 05</div>
                     <h3>eMobilityHub</h3>
                     <p>Electric vehicle rental management platform with role-based access for admins, operators and
-                        managers. Features analytics dashboard, PDF invoice generation, vehicle tracking, and RSS feed
-                        integration.</p>
+                        managers. Features analytics dashboard, PDF invoice generation, vehicle tracking, RSS feed
+                        integration, CSV bulk vehicle import, and a separate JSP-based promotions management app.
+                        Fully containerized with Docker and Nginx reverse proxy.</p>
                     <div class="project-tags">
                         <span class="project-tag">Spring Boot</span>
                         <span class="project-tag">Angular</span>
+                        <span class="project-tag">JSP</span>
                         <span class="project-tag">MySQL</span>
                         <span class="project-tag">Spring Security</span>
                         <span class="project-tag">Bootstrap</span>
+                        <span class="project-tag">Docker</span>
+                        <span class="project-tag">Nginx</span>
+                        <span class="project-tag">JWT</span>
                     </div>
                     <div class="project-links">
                         <a href="https://github.com/pero-grubac/e-Mobility-Hub" target="_blank" class="project-link">
@@ -273,29 +279,34 @@
                 </div>
             </div>
 
-            <!-- EESTEC Planer -->
-            <div class="project-card">
+            <!-- Chat Room -->
+            <div class="project-card reverse">
                 <div class="project-img">
-                    <div class="project-img-placeholder">
-                        <i class="fas fa-tasks"></i>
-                        <span>SCREENSHOT COMING SOON</span>
-                    </div>
+                    <picture>
+                        <source srcset="assets/chatroom/chatroom.gif" type="image/gif">
+                        <img src="assets/chatroom/chatroom.jpeg" alt="Chat Room demo"
+                            style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">05 / 05</div>
-                    <h3>EESTEC Planer</h3>
-                    <p>Full-stack task management system for the EESTEC organization. Admin panel for user and role
-                        management, user panel for task collaboration with comments and notifications. Built with Spring
-                        Boot backend and React frontend.</p>
+                    <h3>Chat Room</h3>
+                    <p>Secure internet forum with role-based access for administrators, moderators and users.
+                        Features two-factor email authentication, JWT sessions, OAuth2 Google login,
+                        WAF protection, SIEM logging, and full SSL/TLS encryption via Nginx reverse proxy.
+                        Containerized with Docker.</p>
                     <div class="project-tags">
                         <span class="project-tag">Spring Boot</span>
                         <span class="project-tag">React</span>
                         <span class="project-tag">MySQL</span>
-                        <span class="project-tag">Java</span>
-                        <span class="project-tag">Maven</span>
+                        <span class="project-tag">Spring Security</span>
+                        <span class="project-tag">JWT</span>
+                        <span class="project-tag">OAuth2</span>
+                        <span class="project-tag">Docker</span>
+                        <span class="project-tag">Nginx</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/pero-grubac/EESTEC-Planer" target="_blank" class="project-link">
+                        <a href="https://github.com/pero-grubac/Chat-room" target="_blank" class="project-link">
                             <i class="fab fa-github"></i> GitHub
                         </a>
                     </div>
