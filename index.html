@@ -149,10 +149,11 @@
             <!-- Incident Alert -->
             <div class="project-card">
                 <div class="project-img">
-                    <div class="project-img-placeholder">
-                        <i class="fas fa-bell"></i>
-                        <span>SCREENSHOT COMING SOON</span>
-                    </div>
+                    <picture>
+                        <source srcset="assets/incident_alert/demo.gif" type="image/gif">
+                        <img src="assets/incident_alert/demo.png" alt="Store Management System demo"
+                            style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">01 / 07</div>
@@ -286,11 +287,13 @@
 
             <!-- AssetManager -->
             <div class="project-card">
-                <div class="project-img">
-                    <div class="project-img-placeholder">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>SCREENSHOT COMING SOON</span>
-                    </div>
+                <div class="project-img"
+                    style="display:flex; align-items:center; justify-content:center; background:#0a0a0a; border-radius:8px; min-height:250px; max-height:350px; overflow:hidden;">
+                    <picture>
+                        <source srcset="assets/asset_manager/demo.gif" type="image/gif">
+                        <img src="assets/asset_manager/demo.jpg" alt="AssetManager demo"
+                            style="height:320px; width:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">05 / 07</div>
@@ -314,34 +317,13 @@
             </div>
 
             <div class="project-card reverse">
-                <div class="project-img">
-                    <div style="position:relative; border-radius:8px; overflow:hidden;">
-                        <div id="etfSlider" style="display:flex; transition:transform 0.4s ease;">
-                            <img src="assets/etf_oglasi/home screen.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/announcements.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/announcement .png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/schedule.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/side bar.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/settings.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/notifications.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                            <img src="assets/etf_oglasi/notification.png"
-                                style="min-width:100%; height:350px; object-fit:contain; background:#111;">
-                        </div>
-                        <button onclick="etfPrev()"
-                            style="position:absolute; left:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:18px;">&#8249;</button>
-                        <button onclick="etfNext()"
-                            style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:18px;">&#8250;</button>
-                        <div id="etfDots"
-                            style="position:absolute; bottom:8px; width:100%; display:flex; justify-content:center; gap:6px;">
-                        </div>
-                    </div>
+                <div class="project-img"
+                    style="display:flex; align-items:center; justify-content:center; background:#0a0a0a; border-radius:8px; min-height:250px; max-height:350px; overflow:hidden;">
+                    <picture>
+                        <source srcset="assets/etf_oglasi/demo.gif" type="image/gif">
+                        <img src="assets/etf_oglasi/demo.jpg" alt="AssetManager demo"
+                            style="height:320px; width:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">06 / 07</div>
@@ -366,46 +348,16 @@
                 </div>
             </div>
 
-            <script>
-                let etfIndex = 0;
-                const etfTotal = 8;
-                const etfSlider = document.getElementById('etfSlider');
-                const etfDotsContainer = document.getElementById('etfDots');
 
-                // Create dots
-                for (let i = 0; i < etfTotal; i++) {
-                    const dot = document.createElement('div');
-                    dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;';
-                    dot.onclick = () => etfGoTo(i);
-                    etfDotsContainer.appendChild(dot);
-                }
-
-                function etfUpdateDots() {
-                    [...etfDotsContainer.children].forEach((d, i) => {
-                        d.style.background = i === etfIndex ? '#fff' : 'rgba(255,255,255,0.4)';
-                    });
-                }
-
-                function etfGoTo(n) {
-                    etfIndex = n;
-                    etfSlider.style.transform = `translateX(-${etfIndex * 100}%)`;
-                    etfUpdateDots();
-                }
-
-                function etfNext() { etfGoTo((etfIndex + 1) % etfTotal); }
-                function etfPrev() { etfGoTo((etfIndex - 1 + etfTotal) % etfTotal); }
-
-                etfUpdateDots();
-                setInterval(etfNext, 3000);
-            </script>
 
             <!-- Store Management System -->
             <div class="project-card">
                 <div class="project-img">
-                    <div class="project-img-placeholder">
-                        <i class="fas fa-store"></i>
-                        <span>SCREENSHOT COMING SOON</span>
-                    </div>
+                    <picture>
+                        <source srcset="assets/store_management/demo.gif" type="image/gif">
+                        <img src="assets/store_management/demo.png" alt="Store Management System demo"
+                            style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+                    </picture>
                 </div>
                 <div class="project-info">
                     <div class="project-number">07 / 07</div>
@@ -437,8 +389,8 @@
             <div class="section-label">// get in touch</div>
             <h2>Let's Work Together</h2>
             <p>Open to freelance projects, collaborations, and interesting opportunities.</p>
-            <a href="mailto:pero.grubac@gmail.com" class="btn-primary">
-                <i class="fas fa-envelope"></i> pero.grubac@gmail.com
+            <a href="mailto:pero.grubac00@gmail.com" class="btn-primary">
+                <i class="fas fa-envelope"></i> Pero Grubač
             </a>
             <div class="social-links">
                 <a href="https://github.com/pero-grubac" target="_blank" class="social-link" title="GitHub">
