@@ -15,73 +15,55 @@
 
 <body>
 
-    <!-- NAVBAR -->
     <nav id="navbar">
         <a class="nav-brand" href="#">pg<span>.</span></a>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#stack">Stack</a></li>
             <li><a href="#projects">Projects</a></li>
+            <li><a href="#live-apps">Live</a></li>
+            <li><a href="#tools">Tools</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
-    <!-- HERO -->
     <div class="hero">
         <div class="hero-grid"></div>
         <div class="hero-glow"></div>
         <div class="hero-content">
             <a href="#contact" class="hero-tag" style="text-decoration:none; cursor:pointer;">Available for freelance
                 projects</a>
-            <h1>
-                Pero<br>
-                <span class="name-accent">Grubač</span>
-            </h1>
+            <h1>Pero<br><span class="name-accent">Grubač</span></h1>
             <p class="hero-sub">
                 Backend developer building <span>distributed systems</span>,
                 REST APIs & microservices.<br>
                 Java · C# · Python — Spring Boot · .NET · FastAPI
             </p>
             <div class="hero-cta">
-                <a href="#projects" class="btn-primary">
-                    <i class="fas fa-rocket"></i> View Projects
-                </a>
-                <a href="https://github.com/pero-grubac" target="_blank" class="btn-outline">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/perogrubac/" target="_blank" class="btn-outline">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
+                <a href="#projects" class="btn-primary"><i class="fas fa-rocket"></i> View Projects</a>
+                <a href="https://github.com/pero-grubac" target="_blank" class="btn-outline"><i
+                        class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/perogrubac/" target="_blank" class="btn-outline"><i
+                        class="fab fa-linkedin"></i> LinkedIn</a>
             </div>
         </div>
     </div>
 
-    <!-- ABOUT -->
     <section id="about">
         <div class="section-label">// who am i</div>
         <h2 class="section-title">About Me</h2>
         <div class="about-grid">
             <div class="about-text">
-                <p>
-                    I'm a <strong>Software Engineering graduate</strong> from Banja Luka with a focus on backend
-                    systems.
-                    I build reliable, scalable applications — from microservices to mobile apps.
-                </p>
-                <p>
-                    My work spans <strong>distributed systems with RabbitMQ and Docker</strong>,
-                    real-time platforms, REST APIs, and full-stack web applications.
-                    I'm comfortable across multiple ecosystems and enjoy picking the right tool for the job.
-                </p>
-                <p>
-                    Currently working professionally as a backend developer and
-                    <strong>open to freelance collaborations</strong> on interesting backend, API, or full-stack
-                    projects.
-                </p>
+                <p>I'm a <strong>Software Engineering graduate</strong> from Banja Luka with a focus on backend systems.
+                    I build reliable, scalable applications — from microservices to mobile apps.</p>
+                <p>My work spans <strong>distributed systems with RabbitMQ and Docker</strong>, real-time platforms,
+                    REST APIs, and full-stack web applications. I'm comfortable across multiple ecosystems and enjoy
+                    picking the right tool for the job.</p>
+                <p>Currently working professionally as a backend developer and <strong>open to freelance
+                        collaborations</strong> on interesting backend, API, or full-stack projects.</p>
             </div>
             <div class="code-block">
-                <div class="code-dots">
-                    <span></span><span></span><span></span>
-                </div>
+                <div class="code-dots"><span></span><span></span><span></span></div>
                 <pre><span class="code-bracket">{</span>
   <span class="code-key">"name"</span>: <span class="code-str">"Pero Grubač"</span>,
   <span class="code-key">"role"</span>: <span class="code-str">"Backend Developer"</span>,
@@ -100,145 +82,155 @@
         </div>
     </section>
 
-    <!-- STACK -->
     <section id="stack">
         <div class="section-label">// technologies</div>
         <h2 class="section-title">Tech Stack</h2>
+        <p style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); margin-bottom:2rem;">// click
+            any tag to filter projects</p>
         <div class="stack-categories">
             <div class="stack-card">
                 <h3>Languages</h3>
                 <div class="stack-items">
-                    <span class="stack-tag">Java</span>
-                    <span class="stack-tag">C#</span>
-                    <span class="stack-tag">Python</span>
-                    <span class="stack-tag">JavaScript</span>
-                    <span class="stack-tag">TypeScript</span>
-                    <span class="stack-tag">Dart</span>
+                    <span class="stack-tag" data-tag="Java">Java</span>
+                    <span class="stack-tag" data-tag="C#">C#</span>
+                    <span class="stack-tag" data-tag="Python">Python</span>
+                    <span class="stack-tag" data-tag="JavaScript">JavaScript</span>
+                    <span class="stack-tag" data-tag="TypeScript">TypeScript</span>
+                    <span class="stack-tag" data-tag="Dart">Dart</span>
                 </div>
             </div>
             <div class="stack-card">
                 <h3>Frameworks</h3>
                 <div class="stack-items">
-                    <span class="stack-tag">Spring Boot</span>
-                    <span class="stack-tag">ASP.NET</span>
-                    <span class="stack-tag">FastAPI</span>
-                    <span class="stack-tag">Flutter</span>
-                    <span class="stack-tag">React</span>
-                    <span class="stack-tag">Angular</span>
+                    <span class="stack-tag" data-tag="Spring Boot">Spring Boot</span>
+                    <span class="stack-tag" data-tag="ASP.NET">ASP.NET</span>
+                    <span class="stack-tag" data-tag="FastAPI">FastAPI</span>
+                    <span class="stack-tag" data-tag="Flutter">Flutter</span>
+                    <span class="stack-tag" data-tag="React">React</span>
+                    <span class="stack-tag" data-tag="Angular">Angular</span>
                 </div>
             </div>
             <div class="stack-card">
                 <h3>Infrastructure</h3>
                 <div class="stack-items">
-                    <span class="stack-tag">Docker</span>
-                    <span class="stack-tag">RabbitMQ</span>
-                    <span class="stack-tag">PostgreSQL</span>
-                    <span class="stack-tag">MySQL</span>
-                    <span class="stack-tag">Redis</span>
-                    <span class="stack-tag">Nginx</span>
-                    <span class="stack-tag">GCP</span>
+                    <span class="stack-tag" data-tag="Docker">Docker</span>
+                    <span class="stack-tag" data-tag="RabbitMQ">RabbitMQ</span>
+                    <span class="stack-tag" data-tag="PostgreSQL">PostgreSQL</span>
+                    <span class="stack-tag" data-tag="MySQL">MySQL</span>
+                    <span class="stack-tag" data-tag="Redis">Redis</span>
+                    <span class="stack-tag" data-tag="Nginx">Nginx</span>
+                    <span class="stack-tag" data-tag="PWA">PWA</span>
+                    <span class="stack-tag" data-tag="GCP">GCP</span>
+                    <span class="stack-tag" data-tag="Vite">Vite</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PROJECTS -->
     <section id="projects">
         <div class="section-label">// what i've built</div>
         <h2 class="section-title">Featured Projects</h2>
         <div class="projects-grid">
 
-            <!-- Incident Alert -->
-            <div class="project-card">
-                <div class="project-img">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+            <div class="project-card"
+                data-tags="ASP.NET,C#,React,RabbitMQ,Docker,PostgreSQL,Microservices,JWT,REST APIs">
+                <div class="project-img" style="position:relative; overflow:hidden;">
+                    <video autoplay loop muted playsinline
+                        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100%; height:auto; object-fit:contain; display:block;">
                         <source src="assets/incident_alert/demo.mp4" type="video/mp4">
-                        <img src="assets/incident_alert/demo.png" alt="Incident Alert demo">
+                        <img src="assets/incident_alert/demo.png" alt="Incident Alert">
                     </video>
                 </div>
                 <div class="project-info">
-                    <div class="project-number">01 / 07</div>
+                    <div class="project-meta">
+                        <div class="project-number">01 / 04</div>
+                        <span class="featured-badge">Microservices</span>
+                    </div>
                     <h3>Incident Alert</h3>
                     <p>Real-time incident tracking and management system built on a microservices architecture. Uses
                         event-driven messaging via RabbitMQ and Docker for containerized deployment across multiple
                         services.</p>
                     <div class="project-tags">
                         <span class="project-tag">ASP.NET</span>
+                        <span class="project-tag">C#</span>
                         <span class="project-tag">React</span>
                         <span class="project-tag">RabbitMQ</span>
                         <span class="project-tag">Docker</span>
                         <span class="project-tag">PostgreSQL</span>
+                        <span class="project-tag">Microservices</span>
+                        <span class="project-tag">JWT</span>
+                        <span class="project-tag">REST APIs</span>
                     </div>
                     <div class="project-links" style="display:flex; flex-wrap:wrap; gap:8px;">
-                        <a href="https://github.com/pero-grubac/IncidentAlert" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> Backend
-                        </a>
+                        <a href="https://github.com/pero-grubac/IncidentAlert" target="_blank" class="project-link"><i
+                                class="fab fa-github"></i> Backend</a>
                         <a href="https://github.com/pero-grubac/IncidentAlertFrontend" target="_blank"
-                            class="project-link">
-                            <i class="fab fa-github"></i> Frontend
-                        </a>
+                            class="project-link"><i class="fab fa-github"></i> Frontend</a>
                         <a href="https://github.com/pero-grubac/IncidentAlertFrontend-Mangement" target="_blank"
-                            class="project-link">
-                            <i class="fab fa-github"></i> Management
-                        </a>
+                            class="project-link"><i class="fab fa-github"></i> Management</a>
                     </div>
                 </div>
             </div>
 
-            <!-- eMobilityHub -->
-            <div class="project-card reverse">
-                <div class="project-img">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+            <div class="project-card reverse"
+                data-tags="Spring Boot,Java,Angular,TypeScript,JSP,MySQL,Spring Security,Bootstrap,Docker,Nginx,JWT,REST APIs">
+                <div class="project-img" style="position:relative; overflow:hidden;">
+                    <video autoplay loop muted playsinline
+                        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100%; height:auto; object-fit:contain; display:block;">
                         <source src="assets/e-mobility-hub/demo.mp4" type="video/mp4">
-                        <img src="assets/e-mobility-hub/demo.png" alt="eMobilityHub demo">
+                        <img src="assets/e-mobility-hub/demo.png" alt="eMobilityHub">
                     </video>
                 </div>
                 <div class="project-info">
-                    <div class="project-number">02 / 07</div>
+                    <div class="project-meta">
+                        <div class="project-number">02 / 04</div>
+                        <span class="featured-badge">Full Stack</span>
+                    </div>
                     <h3>eMobilityHub</h3>
                     <p>Electric vehicle rental management platform with role-based access for admins, operators and
                         managers. Features analytics dashboard, PDF invoice generation, vehicle tracking, RSS feed
-                        integration, CSV bulk vehicle import, and a separate JSP-based promotions management app.
-                        Fully containerized with Docker and Nginx reverse proxy.</p>
+                        integration, CSV bulk vehicle import, and a separate JSP-based promotions management app. Fully
+                        containerized with Docker and Nginx reverse proxy.</p>
                     <div class="project-tags">
                         <span class="project-tag">Spring Boot</span>
+                        <span class="project-tag">Java</span>
                         <span class="project-tag">Angular</span>
+                        <span class="project-tag">TypeScript</span>
                         <span class="project-tag">JSP</span>
                         <span class="project-tag">MySQL</span>
                         <span class="project-tag">Spring Security</span>
-                        <span class="project-tag">Bootstrap</span>
                         <span class="project-tag">Docker</span>
                         <span class="project-tag">Nginx</span>
                         <span class="project-tag">JWT</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/pero-grubac/e-Mobility-Hub" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
+                        <a href="https://github.com/pero-grubac/e-Mobility-Hub" target="_blank" class="project-link"><i
+                                class="fab fa-github"></i> GitHub</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Chat Room -->
-            <div class="project-card">
-                <div class="project-img">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+            <div class="project-card"
+                data-tags="Spring Boot,Java,React,MySQL,Spring Security,JWT,OAuth2,Docker,Nginx,REST APIs">
+                <div class="project-img" style="position:relative; overflow:hidden;">
+                    <video autoplay loop muted playsinline
+                        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100%; height:auto; object-fit:contain; display:block;">
                         <source src="assets/chatroom/demo.mp4" type="video/mp4">
-                        <img src="assets/chatroom/demo.jpeg" alt="Chat Room demo">
+                        <img src="assets/chatroom/demo.jpeg" alt="Chat Room">
                     </video>
                 </div>
                 <div class="project-info">
-                    <div class="project-number">03 / 07</div>
+                    <div class="project-meta">
+                        <div class="project-number">03 / 04</div>
+                        <span class="featured-badge">Security</span>
+                    </div>
                     <h3>Chat Room</h3>
-                    <p>Secure internet forum with role-based access for administrators, moderators and users.
-                        Features two-factor email authentication, JWT sessions, OAuth2 Google login,
-                        WAF protection, SIEM logging, and full SSL/TLS encryption via Nginx reverse proxy.
-                        Containerized with Docker.</p>
+                    <p>Secure internet forum with role-based access for administrators, moderators and users. Features
+                        two-factor email authentication, JWT sessions, OAuth2 Google login, WAF protection, SIEM
+                        logging, and full SSL/TLS encryption via Nginx reverse proxy. Containerized with Docker.</p>
                     <div class="project-tags">
                         <span class="project-tag">Spring Boot</span>
+                        <span class="project-tag">Java</span>
                         <span class="project-tag">React</span>
                         <span class="project-tag">MySQL</span>
                         <span class="project-tag">Spring Security</span>
@@ -248,24 +240,25 @@
                         <span class="project-tag">Nginx</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/pero-grubac/Chat-room" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
+                        <a href="https://github.com/pero-grubac/Chat-room" target="_blank" class="project-link"><i
+                                class="fab fa-github"></i> GitHub</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Online Library System -->
-            <div class="project-card reverse">
-                <div class="project-img">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
+            <div class="project-card reverse" data-tags="Java,Redis,WebSocket,RMI,RabbitMQ,REST APIs">
+                <div class="project-img" style="position:relative; overflow:hidden;">
+                    <video autoplay loop muted playsinline
+                        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100%; height:auto; object-fit:contain; display:block;">
                         <source src="assets/library/demo.mp4" type="video/mp4">
-                        <img src="assets/library/demo.png" alt="Online Library System demo">
+                        <img src="assets/library/demo.png" alt="Online Library System">
                     </video>
                 </div>
                 <div class="project-info">
-                    <div class="project-number">04 / 07</div>
+                    <div class="project-meta">
+                        <div class="project-number">04 / 04</div>
+                        <span class="featured-badge">Distributed</span>
+                    </div>
                     <h3>Online Library System</h3>
                     <p>Distributed library platform with three independent applications — library, member, and supplier
                         — communicating via WebSockets, RMI, and message queues. Integrates Redis for inventory and
@@ -280,107 +273,420 @@
                     </div>
                     <div class="project-links">
                         <a href="https://github.com/pero-grubac/Online-Library-System" target="_blank"
-                            class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
+                            class="project-link"><i class="fab fa-github"></i> GitHub</a>
                     </div>
                 </div>
             </div>
 
-            <!-- AssetManager -->
-            <div class="project-card">
-                <div class="project-img"
-                    style="display:flex; align-items:center; justify-content:center; background:#0a0a0a; border-radius:8px; min-height:250px; max-height:350px; overflow:hidden;">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="height:320px; width:auto; object-fit:contain; border-radius:8px; display:block;">
-                        <source src="assets/asset_manager/demo.mp4" type="video/mp4">
-                        <img src="assets/asset_manager/demo.jpg" alt="AssetManager demo">
-                    </video>
+        </div>
+
+        <!-- MORE WORK SLIDER -->
+        <div class="more-work-header">
+            <div class="section-label" style="margin:0;">// more work</div>
+            <div class="more-work-nav">
+                <button class="more-nav-btn" id="morePrev" aria-label="Previous"><i
+                        class="fas fa-chevron-left"></i></button>
+                <button class="more-nav-btn" id="moreNext" aria-label="Next"><i
+                        class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="more-work-wrapper">
+            <div class="more-work-track" id="moreTrack">
+
+                <div class="more-work-card" data-tags="Flutter,Dart,SQLite,Android">
+                    <div class="more-work-img">
+                        <img src="assets/fitforge/demo.png" alt="FitForge" loading="lazy">
+                    </div>
+                    <div class="more-work-info">
+                        <div class="more-work-meta">
+                            <span class="more-work-badge">Mobile</span>
+                        </div>
+                        <h3>FitForge</h3>
+                        <p>Fitness tracking Android application for logging workouts, tracking progress, and managing
+                            training plans.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Flutter</span>
+                            <span class="project-tag">Dart</span>
+                            <span class="project-tag">SQLite</span>
+                            <span class="project-tag">Android</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/pero-grubac/fit_forge" target="_blank" class="project-link"><i
+                                    class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
                 </div>
+                <div class="more-work-card" data-tags="Flutter,Dart,SQLite,Google Maps,Riverpod,Android">
+                    <div class="more-work-img">
+                        <img src="assets/asset_manager/demo.jpg" alt="AssetManager" loading="lazy">
+                    </div>
+                    <div class="more-work-info">
+                        <div class="more-work-meta">
+                            <span class="more-work-badge">Mobile</span>
+                        </div>
+                        <h3>AssetManager</h3>
+                        <p>Android app for tracking company assets with barcode scanning, Google Maps, and
+                            multi-language support.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Flutter</span>
+                            <span class="project-tag">Dart</span>
+                            <span class="project-tag">SQLite</span>
+                            <span class="project-tag">Android</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/pero-grubac/AssetManager" target="_blank"
+                                class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="Flutter,Dart,SQLite,Riverpod,WorkManager,REST APIs,Android">
+                    <div class="more-work-img">
+                        <img src="assets/etf_oglasi/demo.jpg" alt="ETF Oglasi" loading="lazy">
+                    </div>
+                    <div class="more-work-info">
+                        <div class="more-work-meta">
+                            <span class="more-work-badge">Mobile</span>
+                        </div>
+                        <h3>ETF Oglasi</h3>
+                        <p>Mobile app for university announcements with offline caching, push notifications, and
+                            localization. Graduation thesis project.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Flutter</span>
+                            <span class="project-tag">Dart</span>
+                            <span class="project-tag">SQLite</span>
+                            <span class="project-tag">Android</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/pero-grubac/ETFOglasi" target="_blank" class="project-link"><i
+                                    class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="C#,.NET,MySQL,WinForms,BCrypt">
+                    <div class="more-work-img">
+                        <img src="assets/store_management/demo.png" alt="Store Management" loading="lazy">
+                    </div>
+                    <div class="more-work-info">
+                        <div class="more-work-meta">
+                            <span class="more-work-badge">Desktop</span>
+                        </div>
+                        <h3>Store Management</h3>
+                        <p>Desktop app for retail store operations with role-based access, CRUD, password hashing, and
+                            audit logging.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">C#</span>
+                            <span class="project-tag">.NET</span>
+                            <span class="project-tag">MySQL</span>
+                            <span class="project-tag">WinForms</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/pero-grubac/Store-Management-System" target="_blank"
+                                class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="more-work-dots" id="moreDots"></div>
+
+    </section>
+
+    <!-- LIVE APPS -->
+    <section id="live-apps">
+        <div class="section-label">// deployed & accessible</div>
+        <h2 class="section-title">Live Apps</h2>
+        <div class="more-work-header" style="margin-top:0;">
+            <div class="more-work-nav" style="margin-left:auto;">
+                <button class="more-nav-btn" id="livePrev" aria-label="Previous"><i
+                        class="fas fa-chevron-left"></i></button>
+                <button class="more-nav-btn" id="liveNext" aria-label="Next"><i
+                        class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="more-work-wrapper">
+            <div class="more-work-track" id="liveTrack">
+                <div class="more-work-card" data-tags="React,JavaScript,D3,GitHub API,Vite">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>GitHub Dashboard</h3>
+                        <p style="flex:1;">Dark-themed developer analytics dashboard that visualizes any GitHub user's
+                            public repos, languages, stars and activity over time.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">D3</span>
+                                <span class="project-tag">GitHub API</span>
+                                <span class="project-tag">Vite</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/github-dashboard/" target="_blank"
+                                    class="project-link" style="color:var(--accent);"><i
+                                        class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/github-dashboard" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="React,JavaScript,D3,GitHub API,Vite">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>DevKit</h3>
+                        <p style="flex:1;">A developer toolkit with 25+ tools — JSON, YAML, JWT,
+                            Regex, Proto generator, Password, TOTP, SQL, QR code and more. No backend, runs entirely in
+                            your browser.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">Vite</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/devkit/" target="_blank" class="project-link"
+                                    style="color:var(--accent);"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/devkit" target="_blank" class="project-link"><i
+                                        class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="React,JavaScript,GitHub API,Vite">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>Dev Timeline</h3>
+                        <p style="flex:1;">Interactive timeline that visualizes a GitHub user's programming language
+                            history across all public repositories.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">GitHub API</span>
+                                <span class="project-tag">Vite</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/dev-timeline/" target="_blank"
+                                    class="project-link" style="color:var(--accent);"><i
+                                        class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/dev-timeline" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="JavaScript,HTML/CSS,PWA">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>Catan Map Generator</h3>
+                        <p style="flex:1;">Random balanced map generator for the Catan board game with smart
+                            backtracking algorithm and PWA support for offline use.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/catan-map-generator/" target="_blank"
+                                    class="project-link" style="color:var(--accent);"><i
+                                        class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/catan-map-generator" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="JavaScript,HTML/CSS,PWA">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>Sedmica</h3>
+                        <p style="flex:1;">Score tracking table for the card game Sedmica with real-time score updates
+                            and player management.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/sedmica/" target="_blank" class="project-link"
+                                    style="color:var(--accent);"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/sedmica" target="_blank" class="project-link"><i
+                                        class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="JavaScript,HTML/CSS,PWA">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>Lora Score Table</h3>
+                        <p style="flex:1;">Score tracking table for the card game Lora with real-time updates and player
+                            management.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/lora-score-table/" target="_blank"
+                                    class="project-link" style="color:var(--accent);"><i
+                                        class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/lora-score-table" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="more-work-card" data-tags="JavaScript,HTML/CSS,PWA">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>Yamb Table</h3>
+                        <p style="flex:1;">Digital score table for the dice game Yamb with real-time score tracking and
+                            player management.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/yamb-table/" target="_blank" class="project-link"
+                                    style="color:var(--accent);"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/yamb-table" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="more-work-card" data-tags="JavaScript,HTML/CSS,PWA">
+                    <div class="project-info" style="display:flex; flex-direction:column; height:100%;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span
+                                style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(0,212,170,0.1); color:var(--accent); border:1px solid rgba(0,212,170,0.3); display:flex; align-items:center; gap:5px;">
+                                <span
+                                    style="width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; display:inline-block;"></span>live
+                            </span>
+                        </div>
+                        <h3>excuse.exe</h3>
+                        <p style="flex:1;">excuse.exe is a zero-dependency, offline-capable PWA that generates a random
+                            excuse at the press of a button.</p>
+                        <div>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://pero-grubac.github.io/excuse-generator/" target="_blank"
+                                    class="project-link" style="color:var(--accent);"><i
+                                        class="fas fa-external-link-alt"></i> Live Demo</a>
+                                <a href="https://github.com/pero-grubac/excuse-generator" target="_blank"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="more-work-dots" id="liveDots"></div>
+    </section>
+
+    <!-- TOOLS -->
+    <section id="tools">
+        <div class="section-label">// personal tooling</div>
+        <h2 class="section-title">Tools</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+            <div class="project-card" style="grid-template-columns:1fr; display:flex; flex-direction:column;"
+                data-tags="Python,PostgreSQL,Docker,Discord API,GitHub API">
                 <div class="project-info">
-                    <div class="project-number">05 / 07</div>
-                    <h3>AssetManager</h3>
-                    <p>Android mobile application for tracking and managing company assets — furniture, electronics,
-                        supplies. Features barcode scanning via camera, Google Maps location view, multi-language
-                        support, and full CRUD operations.</p>
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                        <div class="project-number" style="margin:0;">01 / 01</div>
+                        <span
+                            style="font-family:'DM Mono',monospace; font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(255,255,255,0.05); color:var(--muted); border:1px solid var(--border);">tool</span>
+                    </div>
+                    <h3>GitHub Discord Bot</h3>
+                    <p>Personal productivity bot for managing GitHub workflow directly from Discord. Features slash
+                        commands for creating and closing issues, commit streak tracking, activity heatmaps, monthly
+                        reports, and real-time webhook notifications. Deployed on Render with Supabase PostgreSQL.</p>
                     <div class="project-tags">
-                        <span class="project-tag">Flutter</span>
-                        <span class="project-tag">Dart</span>
-                        <span class="project-tag">SQLite</span>
-                        <span class="project-tag">Google Maps</span>
-                        <span class="project-tag">Riverpod</span>
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">PostgreSQL</span>
+                        <span class="project-tag">Docker</span>
+                        <span class="project-tag">Discord API</span>
+                        <span class="project-tag">GitHub API</span>
+                        <span class="project-tag">Webhooks</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/pero-grubac/AssetManager" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
+                        <a href="https://github.com/pero-grubac/git-discord-bot" target="_blank" class="project-link"><i
+                                class="fab fa-github"></i> GitHub</a>
                     </div>
                 </div>
             </div>
-
-            <!-- ETF Oglasi -->
-            <div class="project-card reverse">
-                <div class="project-img"
-                    style="display:flex; align-items:center; justify-content:center; background:#0a0a0a; border-radius:8px; min-height:250px; max-height:350px; overflow:hidden;">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="height:320px; width:auto; object-fit:contain; border-radius:8px; display:block;">
-                        <source src="assets/etf_oglasi/demo.mp4" type="video/mp4">
-                        <img src="assets/etf_oglasi/demo.jpg" alt="ETF Oglasi demo">
-                    </video>
-                </div>
-                <div class="project-info">
-                    <div class="project-number">06 / 07</div>
-                    <h3>ETF Oglasi</h3>
-                    <p>Mobile application for viewing university announcements and class schedules with offline support.
-                        Features smart push notifications, offline caching via SQLite, multi-language localization,
-                        dark/light theme, and user-defined schedule preferences. Built as a graduation thesis project.
-                    </p>
-                    <div class="project-tags">
-                        <span class="project-tag">Flutter</span>
-                        <span class="project-tag">Dart</span>
-                        <span class="project-tag">SQLite</span>
-                        <span class="project-tag">Riverpod</span>
-                        <span class="project-tag">WorkManager</span>
-                        <span class="project-tag">REST APIs</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/pero-grubac/ETFOglasi" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Store Management System -->
-            <div class="project-card">
-                <div class="project-img">
-                    <video autoplay loop muted playsinline loading="lazy"
-                        style="width:100%; height:auto; object-fit:contain; border-radius:8px; display:block;">
-                        <source src="assets/store_management/demo.mp4" type="video/mp4">
-                        <img src="assets/store_management/demo.png" alt="Store Management System demo">
-                    </video>
-                </div>
-                <div class="project-info">
-                    <div class="project-number">07 / 07</div>
-                    <h3>Store Management System</h3>
-                    <p>Desktop application for managing retail store operations with role-based access for
-                        administrators and cashiers. Features full CRUD operations for users and inventory,
-                        password hashing, and audit logging of all operations.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">C#</span>
-                        <span class="project-tag">.NET</span>
-                        <span class="project-tag">MySQL</span>
-                        <span class="project-tag">WinForms</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/pero-grubac/Store-Management-System" target="_blank"
-                            class="project-link">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
@@ -392,17 +698,15 @@
             <p>Open to freelance projects, collaborations, and interesting opportunities.</p>
             <div style="display:flex; justify-content:center;">
                 <a href="mailto:pero.grubac00@gmail.com" class="btn-primary">
-                    <i class="fas fa-envelope"></i> <span
-                        style="font-family: 'DM Mono', monospace;">pero.grubac00@gmail.com</span>
+                    <i class="fas fa-envelope"></i>
+                    <span style="font-family:'DM Mono',monospace;">pero.grubac00@gmail.com</span>
                 </a>
             </div>
             <div class="social-links">
-                <a href="https://github.com/pero-grubac" target="_blank" class="social-link" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/perogrubac/" target="_blank" class="social-link" title="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
+                <a href="https://github.com/pero-grubac" target="_blank" class="social-link" title="GitHub"><i
+                        class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/perogrubac/" target="_blank" class="social-link"
+                    title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
     </section>
@@ -411,13 +715,7 @@
         <p>© 2026 Pero Grubač — Built with HTML & CSS</p>
     </footer>
 
-    <script>
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
-    </script>
-
+    <script src="js/scripts.js"></script>
 </body>
 
 </html>

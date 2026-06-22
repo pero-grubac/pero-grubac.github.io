@@ -5,11 +5,10 @@
 ![HTML](https://img.shields.io/badge/HTML-Portfolio-E34F26?logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-Styling-1572B6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Deployed-222222?logo=githubpages&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-deployed-4c1?style=flat-square&logo=github&logoColor=white)
 
-**Personal portfolio website built with pure HTML, CSS and JavaScript.**
 
-[🌐 pero-grubac.github.io](https://pero-grubac.github.io)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-PORTFOLIO-4c8af5?style=for-the-badge)](https://pero-grubac.github.io)
 
 </div>
 
