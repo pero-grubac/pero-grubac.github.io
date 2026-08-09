@@ -1,14 +1,17 @@
 :root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --surface: #16161f;
-  --border: #2a2a3a;
-  --accent: #00d4aa;
-  --accent2: #7c6af7;
-  --text: #e8e8f0;
-  --muted: #6b6b80;
-  --font-display: "Syne", sans-serif;
-  --font-mono: "DM Mono", monospace;
+  --bg: oklch(0.15 0.006 260);
+  --bg2: oklch(0.2 0.006 260);
+  --surface: oklch(0.18 0.006 260);
+  --border: oklch(0.28 0.008 260);
+  --accent: oklch(0.8 0.13 195);
+  --accent2: oklch(0.74 0.13 300);
+  --live: oklch(0.76 0.15 145);
+  --text: oklch(0.96 0.01 260);
+  --text-body: oklch(0.82 0.008 260);
+  --muted: oklch(0.62 0.01 260);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 *,
 *::before,
@@ -22,9 +25,17 @@ html {
 }
 body {
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-display);
+  color: var(--text-body);
+  font-family: var(--font-body);
   overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+.nav-brand {
+  font-family: var(--font-display);
+  color: var(--text);
 }
 body::before {
   content: "";
@@ -34,6 +45,28 @@ body::before {
   z-index: 100;
   opacity: 0.4;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+/* Faint grid carried through the whole page (not just the hero) so it
+   doesn't go flat black once you scroll past the hero's own grid+glow. */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.18;
+}
+
+/* ACCESSIBILITY */
+a:focus-visible,
+button:focus-visible,
+.stack-tag:focus-visible,
+.project-tag:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* NAVBAR */
@@ -50,13 +83,13 @@ nav {
   transition: all 0.3s;
 }
 nav.scrolled {
-  background: rgba(10, 10, 15, 0.92);
+  background: oklch(0.15 0.006 260 / 0.92);
   border-color: var(--border);
   backdrop-filter: blur(12px);
 }
 .nav-brand {
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
   text-decoration: none;
@@ -72,7 +105,7 @@ nav.scrolled {
 .nav-links a {
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -87,9 +120,12 @@ nav.scrolled {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 0 2rem;
   position: relative;
   overflow: hidden;
+  /* No padding/max-width here on purpose — the decorative grid+glow below
+     should bleed full-width edge to edge. .hero-content carries the same
+     max-width+padding combo as section {} instead, so its text lines up
+     with every other section's text exactly. */
 }
 .hero-grid {
   position: absolute;
@@ -108,7 +144,7 @@ nav.scrolled {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(0, 212, 170, 0.08) 0%,
+    oklch(0.8 0.13 195 / 0.08) 0%,
     transparent 70%
   );
   top: 50%;
@@ -117,25 +153,32 @@ nav.scrolled {
   pointer-events: none;
 }
 .hero-content {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
   position: relative;
   z-index: 2;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3rem;
+  align-items: center;
 }
 .hero-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(0, 212, 170, 0.08);
-  border: 1px solid rgba(0, 212, 170, 0.2);
+  background: oklch(0.8 0.13 195 / 0.08);
+  border: 1px solid oklch(0.8 0.13 195 / 0.2);
   border-radius: 100px;
-  padding: 0.4rem 1rem;
+  padding: 0.45rem 1.1rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--accent);
-  margin-bottom: 2rem;
   text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 2rem;
   animation: fadeUp 0.6s ease both;
 }
 .hero-tag::before {
@@ -156,27 +199,28 @@ nav.scrolled {
   }
 }
 .hero h1 {
-  font-size: clamp(3rem, 8vw, 7rem);
-  font-weight: 800;
+  font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+  font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.04em;
   margin-bottom: 1.5rem;
+  white-space: nowrap;
   animation: fadeUp 0.6s 0.1s ease both;
 }
-.hero h1 .name-accent {
-  color: var(--accent);
-}
 .hero-sub {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  color: var(--muted);
-  margin-bottom: 3rem;
+  font-size: 1.45rem;
+  color: var(--text-body);
+  margin-bottom: 0.85rem;
   max-width: 600px;
-  line-height: 1.7;
+  line-height: 1.5;
   animation: fadeUp 0.6s 0.2s ease both;
 }
-.hero-sub span {
-  color: var(--accent2);
+.hero-tech-line {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 3rem;
+  animation: fadeUp 0.6s 0.25s ease both;
 }
 .hero-cta {
   display: flex;
@@ -195,6 +239,112 @@ nav.scrolled {
   }
 }
 
+/* HERO TERMINAL */
+.hero-terminal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+/* WINDOWS-STYLE TITLEBAR (used by the hero terminal —
+   deliberately not macOS traffic-light dots: min/max/close glyphs instead,
+   close turns red on hover, matching Windows Terminal's caption buttons) */
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0 0.55rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border);
+}
+.win-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.win-title i {
+  color: var(--accent);
+  font-size: 0.7rem;
+}
+.win-controls {
+  display: flex;
+  height: 100%;
+}
+.win-btn {
+  width: 34px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--muted);
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+.win-btn.win-close:hover {
+  background: #e81123;
+  color: #fff;
+}
+.hero-terminal-body {
+  padding: 1.25rem 1.5rem;
+  min-height: 220px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.9;
+}
+.hero-terminal-line {
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.hero-terminal-output {
+  color: var(--muted);
+}
+.hero-terminal-prompt {
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+.hero-terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (max-width: 900px) {
+  /* Stacking the terminal under the hero text pushes total content height
+     close to (or past) 100vh, so align-items:center was placing the
+     avatar/tag row right under the fixed nav. Let the hero grow naturally
+     instead of forcing it into exactly one viewport. */
+  .hero {
+    min-height: auto;
+    padding: 7rem 2rem 3rem;
+  }
+  .hero-content {
+    grid-template-columns: 1fr;
+  }
+  .hero-terminal {
+    max-width: 480px;
+  }
+}
+
 /* BUTTONS */
 .btn-primary {
   display: inline-flex;
@@ -202,17 +352,17 @@ nav.scrolled {
   gap: 0.5rem;
   background: var(--accent);
   color: #0a0a0f;
-  padding: 0.85rem 2rem;
+  padding: 0.9rem 2.1rem;
   border-radius: 6px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.2s;
 }
 .btn-primary:hover {
-  background: #00f0c0;
+  background: oklch(0.86 0.15 195);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 212, 170, 0.3);
+  box-shadow: 0 8px 30px oklch(0.8 0.13 195 / 0.3);
 }
 .btn-outline {
   display: inline-flex;
@@ -220,10 +370,10 @@ nav.scrolled {
   gap: 0.5rem;
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 0.85rem 2rem;
+  padding: 0.9rem 2.1rem;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.2s;
 }
@@ -236,22 +386,59 @@ nav.scrolled {
 /* SECTIONS */
 section {
   padding: 6rem 2rem;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .section-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 0.75rem;
 }
+.section-label--flush {
+  margin: 0;
+}
 .section-title {
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 3rem;
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .hero-terminal-cursor {
+    animation: none;
+  }
 }
 
 /* ABOUT */
@@ -262,63 +449,35 @@ section {
   align-items: start;
 }
 .about-text p {
-  color: var(--muted);
-  line-height: 1.8;
+  color: var(--text-body);
+  font-size: 1.2rem;
+  line-height: 1.75;
   margin-bottom: 1.5rem;
 }
 .about-text p strong {
   color: var(--text);
 }
-.code-block {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  line-height: 1.8;
-  position: relative;
+/* Gradient "frame" via the padding trick: the outer box is the gradient,
+   the inner box (2px smaller all around) is the photo, so it reads as a
+   thin gradient border rather than a filled gradient background. */
+.about-photo-frame {
+  border-radius: 16px;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+}
+.about-photo {
+  border-radius: 14px;
   overflow: hidden;
+  /* Matches the source photo's native 3:2 ratio so object-fit:cover has
+     nothing to crop — the whole frame shows, just scaled. */
+  aspect-ratio: 3 / 2;
+  background: var(--bg2);
 }
-.code-block::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-}
-.code-dots {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 1rem;
-}
-.code-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.code-dots span:nth-child(1) {
-  background: #ff5f56;
-}
-.code-dots span:nth-child(2) {
-  background: #ffbd2e;
-}
-.code-dots span:nth-child(3) {
-  background: #27c93f;
-}
-.code-key {
-  color: var(--accent2);
-}
-.code-str {
-  color: var(--accent);
-}
-.code-arr {
-  color: #f8c96d;
-}
-.code-bracket {
-  color: var(--muted);
+.about-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* STACK */
@@ -330,6 +489,7 @@ section {
 .stack-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-top: 2px solid oklch(0.8 0.13 195 / 0.45);
   border-radius: 12px;
   padding: 1.5rem;
   transition: border-color 0.2s;
@@ -339,7 +499,7 @@ section {
 }
 .stack-card h3 {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--accent);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -348,15 +508,15 @@ section {
 .stack-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 .stack-tag {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--text);
   cursor: pointer;
   transition: all 0.2s;
@@ -364,9 +524,15 @@ section {
 }
 .stack-tag:hover,
 .stack-tag.active {
-  background: rgba(0, 212, 170, 0.1);
-  border-color: rgba(0, 212, 170, 0.4);
+  background: oklch(0.8 0.13 195 / 0.1);
+  border-color: oklch(0.8 0.13 195 / 0.4);
   color: var(--accent);
+}
+.hint-text {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
 }
 
 /* FEATURED PROJECTS */
@@ -379,10 +545,13 @@ section {
 .project-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-  overflow: hidden;
+  padding: 2rem;
+  box-shadow: 0 24px 60px -28px oklch(0 0 0 / 0.55);
   transition:
     border-color 0.3s,
     transform 0.3s,
@@ -406,12 +575,29 @@ section {
 .project-card.reverse > * {
   direction: ltr;
 }
+.tool-card {
+  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+}
 .project-img {
+  position: relative;
   background: var(--bg2);
-  min-height: 280px;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  border: 1px solid var(--border);
   overflow: hidden;
 }
-.project-img video,
+.project-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
 .project-img img {
   width: 100%;
   height: 100%;
@@ -419,10 +605,17 @@ section {
   display: block;
 }
 .project-info {
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+/* Only used by the Live Apps cards (no image half, no .project-card padding
+   to inherit) — needs its own padding and breathing room between children. */
+.project-info--stretch {
+  justify-content: flex-start;
+  height: 100%;
+  padding: 1.75rem;
+  gap: 0.35rem;
 }
 .project-meta {
   display: flex;
@@ -432,57 +625,60 @@ section {
 }
 .project-number {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--muted);
 }
-.project-badge {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: rgba(124, 106, 247, 0.12);
-  color: var(--accent2);
-  border: 1px solid rgba(124, 106, 247, 0.25);
-}
 .project-info h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.65rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
 }
 .project-info p {
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.7;
+  color: var(--text-body);
+  font-size: 1.1rem;
+  line-height: 1.65;
   margin-bottom: 1.25rem;
+}
+.project-info p strong,
+.more-work-info p strong {
+  color: var(--text);
+}
+.flex-grow {
+  flex: 1;
 }
 
 /* SHARED TAGS & LINKS */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
+  gap: 0.55rem;
+  margin-bottom: 1.25rem;
 }
+/* Flat/neutral by default — teal stays reserved for Tech Stack tags, live
+   badges and links, so it still reads as meaningful when it shows up rather
+   than being everywhere. The .matching state (tag-filter feedback) is the
+   deliberate exception: that's functional, not decorative. */
 .project-tag {
-  background: rgba(0, 212, 170, 0.08);
-  border: 1px solid rgba(0, 212, 170, 0.15);
-  color: var(--accent);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
+  background: oklch(1 0 0 / 0.04);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.35rem 0.75rem;
+  border-radius: 5px;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s;
   user-select: none;
 }
 .project-tag:hover {
-  background: rgba(0, 212, 170, 0.15);
-  border-color: rgba(0, 212, 170, 0.4);
+  background: oklch(1 0 0 / 0.08);
+  color: var(--text-body);
 }
 .project-tag.matching {
-  background: rgba(0, 212, 170, 0.25);
+  background: oklch(0.8 0.13 195 / 0.25);
   border-color: var(--accent);
+  color: var(--accent);
   font-weight: 700;
 }
 .project-links {
@@ -496,7 +692,7 @@ section {
   gap: 0.4rem;
   color: var(--text);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 600;
   transition: color 0.2s;
 }
@@ -507,188 +703,21 @@ section {
   color: var(--accent);
 }
 
-/* MORE WORK */
-.more-projects-label {
-  margin-bottom: 1.5rem;
-}
-.more-carousel-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-}
-.more-carousel {
-  display: flex;
-  gap: 1rem;
-  will-change: transform;
-}
-.more-card {
-  flex: 0 0 calc((100% - 2rem) / 3);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition:
-    border-color 0.3s,
-    opacity 0.3s;
-}
-.more-card:hover {
-  border-color: var(--accent);
-}
-.more-card.highlighted {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.more-card.dimmed {
-  opacity: 0.15;
-}
-.more-img {
-  height: 160px;
-  overflow: hidden;
-  background: var(--bg2);
-}
-.more-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-.more-card:hover .more-img img {
-  opacity: 0.9;
-}
-.more-info {
-  padding: 1.25rem;
-}
-.more-info h3 {
-  font-size: 1rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-.more-info p {
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-.badge-inprogress {
+/* STATUS BADGES (shared shape, color communicates meaning) */
+.badge-tool {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: #ef9f27;
-  background: rgba(239, 159, 39, 0.1);
-  border: 1px solid rgba(239, 159, 39, 0.3);
-  padding: 2px 6px;
+  font-size: 0.75rem;
+  padding: 4px 10px;
   border-radius: 4px;
-  vertical-align: middle;
-  font-weight: normal;
-}
-
-/* CAROUSEL CONTROLS */
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-.carousel-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-.carousel-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.carousel-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.carousel-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-}
-.carousel-dot.active {
-  background: var(--accent);
-  width: 20px;
-  border-radius: 3px;
-}
-
-/* MINI GRID (Live & Tools) */
-.mini-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
-.mini-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  transition:
-    border-color 0.3s,
-    transform 0.2s,
-    opacity 0.3s;
-}
-.mini-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.mini-card.highlighted {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.mini-card.dimmed {
-  opacity: 0.15;
-  transform: none !important;
-}
-.mini-info {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.mini-info h3 {
-  font-size: 1rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-.mini-info p {
+  background: rgba(255, 255, 255, 0.05);
   color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  flex: 1;
+  border: 1px solid var(--border);
 }
-.mini-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-.badge-live {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(0, 212, 170, 0.1);
-  color: var(--accent);
-  border: 1px solid rgba(0, 212, 170, 0.3);
-  display: flex;
+.live-badge {
+  background: oklch(0.76 0.15 145 / 0.1) !important;
+  color: var(--live) !important;
+  border-color: oklch(0.76 0.15 145 / 0.3) !important;
+  display: inline-flex !important;
   align-items: center;
   gap: 5px;
 }
@@ -696,18 +725,102 @@ section {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--live);
   animation: pulse 2s infinite;
   display: inline-block;
+  flex-shrink: 0;
 }
-.badge-tool {
+.featured-badge {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: oklch(0.74 0.13 300 / 0.12);
+  color: var(--accent2);
+  border: 1px solid oklch(0.74 0.13 300 / 0.25);
+  letter-spacing: 0.05em;
+}
+
+/* MORE WORK / LIVE APPS — static wrapping grids, not a carousel: everything
+   is visible without clicking, and it drops the slider JS entirely. */
+.more-work-label {
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+}
+.more-work-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+/* Live Apps cards carry more content (badge + description + tags + two
+   links, no image) than the More Projects cards, so they get more room. */
+#live-apps .more-work-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.more-work-card {
+  background: var(--surface);
   border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    border-color 0.3s,
+    transform 0.2s,
+    opacity 0.3s;
+}
+.more-work-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+.more-work-card.highlighted {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.more-work-card.dimmed {
+  opacity: 0.25;
+  transform: none !important;
+}
+.more-work-img {
+  height: 160px;
+  overflow: hidden;
+  background: var(--bg2);
+}
+.more-work-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.more-work-card:hover .more-work-img img {
+  opacity: 0.9;
+}
+.more-work-info {
+  padding: 1.25rem;
+}
+.more-work-meta {
+  margin-bottom: 0.5rem;
+}
+.more-work-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: oklch(0.74 0.13 300 / 0.12);
+  color: var(--accent2);
+  border: 1px solid oklch(0.74 0.13 300 / 0.25);
+  letter-spacing: 0.05em;
+}
+.more-work-info h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  margin-top: 0.4rem;
+}
+.more-work-info p {
+  color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
 }
 
 /* CONTACT */
@@ -733,13 +846,17 @@ section {
 }
 .contact-box h2 {
   font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
 }
 .contact-box p {
-  color: var(--muted);
+  color: var(--text-body);
+  font-size: 1.25rem;
   margin-bottom: 2.5rem;
+}
+.contact-email {
+  font-family: var(--font-mono);
 }
 .social-links {
   display: flex;
@@ -766,13 +883,21 @@ section {
   transform: translateY(-3px);
 }
 
+/* TOOLS */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
 /* FOOTER */
 footer {
+  margin-top: 2rem;
   border-top: 1px solid var(--border);
   padding: 2rem;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   color: var(--muted);
 }
 
@@ -790,11 +915,8 @@ footer {
   .project-card.reverse {
     direction: ltr;
   }
-  .project-img {
-    min-height: 200px;
-  }
-  .more-card {
-    flex: 0 0 calc((100% - 1rem) / 2);
+  .more-work-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 600px) {
@@ -804,213 +926,13 @@ footer {
   .hero h1 {
     font-size: 3rem;
   }
-  .more-card {
-    flex: 0 0 100%;
+  .more-work-grid {
+    grid-template-columns: 1fr;
   }
-}
-
-/* ===== MORE WORK SLIDER ===== */
-.more-work-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4rem;
-  margin-bottom: 1.5rem;
-}
-
-.more-work-nav {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.more-nav-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 0.75rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.more-nav-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.more-nav-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
-.more-work-wrapper {
-  overflow: hidden;
-  width: 100%;
-}
-
-.more-work-track {
-  display: flex;
-  gap: 1rem;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-
-.more-work-card {
-  flex: 0 0 calc((100% - 2rem) / 3);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition:
-    border-color 0.3s,
-    transform 0.2s,
-    opacity 0.3s;
-}
-
-.more-work-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-}
-
-.more-work-card.highlighted {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-
-.more-work-card.dimmed {
-  opacity: 0.25;
-  transform: none !important;
-}
-
-.more-work-img {
-  height: 160px;
-  overflow: hidden;
-  background: var(--bg2);
-}
-
-.more-work-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.more-work-card:hover .more-work-img img {
-  opacity: 0.9;
-}
-
-.more-work-info {
-  padding: 1.25rem;
-}
-
-.more-work-meta {
-  margin-bottom: 0.5rem;
-}
-
-.more-work-badge {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: rgba(124, 106, 247, 0.12);
-  color: var(--accent2);
-  border: 1px solid rgba(124, 106, 247, 0.25);
-  letter-spacing: 0.05em;
-}
-
-.more-work-info h3 {
-  font-size: 1rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  margin-top: 0.4rem;
-}
-
-.more-work-info p {
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.more-work-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 1.25rem;
-}
-
-.more-work-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-}
-
-.more-work-dot.active {
-  background: var(--accent);
-  width: 20px;
-  border-radius: 3px;
-}
-
-@media (max-width: 900px) {
-  .more-work-card {
-    flex: 0 0 calc((100% - 1rem) / 2);
+  /* #live-apps .more-work-grid's ID selector otherwise outranks the plain
+     class rule above even inside this media query, so the 2-column layout
+     was never actually collapsing to 1 on phones. */
+  #live-apps .more-work-grid {
+    grid-template-columns: 1fr;
   }
-}
-
-@media (max-width: 600px) {
-  .more-work-card {
-    flex: 0 0 100%;
-  }
-}
-
-.project-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.featured-badge {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: rgba(124, 106, 247, 0.12);
-  color: var(--accent2);
-  border: 1px solid rgba(124, 106, 247, 0.25);
-  letter-spacing: 0.05em;
-}
-
-/* ===== LIVE BADGE ===== */
-.live-badge {
-  background: rgba(0, 212, 170, 0.1) !important;
-  color: var(--accent) !important;
-  border-color: rgba(0, 212, 170, 0.3) !important;
-  display: flex !important;
-  align-items: center;
-  gap: 5px;
-}
-
-.live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse 2s infinite;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.more-work-card h3 {
-  min-height: 3rem;
 }

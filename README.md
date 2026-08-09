@@ -20,28 +20,40 @@ Portfolio website showcasing my projects, tech stack and contact information. Bu
 
 ---
 
-## 🗂️ Projects Featured
+## 🗂️ Featured Projects
 
 1. **Incident Alert** — Microservices incident tracking system (ASP.NET · React · RabbitMQ · Docker)
 2. **eMobilityHub** — Electric vehicle rental platform (Spring Boot · Angular · MySQL · Docker)
 3. **Chat Room** — Secure forum with 2FA and OAuth2 (Spring Boot · React · JWT · Docker)
 4. **Online Library System** — Distributed Java platform (Redis · WebSocket · RMI · RabbitMQ)
-5. **AssetManager** — Android asset tracking app (Flutter · SQLite · Google Maps)
-6. **ETF Oglasi** — University announcements app (Flutter · SQLite · WorkManager)
-7. **Store Management System** — Desktop retail app (C# · .NET · MySQL · WinForms)
+
+## 📦 More Projects
+
+- **FitForge** — Fitness tracking Android app (Flutter · Dart · SQLite)
+- **AssetManager** — Android asset tracking app (Flutter · SQLite · Google Maps)
+- **ETF Oglasi** — University announcements app (Flutter · SQLite · WorkManager)
+- **Store Management System** — Desktop retail app (C# · .NET · MySQL · WinForms)
+
+## 🌐 Live Apps
+
+Eight small deployed tools and toys, all linked with working demos: GitHub Dashboard, DevKit, Dev Timeline, Catan Map Generator, Sedmica, Lora Score Table, Yamb Table, and excuse.exe.
+
+## 🔧 Tools
+
+- **GitHub Discord Bot** — Personal productivity bot for managing GitHub workflow from Discord (Python · PostgreSQL · Docker)
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology         | Usage                       |
-| ------------------ | --------------------------- |
-| HTML5              | Structure                   |
-| CSS3               | Styling and animations      |
-| Vanilla JavaScript | Navbar scroll, interactions |
-| Google Fonts       | Syne + DM Mono typography   |
-| Font Awesome       | Icons                       |
-| GitHub Pages       | Hosting                     |
+| Technology         | Usage                                            |
+| ------------------- | ------------------------------------------------- |
+| HTML5               | Structure                                          |
+| CSS3                | Styling, OKLCH color system, animations            |
+| Vanilla JavaScript  | Navbar scroll, tag filtering, reveal-on-scroll     |
+| Google Fonts        | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
+| Font Awesome        | Icons                                              |
+| GitHub Pages        | Hosting                                            |
 
 ---
 
@@ -64,11 +76,15 @@ pero-grubac.github.io/
 ├── index.html
 ├── css/
 │   └── styles.css
+├── js/
+│   └── scripts.js
 ├── assets/
+│   ├── avatar.jpeg
 │   ├── incident_alert/
-│   ├── e-Mobility-Hub/
+│   ├── e-mobility-hub/
 │   ├── chatroom/
 │   ├── library/
+│   ├── fitforge/
 │   ├── asset_manager/
 │   ├── etf_oglasi/
 │   └── store_management/
