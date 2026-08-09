@@ -53,22 +53,9 @@ function applyFilter(filter, opts = { scroll: false }) {
 
   if (!filter) return;
 
-  // Slidovi slajdere tako da prvi highlightovani projekat bude vidljiv
-  document.querySelectorAll(".more-work-track").forEach((track) => {
-    if (!track._slider) return;
-    const cards = Array.from(track.querySelectorAll(".more-work-card"));
-    const firstMatchIdx = cards.findIndex((c) =>
-      c.classList.contains("highlighted"),
-    );
-    if (firstMatchIdx >= 0) track._slider.goTo(firstMatchIdx);
-  });
-
-  // Skroluj na prvi matchovani projekat uopste (ako je trazeno)
+  // Scroll to the first matched project (if triggered by a click)
   if (opts.scroll && matchedCards.length > 0) {
-    // Damo slajderu da odradi transform, pa skrolujemo
-    setTimeout(() => {
-      matchedCards[0].scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 50);
+    matchedCards[0].scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
@@ -98,16 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       !e.target.closest(".project-card") &&
       !e.target.closest(".more-work-card") &&
-      !e.target.closest(".stack-tag") &&
-      !e.target.closest(".more-work-nav")
+      !e.target.closest(".stack-tag")
     ) {
       applyFilter(null);
     }
   });
 
-  // Video lazy load
+  // Video lazy load — playback is entirely observer-driven (no autoplay attribute in HTML)
   const videos = document.querySelectorAll("video");
-  const observer = new IntersectionObserver(
+  const videoObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.play();
@@ -118,69 +104,123 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   videos.forEach((v) => {
     v.pause();
-    observer.observe(v);
+    videoObserver.observe(v);
   });
 
-  // ===== SLIDER FACTORY =====
-  function initSlider(trackId, prevId, nextId, dotsId) {
-    const track = document.getElementById(trackId);
-    const prevBtn = document.getElementById(prevId);
-    const nextBtn = document.getElementById(nextId);
-    const dotsContainer = document.getElementById(dotsId);
-
-    if (!track || !prevBtn || !nextBtn) return;
-
-    const cards = Array.from(track.querySelectorAll(".more-work-card"));
-    const total = cards.length;
-    let current = 0;
-
-    function getVisible() {
-      return window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 3;
-    }
-
-    function maxStep() {
-      return Math.max(0, total - getVisible());
-    }
-
-    function getCardWidth() {
-      return cards[0] ? cards[0].offsetWidth + 16 : 0;
-    }
-
-    function goTo(index) {
-      current = Math.max(0, Math.min(index, maxStep()));
-      track.style.transform = `translateX(-${current * getCardWidth()}px)`;
-      prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === maxStep();
-      document.querySelectorAll(`#${dotsId} .more-work-dot`).forEach((d, i) => {
-        d.classList.toggle("active", i === current);
+  // ===== SCROLL REVEAL =====
+  // Deliberately not IntersectionObserver-based: a fast flick, Page Down,
+  // "End", or landing directly on a #anchor can jump the viewport clean over
+  // a section in a single frame, so it never registers as "intersecting" and
+  // stays opacity:0 forever. Checking live geometry on scroll/resize (plus
+  // once up front) always catches up, however the user got there.
+  const revealEls = Array.from(document.querySelectorAll(".reveal"));
+  if (revealEls.length) {
+    let revealTicking = false;
+    function checkReveal() {
+      revealTicking = false;
+      const vh = window.innerHeight;
+      revealEls.forEach((el) => {
+        if (el.classList.contains("is-visible")) return;
+        const rect = el.getBoundingClientRect();
+        // No lower bound on rect.top: a section already scrolled fully past
+        // (both edges above the viewport) must still reveal immediately —
+        // it was skipped, not "not yet reached".
+        if (rect.top < vh * 0.9) {
+          el.classList.add("is-visible");
+        }
       });
     }
-
-    function buildDots() {
-      dotsContainer.innerHTML = "";
-      for (let i = 0; i <= maxStep(); i++) {
-        const dot = document.createElement("span");
-        dot.classList.add("more-work-dot");
-        if (i === 0) dot.classList.add("active");
-        dot.addEventListener("click", () => goTo(i));
-        dotsContainer.appendChild(dot);
+    function onRevealScroll() {
+      if (!revealTicking) {
+        revealTicking = true;
+        requestAnimationFrame(checkReveal);
       }
     }
-
-    prevBtn.addEventListener("click", () => goTo(current - 1));
-    nextBtn.addEventListener("click", () => goTo(current + 1));
-    window.addEventListener("resize", () => {
-      buildDots();
-      goTo(0);
-    });
-
-    buildDots();
-    goTo(0);
-
-    // Izlozi kontroler na track da ga applyFilter moze koristiti
-    track._slider = { goTo };
+    window.addEventListener("scroll", onRevealScroll, { passive: true });
+    window.addEventListener("resize", onRevealScroll);
+    checkReveal();
   }
 
-  initSlider("moreTrack", "morePrev", "moreNext", "moreDots");
-  initSlider("liveTrack", "livePrev", "liveNext", "liveDots");
+  // ===== HERO TERMINAL =====
+  initHeroTerminal();
 });
+
+// ===== HERO TERMINAL TYPING EFFECT =====
+function initHeroTerminal() {
+  const body = document.getElementById("heroTerminalBody");
+  if (!body) return;
+
+  const script = [
+    { type: "cmd", text: "whoami" },
+    { type: "out", text: "pero-grubac — backend developer" },
+    { type: "cmd", text: "cat focus.txt" },
+    { type: "out", text: "distributed systems · REST APIs · microservices" },
+    { type: "cmd", text: "./status --freelance" },
+    { type: "out", text: "available ✓" },
+  ];
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  function renderStatic() {
+    body.innerHTML = script
+      .map((line) =>
+        line.type === "cmd"
+          ? `<div class="hero-terminal-line"><span class="hero-terminal-prompt">$</span>${line.text}</div>`
+          : `<div class="hero-terminal-line hero-terminal-output">${line.text}</div>`,
+      )
+      .join("");
+  }
+
+  if (reduceMotion) {
+    renderStatic();
+    return;
+  }
+
+  let i = 0;
+  function typeLine() {
+    if (i >= script.length) {
+      setTimeout(() => {
+        body.innerHTML = "";
+        i = 0;
+        typeLine();
+      }, 2200);
+      return;
+    }
+
+    const line = script[i];
+    const el = document.createElement("div");
+    el.className =
+      "hero-terminal-line" + (line.type === "out" ? " hero-terminal-output" : "");
+
+    if (line.type === "cmd") {
+      const prompt = document.createElement("span");
+      prompt.className = "hero-terminal-prompt";
+      prompt.textContent = "$";
+      el.appendChild(prompt);
+    }
+
+    const textNode = document.createElement("span");
+    el.appendChild(textNode);
+    const cursor = document.createElement("span");
+    cursor.className = "hero-terminal-cursor";
+    el.appendChild(cursor);
+    body.appendChild(el);
+
+    let c = 0;
+    const speed = line.type === "cmd" ? 55 : 18;
+    const timer = setInterval(() => {
+      textNode.textContent += line.text[c];
+      c++;
+      if (c >= line.text.length) {
+        clearInterval(timer);
+        cursor.remove();
+        i++;
+        setTimeout(typeLine, line.type === "cmd" ? 300 : 500);
+      }
+    }, speed);
+  }
+
+  typeLine();
+}
