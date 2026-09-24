@@ -5,68 +5,195 @@ window.addEventListener("scroll", () => {
 });
 
 // ===== TAG FILTER =====
+// A card's tags are exactly the .project-tag buttons it shows — no separate
+// data-tags list to keep in sync, so a card can never be highlighted by a tag
+// the visitor can't see on it.
 let activeFilter = null;
+const CARD_SELECTOR = ".project-card, .more-work-card";
 
 function normalizeTag(tag) {
   return tag.trim().toLowerCase();
 }
 
+function cardTags(card) {
+  return Array.from(card.querySelectorAll(".project-tag")).map((t) =>
+    normalizeTag(t.textContent),
+  );
+}
+
 function applyFilter(filter, opts = { scroll: false }) {
   activeFilter = filter;
+  const wanted = filter ? normalizeTag(filter) : null;
 
   document.querySelectorAll(".stack-tag").forEach((el) => {
-    el.classList.toggle(
-      "active",
-      !!filter && normalizeTag(el.dataset.tag) === normalizeTag(filter),
-    );
+    const on = !!wanted && normalizeTag(el.dataset.tag) === wanted;
+    el.classList.toggle("active", on);
+    el.setAttribute("aria-pressed", on);
   });
 
-  const allCards = document.querySelectorAll(".project-card, .more-work-card");
   const matchedCards = [];
-
-  allCards.forEach((card) => {
-    const cardTags = (card.dataset.tags || "")
-      .split(",")
-      .map((t) => normalizeTag(t));
-
-    if (!filter) {
-      card.classList.remove("highlighted", "dimmed");
-      card
-        .querySelectorAll(".project-tag")
-        .forEach((t) => t.classList.remove("matching"));
-      return;
-    }
-
-    const matches = cardTags.includes(normalizeTag(filter));
+  document.querySelectorAll(CARD_SELECTOR).forEach((card) => {
+    const matches = !!wanted && cardTags(card).includes(wanted);
     card.classList.toggle("highlighted", matches);
-    card.classList.toggle("dimmed", !matches);
-
+    card.classList.toggle("dimmed", !!wanted && !matches);
     if (matches) matchedCards.push(card);
 
     card.querySelectorAll(".project-tag").forEach((t) => {
-      t.classList.toggle(
-        "matching",
-        normalizeTag(t.textContent) === normalizeTag(filter),
-      );
+      const on = !!wanted && normalizeTag(t.textContent) === wanted;
+      t.classList.toggle("matching", on);
+      t.setAttribute("aria-pressed", on);
     });
   });
 
-  if (!filter) return;
+  updateFilterStatus(filter, matchedCards.length);
 
   // Scroll to the first matched project (if triggered by a click)
-  if (opts.scroll && matchedCards.length > 0) {
+  if (wanted && opts.scroll && matchedCards.length > 0) {
     matchedCards[0].scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
+function updateFilterStatus(filter, count) {
+  const box = document.getElementById("filterStatus");
+  if (!box) return;
+  box.hidden = !filter;
+  if (!filter) return;
+  document.getElementById("filterStatusTag").textContent = filter;
+  document.getElementById("filterStatusCount").textContent =
+    count === 1 ? "1 match" : `${count} matches`;
+}
+
+function toggleFilter(tag) {
+  const willActivate = activeFilter === null ||
+    normalizeTag(activeFilter) !== normalizeTag(tag);
+  applyFilter(willActivate ? tag : null, { scroll: willActivate });
+  return willActivate;
+}
+
+// Show how many cards each Tech Stack tag reaches; tags with no project on
+// the page are hidden (they reappear automatically once a card uses them).
+function initStackCounts() {
+  const counts = new Map();
+  document.querySelectorAll(CARD_SELECTOR).forEach((card) => {
+    new Set(cardTags(card)).forEach((t) => counts.set(t, (counts.get(t) || 0) + 1));
+  });
+  document.querySelectorAll(".stack-tag").forEach((el) => {
+    const n = counts.get(normalizeTag(el.dataset.tag)) || 0;
+    if (n === 0) {
+      el.remove();
+      return;
+    }
+    const badge = document.createElement("span");
+    badge.className = "stack-count";
+    badge.textContent = n;
+    el.appendChild(badge);
+    el.setAttribute("aria-pressed", "false");
+  });
+}
+
+// Keep the About stats honest by counting what's actually on the page.
+function initStats() {
+  const values = {
+    projects: document.querySelectorAll(CARD_SELECTOR).length,
+    live: document.querySelectorAll(".live-card").length,
+  };
+  document.querySelectorAll("[data-stat]").forEach((el) => {
+    if (values[el.dataset.stat] !== undefined) el.textContent = values[el.dataset.stat];
+  });
+}
+
+// ===== MOBILE NAV =====
+function initNavToggle() {
+  const toggle = document.querySelector(".nav-toggle");
+  if (!toggle) return;
+  const setOpen = (open) => {
+    navbar.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", open);
+  };
+  toggle.addEventListener("click", () =>
+    setOpen(!navbar.classList.contains("nav-open")),
+  );
+  document.querySelectorAll(".nav-links a").forEach((a) =>
+    a.addEventListener("click", () => setOpen(false)),
+  );
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+}
+
+// ===== THEME TOGGLE =====
+// No saved choice = follow the OS. The first click pins the opposite of
+// whatever is showing right now.
+function initThemeToggle() {
+  const btn = document.getElementById("themeToggle");
+  if (!btn) return;
+  const root = document.documentElement;
+  const current = () =>
+    root.dataset.theme ||
+    (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  const label = () =>
+    btn.setAttribute(
+      "aria-label",
+      current() === "dark" ? "Switch to light theme" : "Switch to dark theme",
+    );
+  label();
+  btn.addEventListener("click", () => {
+    const next = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch (e) {
+      /* private mode etc. — the choice just won't persist */
+    }
+    label();
+  });
+}
+
+// ===== CURSOR SPOTLIGHT =====
+// Feeds the pointer position into --mx/--my on the hovered card; the glow
+// itself is a CSS background. Skipped on touch and for reduced motion.
+function initSpotlight() {
+  if (
+    !window.matchMedia("(hover: hover)").matches ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  )
+    return;
+  let last = null;
+  let pending = null;
+  const clear = (card) => {
+    card.style.removeProperty("--mx");
+    card.style.removeProperty("--my");
+  };
+  document.addEventListener(
+    "pointermove",
+    (e) => {
+      const card = e.target.closest(`${CARD_SELECTOR}, .stack-card`);
+      if (last && last !== card) clear(last);
+      last = card;
+      if (!card || pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = null;
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+      });
+    },
+    { passive: true },
+  );
+  document.addEventListener("pointerleave", () => last && clear(last));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  initStackCounts();
+  initStats();
+  initNavToggle();
+  initThemeToggle();
+  initSpotlight();
+
   // Stack tag clicks
   document.querySelectorAll(".stack-tag").forEach((el) => {
     el.addEventListener("click", () => {
-      const tag = el.dataset.tag;
-      const willActivate = activeFilter !== tag;
-      applyFilter(willActivate ? tag : null, { scroll: willActivate });
-      if (!willActivate) {
+      if (!toggleFilter(el.dataset.tag)) {
         document
           .getElementById("projects")
           .scrollIntoView({ behavior: "smooth", block: "start" });
@@ -74,18 +201,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  document.getElementById("filterStatusClear")?.addEventListener("click", () =>
+    applyFilter(null),
+  );
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && activeFilter) applyFilter(null);
+  });
+
   // Project/card tag clicks + click outside to clear
   document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("project-tag")) {
-      const tag = e.target.textContent.trim();
-      const willActivate = activeFilter !== tag;
-      applyFilter(willActivate ? tag : null, { scroll: willActivate });
+    const tagEl = e.target.closest(".project-tag");
+    if (tagEl) {
+      toggleFilter(tagEl.textContent);
       return;
     }
     if (
-      !e.target.closest(".project-card") &&
-      !e.target.closest(".more-work-card") &&
-      !e.target.closest(".stack-tag")
+      !e.target.closest(CARD_SELECTOR) &&
+      !e.target.closest(".stack-tag") &&
+      !e.target.closest(".filter-status")
     ) {
       applyFilter(null);
     }
@@ -113,7 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // a section in a single frame, so it never registers as "intersecting" and
   // stays opacity:0 forever. Checking live geometry on scroll/resize (plus
   // once up front) always catches up, however the user got there.
-  const revealEls = Array.from(document.querySelectorAll(".reveal"));
+  // .stagger grids reveal on their own (so a grid far down a long section
+  // animates when *it* arrives), children one after another via --i.
+  const revealEls = Array.from(document.querySelectorAll(".reveal, .stagger"));
+  document.querySelectorAll(".stagger").forEach((group) => {
+    Array.from(group.children).forEach((child, i) =>
+      child.style.setProperty("--i", i),
+    );
+  });
   if (revealEls.length) {
     let revealTicking = false;
     function checkReveal() {
@@ -127,6 +267,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // it was skipped, not "not yet reached".
         if (rect.top < vh * 0.9) {
           el.classList.add("is-visible");
+          if (el.classList.contains("stagger")) {
+            // Drop the per-card delay once the entrance has played, so
+            // hover and filter transitions aren't delayed afterwards.
+            const total = el.children.length * 70 + 500;
+            setTimeout(() => el.classList.add("stagger-done"), total);
+          }
         }
       });
     }
@@ -155,8 +301,8 @@ function initHeroTerminal() {
     { type: "out", text: "pero-grubac — backend developer" },
     { type: "cmd", text: "cat focus.txt" },
     { type: "out", text: "distributed systems · REST APIs · microservices" },
-    { type: "cmd", text: "./status --freelance" },
-    { type: "out", text: "available ✓" },
+    { type: "cmd", text: "ls ~/live" },
+    { type: "out", text: "arcane-keep  countdown  devkit  +7 more" },
   ];
 
   const reduceMotion = window.matchMedia(
