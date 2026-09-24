@@ -4,81 +4,220 @@ window.addEventListener("scroll", () => {
   navbar.classList.toggle("scrolled", window.scrollY > 50);
 });
 
-// ===== TAG FILTER =====
-// A card's tags are exactly the .project-tag buttons it shows — no separate
-// data-tags list to keep in sync, so a card can never be highlighted by a tag
-// the visitor can't see on it.
-let activeFilter = null;
-const CARD_SELECTOR = ".project-card, .more-work-card";
+// ===== PROJECT SEARCH =====
+// One search box filters the featured cards and the index rows together.
+// An item's tags are exactly the .project-tag buttons it shows — no separate
+// list to keep in sync.
+const ITEM_SELECTOR = ".project-card, .index-row";
+const norm = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const scrollBehavior = reduceMotion ? "auto" : "smooth";
 
-function normalizeTag(tag) {
-  return tag.trim().toLowerCase();
+let items = [];
+let knownTags = new Set();
+let activeKind = "";
+
+function buildIndex() {
+  document.querySelectorAll(".project-tag").forEach((t) => {
+    t.dataset.word = norm(t.textContent);
+  });
+  items = Array.from(document.querySelectorAll(ITEM_SELECTOR)).map((el) => {
+    const details = el.querySelector("details");
+    return {
+      el,
+      kind: el.dataset.kind,
+      id: el.id || details?.id,
+      details,
+      name: (el.querySelector("h3, .row-name")?.textContent || "").trim(),
+      launch: el.querySelector(".row-launch")?.href || null,
+      tags: Array.from(el.querySelectorAll(".project-tag")).map((t) => t.dataset.word),
+      haystack: norm(el.textContent),
+      // Plain-text spots that get <mark> highlights
+      marks: Array.from(el.querySelectorAll("h3, .row-name, .row-stack")).map((node) => ({
+        node,
+        text: node.textContent.trim(),
+      })),
+    };
+  });
+  // A search term that is exactly one of these matches that tag only —
+  // "java" must not match "javascript".
+  knownTags = new Set(items.flatMap((i) => i.tags));
 }
 
-function cardTags(card) {
-  return Array.from(card.querySelectorAll(".project-tag")).map((t) =>
-    normalizeTag(t.textContent),
-  );
+const WORD_CHAR = /[a-z0-9#+]/;
+const isWholeAt = (lower, i, len) =>
+  !WORD_CHAR.test(lower[i - 1] || "") && !WORD_CHAR.test(lower[i + len] || "");
+
+// specs: [{ t: "java", whole: true }] — whole = exact tag, word-bounded
+function highlight(node, text, specs) {
+  node.textContent = "";
+  const lower = text.toLowerCase();
+  const ranges = [];
+  specs.forEach(({ t, whole }) => {
+    let i = lower.indexOf(t);
+    while (i !== -1) {
+      if (!whole || isWholeAt(lower, i, t.length)) ranges.push([i, i + t.length]);
+      i = lower.indexOf(t, i + t.length);
+    }
+  });
+  ranges.sort((x, y) => x[0] - y[0]);
+  let pos = 0;
+  for (const [start, end] of ranges) {
+    if (start < pos) continue;
+    node.append(text.slice(pos, start));
+    const m = document.createElement("mark");
+    m.textContent = text.slice(start, end);
+    node.append(m);
+    pos = end;
+  }
+  node.append(text.slice(pos));
 }
 
-function applyFilter(filter, opts = { scroll: false }) {
-  activeFilter = filter;
-  const wanted = filter ? normalizeTag(filter) : null;
+function applySearch({ syncUrl = true } = {}) {
+  const query = norm(document.getElementById("q").value);
+  // A query that is exactly a tag (incl. "spring boot") is one exact term;
+  // otherwise each word is a term — known tags exact, the rest substring.
+  const specs = !query
+    ? []
+    : knownTags.has(query)
+      ? [{ t: query, whole: true }]
+      : query.split(" ").map((t) => ({ t, whole: knownTags.has(t) }));
 
-  document.querySelectorAll(".stack-tag").forEach((el) => {
-    const on = !!wanted && normalizeTag(el.dataset.tag) === wanted;
-    el.classList.toggle("active", on);
-    el.setAttribute("aria-pressed", on);
+  let shown = 0;
+  const shownByGroup = { system: 0, index: 0 };
+  items.forEach((it) => {
+    const match =
+      (!activeKind || it.kind === activeKind) &&
+      specs.every(({ t, whole }) => (whole ? it.tags.includes(t) : it.haystack.includes(t)));
+    it.el.hidden = !match;
+    if (match) {
+      shown++;
+      shownByGroup[it.kind === "system" ? "system" : "index"]++;
+    }
+    it.marks.forEach((m) => highlight(m.node, m.text, specs));
   });
 
-  const matchedCards = [];
-  document.querySelectorAll(CARD_SELECTOR).forEach((card) => {
-    const matches = !!wanted && cardTags(card).includes(wanted);
-    card.classList.toggle("highlighted", matches);
-    card.classList.toggle("dimmed", !!wanted && !matches);
-    if (matches) matchedCards.push(card);
-
-    card.querySelectorAll(".project-tag").forEach((t) => {
-      const on = !!wanted && normalizeTag(t.textContent) === wanted;
-      t.classList.toggle("matching", on);
-      t.setAttribute("aria-pressed", on);
-    });
+  document.querySelectorAll("[data-group]").forEach((label) => {
+    label.hidden = shownByGroup[label.dataset.group] === 0;
+  });
+  document.querySelectorAll(".project-tag").forEach((t) => {
+    const on = !!query && t.dataset.word === query;
+    t.classList.toggle("matching", on);
+    t.setAttribute("aria-pressed", on);
+  });
+  document.querySelectorAll(".stack-tag").forEach((t) => {
+    const on = !!query && norm(t.dataset.tag) === query;
+    t.classList.toggle("active", on);
+    t.setAttribute("aria-pressed", on);
   });
 
-  updateFilterStatus(filter, matchedCards.length);
+  document.getElementById("searchEmpty").hidden = shown > 0;
+  document.getElementById("searchHint").textContent =
+    query || activeKind ? `${shown} of ${items.length} projects · esc to clear` : "";
 
-  // Scroll to the first matched project (if triggered by a click)
-  if (wanted && opts.scroll && matchedCards.length > 0) {
-    matchedCards[0].scrollIntoView({ behavior: "smooth", block: "center" });
+  if (syncUrl) {
+    const url = new URL(location.href);
+    query ? url.searchParams.set("q", query) : url.searchParams.delete("q");
+    activeKind ? url.searchParams.set("kind", activeKind) : url.searchParams.delete("kind");
+    history.replaceState(null, "", url);
   }
 }
 
-function updateFilterStatus(filter, count) {
-  const box = document.getElementById("filterStatus");
-  if (!box) return;
-  box.hidden = !filter;
-  if (!filter) return;
-  document.getElementById("filterStatusTag").textContent = filter;
-  document.getElementById("filterStatusCount").textContent =
-    count === 1 ? "1 match" : `${count} matches`;
+function setKind(kind) {
+  activeKind = kind;
+  document.querySelectorAll(".kind").forEach((b) =>
+    b.setAttribute("aria-pressed", String(b.dataset.kind === kind)),
+  );
+  applySearch();
 }
 
-function toggleFilter(tag) {
-  const willActivate = activeFilter === null ||
-    normalizeTag(activeFilter) !== normalizeTag(tag);
-  applyFilter(willActivate ? tag : null, { scroll: willActivate });
-  return willActivate;
+// Keeps `anchor` at the same spot on screen while items above it disappear,
+// so clicking a tag doesn't make the page jump away from what you clicked.
+function setQuery(value, { anchor = null, scrollToSearch = false } = {}) {
+  const before = anchor?.getBoundingClientRect().top;
+  document.getElementById("q").value = value;
+  applySearch();
+  if (anchor && !anchor.hidden) {
+    window.scrollBy(0, anchor.getBoundingClientRect().top - before);
+  }
+  if (scrollToSearch) {
+    document.querySelector(".search").scrollIntoView({ behavior: scrollBehavior, block: "start" });
+  }
 }
 
-// Show how many cards each Tech Stack tag reaches; tags with no project on
-// the page are hidden (they reappear automatically once a card uses them).
-function initStackCounts() {
-  const counts = new Map();
-  document.querySelectorAll(CARD_SELECTOR).forEach((card) => {
-    new Set(cardTags(card)).forEach((t) => counts.set(t, (counts.get(t) || 0) + 1));
+function clearSearch() {
+  document.getElementById("q").value = "";
+  setKind("");
+}
+
+function openItem(it) {
+  if (it.el.hidden) clearSearch();
+  if (it.details) it.details.open = true;
+  it.el.scrollIntoView({ behavior: scrollBehavior, block: "start" });
+  const focusTarget = it.details?.querySelector("summary");
+  focusTarget?.focus({ preventScroll: true });
+}
+
+const visibleSummaries = () =>
+  items.filter((i) => i.details && !i.el.hidden).map((i) => i.details.querySelector("summary"));
+
+function initSearch() {
+  buildIndex();
+  const input = document.getElementById("q");
+
+  input.addEventListener("input", () => applySearch());
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (input.value || activeKind) clearSearch();
+      else input.blur();
+    } else if (e.key === "Enter" || e.key === "ArrowDown") {
+      e.preventDefault();
+      visibleSummaries()[0]?.focus();
+    }
   });
+  document.querySelectorAll(".kind").forEach((b) => {
+    const n = b.dataset.kind ? items.filter((i) => i.kind === b.dataset.kind).length : items.length;
+    const sup = document.createElement("sup");
+    sup.textContent = n;
+    b.append(sup);
+    b.addEventListener("click", () => setKind(b.dataset.kind));
+  });
+
+  // Tag clicks search for that tag; clicking the active tag clears it.
+  document.addEventListener("click", (e) => {
+    const tag = e.target.closest(".project-tag");
+    if (tag) {
+      const word = tag.dataset.word;
+      setQuery(norm(input.value) === word ? "" : word, { anchor: tag.closest(ITEM_SELECTOR) });
+      return;
+    }
+    const stack = e.target.closest(".stack-tag");
+    if (stack) {
+      const word = norm(stack.dataset.tag);
+      setQuery(norm(input.value) === word ? "" : word, { scrollToSearch: true });
+      return;
+    }
+    const suggestion = e.target.closest("[data-q]");
+    if (suggestion) {
+      setKind("");
+      setQuery(suggestion.dataset.q);
+    }
+  });
+
+  // Restore ?q= / ?kind= from a shared link, then #id opens that project
+  const params = new URLSearchParams(location.search);
+  if (params.get("q")) input.value = params.get("q");
+  if (params.get("kind")) setKind(params.get("kind"));
+  else applySearch({ syncUrl: false });
+  const fromHash = items.find((i) => i.id && i.id === location.hash.slice(1));
+  if (fromHash) openItem(fromHash);
+}
+
+// Show how many projects each Tech Stack tag reaches; tags with no project on
+// the page are hidden (they reappear automatically once a project uses them).
+function initStackCounts() {
   document.querySelectorAll(".stack-tag").forEach((el) => {
-    const n = counts.get(normalizeTag(el.dataset.tag)) || 0;
+    const n = items.filter((i) => i.tags.includes(norm(el.dataset.tag))).length;
     if (n === 0) {
       el.remove();
       return;
@@ -94,12 +233,33 @@ function initStackCounts() {
 // Keep the About stats honest by counting what's actually on the page.
 function initStats() {
   const values = {
-    projects: document.querySelectorAll(CARD_SELECTOR).length,
-    live: document.querySelectorAll(".live-card").length,
+    projects: items.length,
+    live: items.filter((i) => i.kind === "live").length,
   };
   document.querySelectorAll("[data-stat]").forEach((el) => {
     if (values[el.dataset.stat] !== undefined) el.textContent = values[el.dataset.stat];
   });
+}
+
+// ===== TOAST =====
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 1600);
+}
+
+async function copyEmail() {
+  const email = document.querySelector(".contact-email").textContent.trim();
+  try {
+    await navigator.clipboard.writeText(email);
+    toast("email copied");
+  } catch (e) {
+    location.href = `mailto:${email}`;
+  }
 }
 
 // ===== MOBILE NAV =====
@@ -122,30 +282,212 @@ function initNavToggle() {
 }
 
 // ===== THEME TOGGLE =====
-// No saved choice = follow the OS. The first click pins the opposite of
+// No saved choice = follow the OS. The first switch pins the opposite of
 // whatever is showing right now.
-function initThemeToggle() {
-  const btn = document.getElementById("themeToggle");
-  if (!btn) return;
-  const root = document.documentElement;
-  const current = () =>
-    root.dataset.theme ||
-    (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-  const label = () =>
-    btn.setAttribute(
+const currentTheme = () =>
+  document.documentElement.dataset.theme ||
+  (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+
+function updateThemeLabel() {
+  document
+    .getElementById("themeToggle")
+    ?.setAttribute(
       "aria-label",
-      current() === "dark" ? "Switch to light theme" : "Switch to dark theme",
+      currentTheme() === "dark" ? "Switch to light theme" : "Switch to dark theme",
     );
-  label();
-  btn.addEventListener("click", () => {
-    const next = current() === "dark" ? "light" : "dark";
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch (e) {
-      /* private mode etc. — the choice just won't persist */
+}
+
+function toggleTheme() {
+  const next = currentTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try {
+    localStorage.setItem("theme", next);
+  } catch (e) {
+    /* private mode etc. — the choice just won't persist */
+  }
+  updateThemeLabel();
+  return next;
+}
+
+function initThemeToggle() {
+  updateThemeLabel();
+  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
+}
+
+// ===== COMMAND PALETTE (ctrl/cmd + k) + KEYBOARD SHORTCUTS =====
+function initPalette() {
+  const palette = document.getElementById("palette");
+  const input = document.getElementById("paletteInput");
+  const list = document.getElementById("paletteList");
+  if (!palette) return;
+  let shown = [];
+  let index = 0;
+
+  const go = (id) => () =>
+    document.getElementById(id).scrollIntoView({ behavior: scrollBehavior });
+  const commands = [
+    ...["about", "stack", "projects", "contact"].map((id) => ({ verb: "go", label: id, run: go(id) })),
+    ...items.map((it) => ({
+      verb: "view",
+      label: it.name,
+      hint: it.kind,
+      run: () => openItem(it),
+    })),
+    ...items
+      .filter((it) => it.launch)
+      .map((it) => ({
+        verb: "launch",
+        label: it.name,
+        hint: "↗",
+        run: () => window.open(it.launch, "_blank", "noopener"),
+      })),
+    { verb: "run", label: "toggle theme", hint: "t", run: () => toast(`theme: ${toggleTheme()}`) },
+    { verb: "run", label: "copy email", run: copyEmail },
+    {
+      verb: "run",
+      label: "show live apps only",
+      run: () => {
+        setKind("live");
+        document.querySelector(".search").scrollIntoView({ behavior: scrollBehavior });
+      },
+    },
+    {
+      verb: "open",
+      label: "github profile",
+      hint: "↗",
+      run: () => window.open("https://github.com/pero-grubac", "_blank", "noopener"),
+    },
+  ];
+
+  function render() {
+    const terms = norm(input.value).split(" ").filter(Boolean);
+    shown = commands.filter((c) => {
+      const text = `${c.verb} ${c.label} ${c.hint || ""}`.toLowerCase();
+      return terms.every((t) => text.includes(t));
+    });
+    // Whatever was typed can always be run as a project search
+    const typed = norm(input.value);
+    if (typed) {
+      shown.push({
+        verb: "search",
+        label: `"${typed}" in projects`,
+        hint: "/",
+        run: () => setQuery(typed, { scrollToSearch: true }),
+      });
     }
-    label();
+    index = Math.min(index, Math.max(shown.length - 1, 0));
+    list.textContent = "";
+    if (!shown.length) {
+      const li = document.createElement("li");
+      li.className = "none";
+      li.textContent = "no matching command";
+      list.append(li);
+      input.removeAttribute("aria-activedescendant");
+      return;
+    }
+    shown.forEach((c, i) => {
+      const li = document.createElement("li");
+      li.id = `cmd-${i}`;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", String(i === index));
+      const verb = document.createElement("span");
+      verb.className = "verb";
+      verb.textContent = c.verb;
+      const label = document.createElement("span");
+      label.textContent = c.label;
+      li.append(verb, label);
+      if (c.hint) {
+        const h = document.createElement("span");
+        h.className = "hint";
+        h.textContent = c.hint;
+        li.append(h);
+      }
+      li.addEventListener("mousemove", () => select(i));
+      li.addEventListener("click", () => run(i));
+      list.append(li);
+    });
+    input.setAttribute("aria-activedescendant", `cmd-${index}`);
+  }
+
+  function select(i) {
+    if (i === index) return;
+    list.children[index]?.setAttribute("aria-selected", "false");
+    index = i;
+    const li = list.children[index];
+    li?.setAttribute("aria-selected", "true");
+    li?.scrollIntoView({ block: "nearest" });
+    input.setAttribute("aria-activedescendant", `cmd-${index}`);
+  }
+
+  function run(i) {
+    const c = shown[i];
+    if (!c) return;
+    palette.close();
+    c.run();
+  }
+
+  function open() {
+    if (palette.open) return;
+    input.value = "";
+    index = 0;
+    render();
+    palette.showModal();
+    input.focus();
+  }
+
+  input.addEventListener("input", () => {
+    index = 0;
+    render();
+  });
+  input.addEventListener("keydown", (e) => {
+    const n = Math.max(shown.length, 1);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      select((index + 1) % n);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      select((index - 1 + n) % n);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      run(index);
+    }
+  });
+  palette.addEventListener("click", (e) => {
+    if (e.target === palette) palette.close(); // click on the backdrop
+  });
+  document.getElementById("paletteBtn")?.addEventListener("click", open);
+
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      palette.open ? palette.close() : open();
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey || palette.open) return;
+    const t = e.target;
+    if (t instanceof Element && t.closest("input, textarea, select, [contenteditable]")) return;
+
+    if (e.key === "/") {
+      e.preventDefault();
+      const q = document.getElementById("q");
+      q.closest(".search").scrollIntoView({ behavior: scrollBehavior, block: "start" });
+      q.focus({ preventScroll: true });
+      q.select();
+    } else if (e.key === "t") {
+      toast(`theme: ${toggleTheme()}`);
+    } else if (e.key === "Escape" && (document.getElementById("q").value || activeKind)) {
+      clearSearch();
+    } else if (e.key === "j" || e.key === "k") {
+      const rows = visibleSummaries();
+      if (!rows.length) return;
+      const i = rows.indexOf(document.activeElement);
+      const next = i === -1 ? 0 : Math.min(Math.max(i + (e.key === "j" ? 1 : -1), 0), rows.length - 1);
+      rows[next].focus();
+      rows[next].scrollIntoView({ block: "nearest", behavior: scrollBehavior });
+    } else if (e.key === "o") {
+      const it = items.find((i) => i.el.contains(document.activeElement));
+      if (it?.launch) window.open(it.launch, "_blank", "noopener");
+    }
   });
 }
 
@@ -167,7 +509,7 @@ function initSpotlight() {
   document.addEventListener(
     "pointermove",
     (e) => {
-      const card = e.target.closest(`${CARD_SELECTOR}, .stack-card`);
+      const card = e.target.closest(".project-card, .stack-card");
       if (last && last !== card) clear(last);
       last = card;
       if (!card || pending) return;
@@ -184,45 +526,13 @@ function initSpotlight() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initSearch();
   initStackCounts();
   initStats();
   initNavToggle();
   initThemeToggle();
+  initPalette();
   initSpotlight();
-
-  // Stack tag clicks
-  document.querySelectorAll(".stack-tag").forEach((el) => {
-    el.addEventListener("click", () => {
-      if (!toggleFilter(el.dataset.tag)) {
-        document
-          .getElementById("projects")
-          .scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  });
-
-  document.getElementById("filterStatusClear")?.addEventListener("click", () =>
-    applyFilter(null),
-  );
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && activeFilter) applyFilter(null);
-  });
-
-  // Project/card tag clicks + click outside to clear
-  document.addEventListener("click", (e) => {
-    const tagEl = e.target.closest(".project-tag");
-    if (tagEl) {
-      toggleFilter(tagEl.textContent);
-      return;
-    }
-    if (
-      !e.target.closest(CARD_SELECTOR) &&
-      !e.target.closest(".stack-tag") &&
-      !e.target.closest(".filter-status")
-    ) {
-      applyFilter(null);
-    }
-  });
 
   // Video lazy load — playback is entirely observer-driven (no autoplay attribute in HTML)
   const videos = document.querySelectorAll("video");

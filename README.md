@@ -20,32 +20,33 @@ Portfolio website showcasing my projects, tech stack and contact information. Bu
 
 ---
 
-## 🗂️ Featured Projects
+## 🗂️ Projects
+
+All 19 projects live in one **Projects** section with a single search bar (`grep -i …`) and kind filters (systems · live · mobile · desktop · tool). Searches and filters are kept in the URL, so a link like `?q=docker` or `#arcane-keep` opens that exact view.
+
+**Featured systems** — always visible, each with a demo video:
 
 1. **Incident Alert** — Microservices incident tracking system (ASP.NET · React · RabbitMQ · Docker)
 2. **eMobilityHub** — Electric vehicle rental platform (Spring Boot · Angular · MySQL · Docker)
 3. **Chat Room** — Secure forum with 2FA and OAuth2 (Spring Boot · React · JWT · Docker)
 4. **Online Library System** — Distributed Java platform (Redis · WebSocket · RMI · RabbitMQ)
 
-## 📦 More Projects
+**Index** — one row per project; rows open in place with a preview, a short description and key highlights, and live apps launch straight from the row:
 
-- **FitForge** — Fitness tracking Android app (Flutter · Dart · SQLite)
-- **AssetManager** — Android asset tracking app (Flutter · SQLite · Google Maps)
-- **ETF Oglasi** — University announcements app (Flutter · SQLite · WorkManager)
-- **Store Management System** — Desktop retail app (C# · .NET · MySQL · WinForms)
+- **Live apps** — Arcane Keep, DevKit, GitHub Dashboard, Dev Timeline, Countdown, Catan Map Generator, excuse.exe, Sedmica, Lora Score Table, Yamb Table
+- **Mobile** — FitForge, AssetManager, ETF Oglasi (Flutter · Dart · SQLite)
+- **Desktop** — Store Management System (C# · .NET · WinForms · MySQL in Docker)
+- **Tool** — GitHub Discord Bot (Python · discord.py · Flask · PostgreSQL)
 
-## 🌐 Live Apps
+### ⌨️ Keyboard
 
-Ten deployed apps, each with a screenshot and a working demo link:
-
-- **Arcane Keep** (featured) — Endless tower-defense game with procedural maps (React · Canvas · Web Audio · PWA)
-- **Developer tools** — DevKit, GitHub Dashboard, Dev Timeline
-- **Utilities** — Countdown, Catan Map Generator, excuse.exe
-- **Score keepers** — Sedmica, Lora Score Table, Yamb Table
-
-## 🔧 Tools
-
-- **GitHub Discord Bot** — Personal productivity bot for managing GitHub workflow from Discord (Python · PostgreSQL · Docker)
+| Key | Action |
+| --- | --- |
+| `/` | Search projects |
+| `Ctrl` + `K` | Command menu — jump to a project, launch an app, copy email |
+| `t` | Toggle light / dark theme |
+| `j` / `k` | Move between index rows · `Enter` opens · `o` launches a live app |
+| `Esc` | Clear the search |
 
 ---
 
@@ -55,7 +56,7 @@ Ten deployed apps, each with a screenshot and a working demo link:
 | ------------------- | ------------------------------------------------- |
 | HTML5               | Structure                                          |
 | CSS3                | Styling, OKLCH color tokens (light + dark), animations |
-| Vanilla JavaScript  | Mobile nav, tag filtering, live stats, light/dark toggle, staggered reveal |
+| Vanilla JavaScript  | Project search, command menu, keyboard shortcuts, light/dark toggle, staggered reveal |
 | Google Fonts        | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
 | Font Awesome        | Icons                                              |
 | GitHub Pages        | Hosting                                            |
@@ -85,13 +86,15 @@ pero-grubac.github.io/
 │   └── scripts.js
 ├── assets/
 │   ├── avatar.jpeg
+│   ├── favicon.ico
+│   ├── apple-touch-icon.png
 │   ├── og-card.png          # link-preview image
-│   ├── live/                # Live Apps thumbnails (WebP)
-│   ├── incident_alert/
+│   ├── incident_alert/      # featured systems: demo.mp4 + poster image
 │   ├── e-mobility-hub/
 │   ├── chatroom/
 │   ├── library/
-│   ├── fitforge/
+│   ├── live/                # live app screenshots (WebP)
+│   ├── fitforge/            # mobile & desktop: preview.webp built from real app screens
 │   ├── asset_manager/
 │   ├── etf_oglasi/
 │   └── store_management/

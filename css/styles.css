@@ -70,6 +70,8 @@
 }
 html {
   scroll-behavior: smooth;
+  /* keeps anchors and scrollIntoView targets clear of the fixed nav */
+  scroll-padding-top: 5rem;
 }
 body {
   background: var(--bg);
@@ -110,7 +112,6 @@ body::before {
   background-size: 60px 60px;
   opacity: var(--grid-opacity);
 }
-
 /* ACCESSIBILITY */
 a:focus-visible,
 button:focus-visible,
@@ -119,7 +120,6 @@ button:focus-visible,
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-
 /* NAVBAR */
 nav {
   position: fixed;
@@ -240,7 +240,6 @@ nav.nav-open .nav-toggle span:nth-child(2) {
 nav.nav-open .nav-toggle span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
-
 /* HERO */
 .hero {
   min-height: 100vh;
@@ -364,7 +363,6 @@ nav.nav-open .nav-toggle span:nth-child(3) {
     transform: translateY(0);
   }
 }
-
 /* HERO TERMINAL */
 .hero-terminal {
   background: var(--surface);
@@ -470,7 +468,6 @@ nav.nav-open .nav-toggle span:nth-child(3) {
     max-width: 480px;
   }
 }
-
 /* BUTTONS */
 .btn-primary {
   display: inline-flex;
@@ -508,7 +505,6 @@ nav.nav-open .nav-toggle span:nth-child(3) {
   color: var(--accent);
   transform: translateY(-2px);
 }
-
 /* SECTIONS */
 section {
   padding: 6rem 2rem;
@@ -589,21 +585,15 @@ section {
   .hero-terminal-cursor {
     animation: none;
   }
-  .live-card:hover .live-thumb img {
-    transform: none;
-  }
 }
-
 /* SECTION GLOWS — carry some of the hero's atmosphere down the page.
    Sections are already stacking contexts (.reveal transforms), so z-index:-1
    keeps the glow behind the content but inside the section. */
 #projects,
-#live-apps,
 #contact {
   position: relative;
 }
 #projects::before,
-#live-apps::before,
 #contact::before {
   content: "";
   position: absolute;
@@ -618,18 +608,12 @@ section {
   right: -240px;
   background: radial-gradient(circle, color-mix(in oklch, var(--accent2) 7%, transparent) 0%, transparent 65%);
 }
-#live-apps::before {
-  top: 10rem;
-  left: -280px;
-  background: radial-gradient(circle, color-mix(in oklch, var(--live) 6%, transparent) 0%, transparent 65%);
-}
 #contact::before {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle, color-mix(in oklch, var(--accent) 8%, transparent) 0%, transparent 65%);
 }
-
 /* ABOUT */
 .about-grid {
   display: grid;
@@ -668,7 +652,6 @@ section {
   object-fit: cover;
   display: block;
 }
-
 .stats-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -708,7 +691,6 @@ section {
 .stat:nth-child(2) dd {
   color: var(--live);
 }
-
 /* STACK */
 .stack-categories {
   display: grid;
@@ -785,7 +767,6 @@ section {
   color: var(--muted);
   margin-bottom: 2rem;
 }
-
 /* FEATURED PROJECTS */
 .projects-grid {
   display: flex;
@@ -811,14 +792,6 @@ section {
 .project-card:hover {
   border-color: var(--accent);
   transform: translateY(-3px);
-}
-.project-card.highlighted {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.project-card.dimmed {
-  opacity: 0.15;
-  transform: none !important;
 }
 .project-card.reverse {
   direction: rtl;
@@ -888,11 +861,9 @@ section {
 .project-arch span {
   color: var(--accent);
 }
-.project-info p strong,
-.more-work-info p strong {
+.project-info p strong {
   color: var(--text);
 }
-
 /* SHARED TAGS & LINKS */
 .project-tags {
   display: flex;
@@ -947,7 +918,6 @@ section {
 .project-link.link-accent {
   color: var(--accent);
 }
-
 /* STATUS BADGES (shared shape, color communicates meaning) */
 .badge-tool {
   font-family: var(--font-mono);
@@ -957,14 +927,6 @@ section {
   background: color-mix(in oklch, var(--tint) 5%, transparent);
   color: var(--muted);
   border: 1px solid var(--border);
-}
-.live-badge {
-  background: color-mix(in oklch, var(--live) 10%, transparent) !important;
-  color: var(--live) !important;
-  border-color: color-mix(in oklch, var(--live) 30%, transparent) !important;
-  display: inline-flex !important;
-  align-items: center;
-  gap: 5px;
 }
 .live-dot {
   width: 5px;
@@ -985,194 +947,7 @@ section {
   border: 1px solid color-mix(in oklch, var(--accent2) 25%, transparent);
   letter-spacing: 0.05em;
 }
-
-/* MORE WORK / LIVE APPS — static wrapping grids, not a carousel: everything
-   is visible without clicking, and it drops the slider JS entirely. */
-.more-work-label {
-  margin-top: 4rem;
-  margin-bottom: 1.5rem;
-}
-.more-work-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-.more-work-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition:
-    border-color 0.3s,
-    transform 0.45s ease,
-    opacity 0.45s ease;
-}
-.more-work-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-}
-.more-work-card.highlighted {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.more-work-card.dimmed {
-  opacity: 0.25;
-  transform: none !important;
-}
-.more-work-img {
-  height: 160px;
-  overflow: hidden;
-  background: var(--bg2);
-}
-.more-work-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-.more-work-card:hover .more-work-img img {
-  opacity: 0.9;
-}
-.more-work-info {
-  padding: 1.25rem;
-}
-.more-work-meta {
-  margin-bottom: 0.5rem;
-}
-.more-work-badge {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: color-mix(in oklch, var(--accent2) 12%, transparent);
-  color: var(--accent2);
-  border: 1px solid color-mix(in oklch, var(--accent2) 25%, transparent);
-  letter-spacing: 0.05em;
-}
-.more-work-info h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  margin-top: 0.4rem;
-}
-.more-work-info p {
-  color: var(--text-body);
-  font-size: 1rem;
-  line-height: 1.55;
-  margin-bottom: 1rem;
-}
-
-/* LIVE APPS */
-.live-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-.live-card {
-  display: flex;
-  flex-direction: column;
-}
-.live-thumb {
-  display: block;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-}
-.live-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-  opacity: 0.8;
-  transition:
-    opacity 0.25s,
-    transform 0.4s;
-}
-.live-card:hover .live-thumb img {
-  opacity: 1;
-  transform: scale(1.03);
-}
-.live-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.25rem 1.4rem 1.4rem;
-}
-.live-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.6rem;
-}
-.live-head h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.live-body > p {
-  flex: 1;
-  color: var(--text-body);
-  font-size: 1rem;
-  line-height: 1.55;
-  margin-bottom: 1rem;
-}
-.live-body p strong {
-  color: var(--text);
-}
-/* Featured live app: image and text side by side, full width */
-.live-card--featured {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-}
-.live-card--featured .live-thumb {
-  aspect-ratio: auto;
-  height: 100%;
-  min-height: 320px;
-  border-bottom: 0;
-  border-right: 1px solid var(--border);
-}
-.live-card--featured .live-body {
-  padding: 2rem;
-  justify-content: center;
-}
-.live-card--featured h3 {
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
-}
-.live-card--featured .live-body > p {
-  flex: 0;
-  font-size: 1.08rem;
-  line-height: 1.65;
-}
-.live-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  list-style: none;
-  margin-bottom: 1.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-.live-facts span {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--live);
-  line-height: 1.1;
-}
-
 /* TOOLS */
-.tool-card {
-  grid-template-columns: 1.1fr 0.9fr;
-}
 .tool-terminal {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -1202,49 +977,474 @@ section {
 .tool-terminal-body span {
   color: var(--muted);
 }
+/* The hidden attribute must win over components that set their own display */
+[hidden] {
+  display: none !important;
+}
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1;
+  color: var(--muted);
+  padding: 0.22rem 0.42rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
 
-/* FILTER STATUS CHIP */
-.filter-status {
-  position: fixed;
-  left: 50%;
-  bottom: 1.5rem;
-  transform: translateX(-50%);
-  z-index: 60;
+/* PROJECT SEARCH */
+.search {
+  margin-bottom: 2.5rem;
+}
+.search-box {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
-  border: 1px solid color-mix(in oklch, var(--accent) 40%, transparent);
-  border-radius: 100px;
-  background: color-mix(in oklch, var(--surface) 95%, transparent);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 12px 40px color-mix(in oklch, var(--shadow) 45%, transparent);
+  gap: 0.85rem;
+  height: 3.25rem;
+  padding: 0 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 12%, transparent);
+}
+.search-prefix {
+  color: var(--accent);
+  white-space: nowrap;
+}
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: 0;
+  outline: 0;
+}
+.search-box input::placeholder {
+  color: var(--muted);
+}
+.search-box input::-webkit-search-cancel-button {
+  display: none;
+}
+.search-box:focus-within .search-key {
+  visibility: hidden;
+}
+.kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+.kind {
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--muted);
-  white-space: nowrap;
-}
-.filter-status[hidden] {
-  display: none;
-}
-.filter-status strong {
-  color: var(--accent);
-}
-.filter-status-clear {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
   background: none;
-  color: var(--text);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
   cursor: pointer;
-  font-size: 0.7rem;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
-.filter-status-clear:hover {
-  border-color: var(--accent);
+.kind sup {
+  font-size: 0.65rem;
+  margin-left: 0.25rem;
+  vertical-align: 0.35em;
+}
+.kind:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+.kind[aria-pressed="true"] {
   color: var(--accent);
+  border-color: color-mix(in oklch, var(--accent) 40%, transparent);
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+.search-hint {
+  min-height: 1.3rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.group-label {
+  margin-bottom: 1.5rem;
+}
+.projects-grid + .group-label {
+  margin-top: 1rem;
+}
+mark {
+  background: color-mix(in oklch, var(--accent) 28%, transparent);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 0.05em;
+}
+.search-empty {
+  padding: 2rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.linklike {
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.2em;
 }
 
+/* PROJECT INDEX — one row per project; a row opens in place */
+.index {
+  border-top: 1px solid var(--border);
+}
+.index-row {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+.index-row summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 6.5rem minmax(0, 1.6fr) 5rem 1.25rem;
+  gap: 1rem;
+  align-items: center;
+  min-height: 3.6rem;
+  padding: 0.5rem 1rem;
+  list-style: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.index-row summary::-webkit-details-marker {
+  display: none;
+}
+.index-row summary::after {
+  content: "+";
+  grid-column: 5;
+  justify-self: end;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+.index-row details[open] summary::after {
+  content: "−";
+  color: var(--accent);
+}
+.index-row summary:hover,
+.index-row summary:focus-visible {
+  background: color-mix(in oklch, var(--tint) 4%, transparent);
+}
+.index-row summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.row-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.index-row[data-kind="live"] .row-kind {
+  color: var(--live);
+}
+.row-stack {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Launch link sits over the summary row (not inside it — links don't belong
+   in a <summary>), in the grid's 4th column. */
+.row-launch {
+  position: absolute;
+  top: 0;
+  right: 3rem;
+  height: 3.6rem;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--live);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.row-launch:hover {
+  color: var(--accent);
+}
+.row-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+  /* The 16:10 preview is usually taller than the text; centring splits
+     the spare space above and below instead of leaving it all at the end. */
+  align-items: center;
+  padding: 0.75rem 1rem 2rem;
+}
+.row-thumb {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+}
+.row-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  transition: transform 0.4s;
+}
+a.row-thumb:hover img {
+  transform: scale(1.03);
+}
+.row-text p {
+  color: var(--text-body);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin-bottom: 1.1rem;
+}
+.row-text p strong {
+  color: var(--text);
+}
+.row-facts {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+  margin: -0.2rem 0 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.row-facts li {
+  position: relative;
+  padding-left: 1.2rem;
+}
+.row-facts li::before {
+  content: "›";
+  position: absolute;
+  left: 0.2rem;
+  color: var(--accent);
+}
+.index-row .tool-terminal {
+  align-self: start;
+}
+
+/* COMMAND PALETTE */
+.palette-btn {
+  display: grid;
+  place-items: center;
+  height: 40px;
+  padding: 0 0.6rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.palette-btn kbd {
+  border: 0;
+  padding: 0;
+  font-size: 0.75rem;
+}
+.palette-btn:hover {
+  border-color: var(--accent);
+}
+.palette-btn:hover kbd {
+  color: var(--accent);
+}
+.palette {
+  width: min(38rem, calc(100% - 2rem));
+  margin: 12vh auto auto;
+  padding: 0;
+  color: var(--text-body);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 30px 80px -20px color-mix(in oklch, var(--shadow) 70%, transparent);
+  overflow: hidden;
+}
+.palette::backdrop {
+  background: oklch(0 0 0 / 0.45);
+  backdrop-filter: blur(3px);
+}
+.palette-input {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  height: 3.4rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+.palette-caret {
+  color: var(--accent);
+}
+.palette-input input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: 0;
+  outline: 0;
+}
+.palette-input input::placeholder {
+  color: var(--muted);
+}
+.palette-list {
+  list-style: none;
+  max-height: min(24rem, 55vh);
+  overflow-y: auto;
+  padding: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+}
+.palette-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.palette-list li[aria-selected="true"] {
+  background: color-mix(in oklch, var(--accent) 13%, transparent);
+  color: var(--text);
+}
+.palette-list .verb {
+  width: 3.8rem;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.palette-list li[aria-selected="true"] .verb {
+  color: var(--accent);
+}
+.palette-list .hint {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.palette-list .none {
+  color: var(--muted);
+  cursor: default;
+}
+.palette-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.palette-foot kbd:not(:first-child):not(kbd + kbd) {
+  margin-left: 0.6rem;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 70;
+  translate: -50% 1rem;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px color-mix(in oklch, var(--shadow) 40%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, translate 0.2s;
+}
+.toast.show {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+@media (max-width: 900px) {
+  .row-body {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+@media (max-width: 600px) {
+  /* Two lines per row: name + kind on top, stack (and launch link) below */
+  .index-row summary {
+    grid-template-columns: minmax(0, 1fr) auto 1.25rem;
+    grid-template-areas:
+      "name kind mark"
+      "stack launch launch";
+    row-gap: 0.2rem;
+    padding: 0.7rem 0.75rem;
+  }
+  .row-name {
+    grid-area: name;
+  }
+  .row-kind {
+    grid-area: kind;
+  }
+  .row-stack {
+    grid-area: stack;
+  }
+  .index-row summary::after {
+    grid-area: mark;
+    grid-column: auto;
+  }
+  .row-launch {
+    top: 2.1rem;
+    right: 0.75rem;
+    height: 1.6rem;
+  }
+  .row-body {
+    padding: 0.5rem 0.75rem 1.5rem;
+  }
+  .palette-btn,
+  .search-key {
+    display: none;
+  }
+}
+@media (hover: none) {
+  .search-key,
+  .palette-foot {
+    display: none;
+  }
+}
 /* CONTACT */
 #contact {
   text-align: center;
@@ -1304,8 +1504,6 @@ section {
   color: var(--accent);
   transform: translateY(-3px);
 }
-
-
 /* FOOTER */
 footer {
   margin-top: 2rem;
@@ -1316,11 +1514,9 @@ footer {
   font-size: 0.82rem;
   color: var(--muted);
 }
-
 /* CURSOR SPOTLIGHT — a soft accent glow that follows the pointer inside a
    card. Sits in background-image, so each card's background-color stays. */
 .project-card,
-.more-work-card,
 .stack-card {
   background-image: radial-gradient(
     380px circle at var(--mx, -999px) var(--my, -999px),
@@ -1328,7 +1524,6 @@ footer {
     transparent 70%
   );
 }
-
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .about-grid {
@@ -1342,20 +1537,6 @@ footer {
   }
   .project-card.reverse {
     direction: ltr;
-  }
-  .more-work-grid,
-  .live-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .live-card--featured,
-  .tool-card {
-    grid-template-columns: 1fr;
-  }
-  .live-card--featured .live-thumb {
-    min-height: 0;
-    aspect-ratio: 16 / 10;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
   }
   .stats-strip {
     grid-template-columns: repeat(2, 1fr);
@@ -1408,18 +1589,11 @@ footer {
   .hero h1 {
     font-size: 3rem;
   }
-  .more-work-grid,
-  .live-grid {
-    grid-template-columns: 1fr;
-  }
   .stat {
     padding: 1.1rem 1.2rem;
   }
   .stat dd {
     font-size: 1.9rem;
-  }
-  .live-card--featured .live-body {
-    padding: 1.4rem;
   }
   .tool-terminal-body li {
     grid-template-columns: 1fr;
