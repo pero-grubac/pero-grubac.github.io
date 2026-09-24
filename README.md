@@ -36,7 +36,12 @@ Portfolio website showcasing my projects, tech stack and contact information. Bu
 
 ## 🌐 Live Apps
 
-Eight small deployed tools and toys, all linked with working demos: GitHub Dashboard, DevKit, Dev Timeline, Catan Map Generator, Sedmica, Lora Score Table, Yamb Table, and excuse.exe.
+Ten deployed apps, each with a screenshot and a working demo link:
+
+- **Arcane Keep** (featured) — Endless tower-defense game with procedural maps (React · Canvas · Web Audio · PWA)
+- **Developer tools** — DevKit, GitHub Dashboard, Dev Timeline
+- **Utilities** — Countdown, Catan Map Generator, excuse.exe
+- **Score keepers** — Sedmica, Lora Score Table, Yamb Table
 
 ## 🔧 Tools
 
@@ -49,8 +54,8 @@ Eight small deployed tools and toys, all linked with working demos: GitHub Dashb
 | Technology         | Usage                                            |
 | ------------------- | ------------------------------------------------- |
 | HTML5               | Structure                                          |
-| CSS3                | Styling, OKLCH color system, animations            |
-| Vanilla JavaScript  | Navbar scroll, tag filtering, reveal-on-scroll     |
+| CSS3                | Styling, OKLCH color tokens (light + dark), animations |
+| Vanilla JavaScript  | Mobile nav, tag filtering, live stats, light/dark toggle, staggered reveal |
 | Google Fonts        | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
 | Font Awesome        | Icons                                              |
 | GitHub Pages        | Hosting                                            |
@@ -80,6 +85,8 @@ pero-grubac.github.io/
 │   └── scripts.js
 ├── assets/
 │   ├── avatar.jpeg
+│   ├── og-card.png          # link-preview image
+│   ├── live/                # Live Apps thumbnails (WebP)
 │   ├── incident_alert/
 │   ├── e-mobility-hub/
 │   ├── chatroom/

@@ -9,9 +9,57 @@
   --text: oklch(0.96 0.01 260);
   --text-body: oklch(0.82 0.008 260);
   --muted: oklch(0.62 0.01 260);
+  --accent-hover: oklch(0.86 0.15 195);
+  --on-accent: #0a0a0f;
+  /* --tint: overlay colour for subtle fills (white on dark, ink on light).
+     --shadow: shadow base colour, already softer in the light theme. */
+  --tint: oklch(1 0 0);
+  --shadow: oklch(0 0 0);
+  --grid-opacity: 0.18;
+  color-scheme: dark;
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+}
+/* Light theme: follows the OS unless the visitor picked one with the toggle
+   (stored as data-theme on <html>, set before first paint in <head>). */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: oklch(0.975 0.004 260);
+    --bg2: oklch(0.94 0.006 260);
+    --surface: oklch(0.995 0.002 260);
+    --border: oklch(0.88 0.008 260);
+    --accent: oklch(0.53 0.11 200);
+    --accent2: oklch(0.52 0.15 300);
+    --live: oklch(0.53 0.14 150);
+    --text: oklch(0.2 0.012 260);
+    --text-body: oklch(0.34 0.012 260);
+    --muted: oklch(0.5 0.012 260);
+    --accent-hover: oklch(0.47 0.11 200);
+    --on-accent: #fff;
+    --tint: oklch(0.2 0.012 260);
+    --shadow: oklch(0.35 0.02 260 / 0.35);
+    --grid-opacity: 0.35;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: oklch(0.975 0.004 260);
+  --bg2: oklch(0.94 0.006 260);
+  --surface: oklch(0.995 0.002 260);
+  --border: oklch(0.88 0.008 260);
+  --accent: oklch(0.53 0.11 200);
+  --accent2: oklch(0.52 0.15 300);
+  --live: oklch(0.53 0.14 150);
+  --text: oklch(0.2 0.012 260);
+  --text-body: oklch(0.34 0.012 260);
+  --muted: oklch(0.5 0.012 260);
+  --accent-hover: oklch(0.47 0.11 200);
+  --on-accent: #fff;
+  --tint: oklch(0.2 0.012 260);
+  --shadow: oklch(0.35 0.02 260 / 0.35);
+  --grid-opacity: 0.35;
+  color-scheme: light;
 }
 *,
 *::before,
@@ -25,6 +73,9 @@ html {
 }
 body {
   background: var(--bg);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   color: var(--text-body);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -57,7 +108,7 @@ body::before {
     linear-gradient(var(--border) 1px, transparent 1px),
     linear-gradient(90deg, var(--border) 1px, transparent 1px);
   background-size: 60px 60px;
-  opacity: 0.18;
+  opacity: var(--grid-opacity);
 }
 
 /* ACCESSIBILITY */
@@ -83,7 +134,7 @@ nav {
   transition: all 0.3s;
 }
 nav.scrolled {
-  background: oklch(0.15 0.006 260 / 0.92);
+  background: color-mix(in oklch, var(--bg) 92%, transparent);
   border-color: var(--border);
   backdrop-filter: blur(12px);
 }
@@ -101,6 +152,50 @@ nav.scrolled {
   display: flex;
   gap: 2rem;
   list-style: none;
+  margin-left: auto;
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: 2rem;
+}
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+/* Show the icon for the theme you'd switch TO */
+.theme-toggle .fa-sun {
+  display: none;
+}
+:root[data-theme="dark"] .theme-toggle .fa-sun {
+  display: inline;
+}
+:root[data-theme="dark"] .theme-toggle .fa-moon {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .fa-sun {
+    display: inline;
+  }
+  :root:not([data-theme="light"]) .theme-toggle .fa-moon {
+    display: none;
+  }
 }
 .nav-links a {
   color: var(--muted);
@@ -113,6 +208,37 @@ nav.scrolled {
 }
 .nav-links a:hover {
   color: var(--accent);
+}
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0 9px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--text);
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+nav.nav-open .nav-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+nav.nav-open .nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+nav.nav-open .nav-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* HERO */
@@ -144,7 +270,7 @@ nav.scrolled {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    oklch(0.8 0.13 195 / 0.08) 0%,
+    color-mix(in oklch, var(--accent) 8%, transparent) 0%,
     transparent 70%
   );
   top: 50%;
@@ -169,8 +295,8 @@ nav.scrolled {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: oklch(0.8 0.13 195 / 0.08);
-  border: 1px solid oklch(0.8 0.13 195 / 0.2);
+  background: color-mix(in oklch, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--accent) 20%, transparent);
   border-radius: 100px;
   padding: 0.45rem 1.1rem;
   font-family: var(--font-mono);
@@ -245,7 +371,7 @@ nav.scrolled {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 60px color-mix(in oklch, var(--shadow) 35%, transparent);
   animation: fadeUp 0.6s 0.4s ease both;
 }
 /* WINDOWS-STYLE TITLEBAR (used by the hero terminal —
@@ -256,7 +382,7 @@ nav.scrolled {
   align-items: center;
   justify-content: space-between;
   padding: 0.55rem 0 0.55rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: color-mix(in oklch, var(--tint) 2%, transparent);
   border-bottom: 1px solid var(--border);
 }
 .win-title {
@@ -288,7 +414,7 @@ nav.scrolled {
     color 0.15s;
 }
 .win-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in oklch, var(--tint) 6%, transparent);
   color: var(--text);
 }
 .win-btn.win-close:hover {
@@ -351,7 +477,7 @@ nav.scrolled {
   align-items: center;
   gap: 0.5rem;
   background: var(--accent);
-  color: #0a0a0f;
+  color: var(--on-accent);
   padding: 0.9rem 2.1rem;
   border-radius: 6px;
   font-weight: 700;
@@ -360,9 +486,9 @@ nav.scrolled {
   transition: all 0.2s;
 }
 .btn-primary:hover {
-  background: oklch(0.86 0.15 195);
+  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px oklch(0.8 0.13 195 / 0.3);
+  box-shadow: 0 8px 30px color-mix(in oklch, var(--accent) 30%, transparent);
 }
 .btn-outline {
   display: inline-flex;
@@ -419,26 +545,89 @@ section {
   background: linear-gradient(90deg, var(--accent), var(--accent2));
 }
 /* SCROLL REVEAL */
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition:
     opacity 0.7s ease,
     transform 0.7s ease;
 }
-.reveal.is-visible {
+.js .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
+/* Staggered cards: each grid reveals on its own, children one after
+   another (--i is set by scripts.js). The delay is dropped once the
+   entrance is over (.stagger-done) so hover transitions stay instant. */
+.js .stagger > * {
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.js .stagger:not(.is-visible) > * {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.js .stagger.stagger-done > * {
+  transition-delay: 0s;
+}
+.stack-card,
+.stat {
+  transition:
+    border-color 0.2s,
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .stagger > * {
     opacity: 1 !important;
     transform: none !important;
+    transition-delay: 0s !important;
+  }
+  .reveal {
     transition: none !important;
   }
   .hero-terminal-cursor {
     animation: none;
   }
+  .live-card:hover .live-thumb img {
+    transform: none;
+  }
+}
+
+/* SECTION GLOWS — carry some of the hero's atmosphere down the page.
+   Sections are already stacking contexts (.reveal transforms), so z-index:-1
+   keeps the glow behind the content but inside the section. */
+#projects,
+#live-apps,
+#contact {
+  position: relative;
+}
+#projects::before,
+#live-apps::before,
+#contact::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 720px;
+  height: 720px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+#projects::before {
+  top: 4rem;
+  right: -240px;
+  background: radial-gradient(circle, color-mix(in oklch, var(--accent2) 7%, transparent) 0%, transparent 65%);
+}
+#live-apps::before {
+  top: 10rem;
+  left: -280px;
+  background: radial-gradient(circle, color-mix(in oklch, var(--live) 6%, transparent) 0%, transparent 65%);
+}
+#contact::before {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, color-mix(in oklch, var(--accent) 8%, transparent) 0%, transparent 65%);
 }
 
 /* ABOUT */
@@ -480,6 +669,46 @@ section {
   display: block;
 }
 
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.35rem;
+  padding: 1.5rem 1.75rem;
+  border-left: 1px solid var(--border);
+}
+.stat:first-child {
+  border-left: 0;
+}
+.stat dd {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.stat dt {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.stat:first-child dd {
+  color: var(--accent);
+}
+.stat:nth-child(2) dd {
+  color: var(--live);
+}
+
 /* STACK */
 .stack-categories {
   display: grid;
@@ -489,10 +718,9 @@ section {
 .stack-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-top: 2px solid oklch(0.8 0.13 195 / 0.45);
+  border-top: 2px solid color-mix(in oklch, var(--accent) 45%, transparent);
   border-radius: 12px;
   padding: 1.5rem;
-  transition: border-color 0.2s;
 }
 .stack-card:hover {
   border-color: var(--accent);
@@ -510,8 +738,17 @@ section {
   flex-wrap: wrap;
   gap: 0.65rem;
 }
+/* Tags are real <button>s (keyboard reachable) — reset the UA button look. */
+.stack-tag,
+.project-tag {
+  appearance: none;
+  line-height: 1.2;
+}
 .stack-tag {
-  background: rgba(255, 255, 255, 0.04);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: color-mix(in oklch, var(--tint) 4%, transparent);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.5rem 0.9rem;
@@ -524,9 +761,23 @@ section {
 }
 .stack-tag:hover,
 .stack-tag.active {
-  background: oklch(0.8 0.13 195 / 0.1);
-  border-color: oklch(0.8 0.13 195 / 0.4);
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+  border-color: color-mix(in oklch, var(--accent) 40%, transparent);
   color: var(--accent);
+}
+.stack-count {
+  font-size: 0.72rem;
+  color: var(--muted);
+  min-width: 1.4em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  background: color-mix(in oklch, var(--tint) 6%, transparent);
+  text-align: center;
+}
+.stack-tag.active .stack-count,
+.stack-tag:hover .stack-count {
+  color: var(--accent);
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
 }
 .hint-text {
   font-family: var(--font-mono);
@@ -551,11 +802,11 @@ section {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 24px 60px -28px oklch(0 0 0 / 0.55);
+  box-shadow: 0 24px 60px -28px color-mix(in oklch, var(--shadow) 55%, transparent);
   transition:
     border-color 0.3s,
-    transform 0.3s,
-    opacity 0.3s;
+    transform 0.45s ease,
+    opacity 0.45s ease;
 }
 .project-card:hover {
   border-color: var(--accent);
@@ -574,11 +825,6 @@ section {
 }
 .project-card.reverse > * {
   direction: ltr;
-}
-.tool-card {
-  grid-template-columns: 1fr;
-  display: flex;
-  flex-direction: column;
 }
 .project-img {
   position: relative;
@@ -609,14 +855,6 @@ section {
   flex-direction: column;
   justify-content: center;
 }
-/* Only used by the Live Apps cards (no image half, no .project-card padding
-   to inherit) — needs its own padding and breathing room between children. */
-.project-info--stretch {
-  justify-content: flex-start;
-  height: 100%;
-  padding: 1.75rem;
-  gap: 0.35rem;
-}
 .project-meta {
   display: flex;
   align-items: center;
@@ -640,12 +878,19 @@ section {
   line-height: 1.65;
   margin-bottom: 1.25rem;
 }
+.project-info p.project-arch {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: -0.35rem 0 1rem;
+}
+.project-arch span {
+  color: var(--accent);
+}
 .project-info p strong,
 .more-work-info p strong {
   color: var(--text);
-}
-.flex-grow {
-  flex: 1;
 }
 
 /* SHARED TAGS & LINKS */
@@ -660,7 +905,7 @@ section {
    than being everywhere. The .matching state (tag-filter feedback) is the
    deliberate exception: that's functional, not decorative. */
 .project-tag {
-  background: oklch(1 0 0 / 0.04);
+  background: color-mix(in oklch, var(--tint) 4%, transparent);
   border: 1px solid var(--border);
   color: var(--muted);
   padding: 0.35rem 0.75rem;
@@ -672,11 +917,11 @@ section {
   user-select: none;
 }
 .project-tag:hover {
-  background: oklch(1 0 0 / 0.08);
+  background: color-mix(in oklch, var(--tint) 8%, transparent);
   color: var(--text-body);
 }
 .project-tag.matching {
-  background: oklch(0.8 0.13 195 / 0.25);
+  background: color-mix(in oklch, var(--accent) 25%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -709,14 +954,14 @@ section {
   font-size: 0.75rem;
   padding: 4px 10px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in oklch, var(--tint) 5%, transparent);
   color: var(--muted);
   border: 1px solid var(--border);
 }
 .live-badge {
-  background: oklch(0.76 0.15 145 / 0.1) !important;
+  background: color-mix(in oklch, var(--live) 10%, transparent) !important;
   color: var(--live) !important;
-  border-color: oklch(0.76 0.15 145 / 0.3) !important;
+  border-color: color-mix(in oklch, var(--live) 30%, transparent) !important;
   display: inline-flex !important;
   align-items: center;
   gap: 5px;
@@ -735,9 +980,9 @@ section {
   font-size: 0.75rem;
   padding: 4px 12px;
   border-radius: 20px;
-  background: oklch(0.74 0.13 300 / 0.12);
+  background: color-mix(in oklch, var(--accent2) 12%, transparent);
   color: var(--accent2);
-  border: 1px solid oklch(0.74 0.13 300 / 0.25);
+  border: 1px solid color-mix(in oklch, var(--accent2) 25%, transparent);
   letter-spacing: 0.05em;
 }
 
@@ -752,11 +997,6 @@ section {
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
-/* Live Apps cards carry more content (badge + description + tags + two
-   links, no image) than the More Projects cards, so they get more room. */
-#live-apps .more-work-grid {
-  grid-template-columns: repeat(2, 1fr);
-}
 .more-work-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -764,8 +1004,8 @@ section {
   overflow: hidden;
   transition:
     border-color 0.3s,
-    transform 0.2s,
-    opacity 0.3s;
+    transform 0.45s ease,
+    opacity 0.45s ease;
 }
 .more-work-card:hover {
   border-color: var(--accent);
@@ -805,9 +1045,9 @@ section {
   font-size: 0.72rem;
   padding: 3px 10px;
   border-radius: 20px;
-  background: oklch(0.74 0.13 300 / 0.12);
+  background: color-mix(in oklch, var(--accent2) 12%, transparent);
   color: var(--accent2);
-  border: 1px solid oklch(0.74 0.13 300 / 0.25);
+  border: 1px solid color-mix(in oklch, var(--accent2) 25%, transparent);
   letter-spacing: 0.05em;
 }
 .more-work-info h3 {
@@ -821,6 +1061,188 @@ section {
   font-size: 1rem;
   line-height: 1.55;
   margin-bottom: 1rem;
+}
+
+/* LIVE APPS */
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.live-card {
+  display: flex;
+  flex-direction: column;
+}
+.live-thumb {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.live-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  opacity: 0.8;
+  transition:
+    opacity 0.25s,
+    transform 0.4s;
+}
+.live-card:hover .live-thumb img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+.live-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+.live-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.live-head h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.live-body > p {
+  flex: 1;
+  color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+}
+.live-body p strong {
+  color: var(--text);
+}
+/* Featured live app: image and text side by side, full width */
+.live-card--featured {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+}
+.live-card--featured .live-thumb {
+  aspect-ratio: auto;
+  height: 100%;
+  min-height: 320px;
+  border-bottom: 0;
+  border-right: 1px solid var(--border);
+}
+.live-card--featured .live-body {
+  padding: 2rem;
+  justify-content: center;
+}
+.live-card--featured h3 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+.live-card--featured .live-body > p {
+  flex: 0;
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+.live-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  list-style: none;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.live-facts span {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--live);
+  line-height: 1.1;
+}
+
+/* TOOLS */
+.tool-card {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+.tool-terminal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.tool-terminal .win-title i {
+  color: var(--accent2);
+}
+.tool-terminal-body {
+  list-style: none;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.tool-terminal-body li {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+}
+.tool-terminal-body code {
+  font-family: inherit;
+  color: var(--accent);
+}
+.tool-terminal-body span {
+  color: var(--muted);
+}
+
+/* FILTER STATUS CHIP */
+.filter-status {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+  border: 1px solid color-mix(in oklch, var(--accent) 40%, transparent);
+  border-radius: 100px;
+  background: color-mix(in oklch, var(--surface) 95%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px color-mix(in oklch, var(--shadow) 45%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.filter-status[hidden] {
+  display: none;
+}
+.filter-status strong {
+  color: var(--accent);
+}
+.filter-status-clear {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+.filter-status-clear:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* CONTACT */
@@ -883,12 +1305,6 @@ section {
   transform: translateY(-3px);
 }
 
-/* TOOLS */
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
 
 /* FOOTER */
 footer {
@@ -899,6 +1315,18 @@ footer {
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+/* CURSOR SPOTLIGHT — a soft accent glow that follows the pointer inside a
+   card. Sits in background-image, so each card's background-color stays. */
+.project-card,
+.more-work-card,
+.stack-card {
+  background-image: radial-gradient(
+    380px circle at var(--mx, -999px) var(--my, -999px),
+    color-mix(in oklch, var(--accent) 7%, transparent),
+    transparent 70%
+  );
 }
 
 /* RESPONSIVE */
@@ -915,24 +1343,86 @@ footer {
   .project-card.reverse {
     direction: ltr;
   }
-  .more-work-grid {
+  .more-work-grid,
+  .live-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .live-card--featured,
+  .tool-card {
+    grid-template-columns: 1fr;
+  }
+  .live-card--featured .live-thumb {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stat:nth-child(3) {
+    border-left: 0;
+  }
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
   }
 }
 @media (max-width: 600px) {
+  nav {
+    padding: 0.9rem 1rem;
+  }
+  nav.nav-open {
+    background: color-mix(in oklch, var(--bg) 97%, transparent);
+    border-color: var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .nav-toggle {
+    display: flex;
+  }
+  .nav-actions {
+    margin-left: auto;
+  }
   .nav-links {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 1rem 1rem;
+    background: color-mix(in oklch, var(--bg) 97%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  nav.nav-open .nav-links {
+    display: flex;
+  }
+  .nav-links a {
+    display: block;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-links li:last-child a {
+    border-bottom: 0;
   }
   .hero h1 {
     font-size: 3rem;
   }
-  .more-work-grid {
+  .more-work-grid,
+  .live-grid {
     grid-template-columns: 1fr;
   }
-  /* #live-apps .more-work-grid's ID selector otherwise outranks the plain
-     class rule above even inside this media query, so the 2-column layout
-     was never actually collapsing to 1 on phones. */
-  #live-apps .more-work-grid {
+  .stat {
+    padding: 1.1rem 1.2rem;
+  }
+  .stat dd {
+    font-size: 1.9rem;
+  }
+  .live-card--featured .live-body {
+    padding: 1.4rem;
+  }
+  .tool-terminal-body li {
     grid-template-columns: 1fr;
+    gap: 0.1rem;
   }
 }
