@@ -10,7 +10,6 @@ on:
       - ".gitignore"
       - ".vscode/**"
   push:
-    branches-ignore: [main] # main is checked by the deploy workflow
     paths-ignore:
       - "**.md"
       - "readme_assets/**"

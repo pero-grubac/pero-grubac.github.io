@@ -179,10 +179,12 @@ sequenceDiagram
 
 | Workflow | Runs on | What it does |
 |----------|---------|--------------|
-| `ci.yml` | Pull requests and pushes to branches other than `main` | Static checks, Playwright e2e (desktop + phone), Lighthouse report |
-| `deploy.yml` | Push to `main`, or a manual run | Static checks and e2e, then publishes the site to GitHub Pages |
+| `ci.yml` | Every push (including `main`) and pull request | Static checks, Playwright e2e (desktop + phone), Lighthouse report |
+| `deploy.yml` | After **CI passes on `main`**, or a manual run | Publishes the site's files to GitHub Pages; the tests already ran in CI |
 
-Both workflows **skip documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the site's files are deployed (`index.html`, `css/`, `js/`, `assets/`). Lighthouse scores are warnings, so a low score is visible in the report without blocking a change.
+Deploy is chained to CI (`workflow_run`): a push to `main` is tested once, and only a green run is published, from exactly the commit that was tested. Documentation-only commits start neither.
+
+CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the site's files are deployed (`index.html`, `css/`, `js/`, `assets/`). Lighthouse scores are warnings, so a low score is visible in the report without blocking a change.
 
 **One-time setup:** **Settings → Pages → Build and deployment → Source** → **GitHub Actions**. Until then GitHub keeps publishing `main` directly and the checks don't gate the deploy.
 
