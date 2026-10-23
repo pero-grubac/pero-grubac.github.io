@@ -2,48 +2,66 @@
 
 # 🌐 pero-grubac.github.io
 
-![HTML](https://img.shields.io/badge/HTML-Portfolio-E34F26?logo=html5&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-Styling-1572B6?logo=css3&logoColor=white)
+[![CI](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/ci.yml)
+[![Deploy](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/deploy.yml)
+![HTML5](https://img.shields.io/badge/HTML-5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS-3-1572B6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-deployed-4c1?style=flat-square&logo=github&logoColor=white)
+![Build](https://img.shields.io/badge/build_step-none-2EA44F)
+![Tests](https://img.shields.io/badge/tests-6_unit_·_7_e2e-2EA44F?logo=nodedotjs&logoColor=white)
 
+**My portfolio: 19 projects behind one search bar, live apps that open in place, a command menu and a light/dark theme, in plain HTML, CSS and JavaScript.**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-PORTFOLIO-4c8af5?style=for-the-badge)](https://pero-grubac.github.io)
+[![Live Site](https://img.shields.io/badge/🌐_Live_Site-pero--grubac.github.io-4C8AF5?style=for-the-badge)](https://pero-grubac.github.io)
+
+<img src="readme_assets/demo.gif" alt="Portfolio demo: the hero, searching projects for pwa, opening the Countdown and Catan rows with their previews, the Ctrl+K command menu and switching between dark and light theme" width="800">
 
 </div>
 
 ---
 
-## 📌 About
+## 📌 Project Overview
 
-Portfolio website showcasing my projects, tech stack and contact information. Built from scratch without any frameworks — pure HTML, CSS and vanilla JavaScript.
+A portfolio built from scratch without frameworks or a build step. Every project is in one **Projects** section with a single search bar (`grep -i …`) and kind filters. Rows open in place with a preview, a short description and the key points, and live apps launch straight from their row.
+
+Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-keep` opens that exact view.
 
 ---
 
-## 🗂️ Projects
+## ✨ Features
 
-All 19 projects live in one **Projects** section with a single search bar (`grep -i …`) and kind filters (systems · live · mobile · desktop · tool). Searches and filters are kept in the URL, so a link like `?q=docker` or `#arcane-keep` opens that exact view.
+- 🔎 **One search for everything**: names, descriptions and tags, with matches highlighted; clicking a Tech Stack tag searches for it
+- 🗂️ **Kind filters**: systems · live · mobile · desktop · tool
+- 🎬 **Featured systems** with demo videos that play only while on screen
+- 📂 **Index rows** that open in place, with previews of every live app
+- ⌨️ **Command menu** (`Ctrl` + `K`): jump to a project, launch an app, copy the email, switch theme
+- 🌗 **Light and dark theme** following the system, switchable and remembered
+- 🔗 **Shareable views** through `?q=`, `?kind=` and `#project`
+- 📱 **Responsive**, with a collapsible menu on phones
+- ♿ **Keyboard first**: everything is reachable without a mouse
 
-**Featured systems** — always visible, each with a demo video:
+### 🗂️ Projects
 
-1. **Incident Alert** — Microservices incident tracking system (ASP.NET · React · RabbitMQ · Docker)
-2. **eMobilityHub** — Electric vehicle rental platform (Spring Boot · Angular · MySQL · Docker)
-3. **Chat Room** — Secure forum with 2FA and OAuth2 (Spring Boot · React · JWT · Docker)
-4. **Online Library System** — Distributed Java platform (Redis · WebSocket · RMI · RabbitMQ)
+**Featured systems** (each with a demo video):
 
-**Index** — one row per project; rows open in place with a preview, a short description and key highlights, and live apps launch straight from the row:
+1. **Incident Alert**: microservices incident tracking (ASP.NET · React · RabbitMQ · Docker)
+2. **eMobilityHub**: electric vehicle rental platform (Spring Boot · Angular · MySQL · Docker)
+3. **Chat Room**: secure forum with 2FA and OAuth2 (Spring Boot · React · JWT · Docker)
+4. **Online Library System**: distributed Java platform (Redis · WebSocket · RMI · RabbitMQ)
 
-- **Live apps** — Arcane Keep, DevKit, GitHub Dashboard, Dev Timeline, Countdown, Catan Map Generator, excuse.exe, Sedmica, Lora Score Table, Yamb Table
-- **Mobile** — FitForge, AssetManager, ETF Oglasi (Flutter · Dart · SQLite)
-- **Desktop** — Store Management System (C# · .NET · WinForms · MySQL in Docker)
-- **Tool** — GitHub Discord Bot (Python · discord.py · Flask · PostgreSQL)
+**Index**:
+
+- **Live apps**: Arcane Keep, DevKit, GitHub Dashboard, Dev Timeline, Countdown, Catan Map Generator, excuse.exe, Sedmica, Lora Score Table, Yamb Table
+- **Mobile**: FitForge, AssetManager, ETF Oglasi (Flutter · Dart · SQLite)
+- **Desktop**: Store Management System (C# · .NET · WinForms · MySQL in Docker)
+- **Tool**: GitHub Discord Bot (Python · discord.py · Flask · PostgreSQL)
 
 ### ⌨️ Keyboard
 
 | Key | Action |
-| --- | --- |
+|-----|--------|
 | `/` | Search projects |
-| `Ctrl` + `K` | Command menu — jump to a project, launch an app, copy email |
+| `Ctrl` + `K` | Command menu |
 | `t` | Toggle light / dark theme |
 | `j` / `k` | Move between index rows · `Enter` opens · `o` launches a live app |
 | `Esc` | Clear the search |
@@ -52,26 +70,17 @@ All 19 projects live in one **Projects** section with a single search bar (`grep
 
 ## 🛠️ Tech Stack
 
-| Technology         | Usage                                            |
-| ------------------- | ------------------------------------------------- |
-| HTML5               | Structure                                          |
-| CSS3                | Styling, OKLCH color tokens (light + dark), animations |
-| Vanilla JavaScript  | Project search, command menu, keyboard shortcuts, light/dark toggle, staggered reveal |
-| Google Fonts        | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
-| Font Awesome        | Icons                                              |
-| GitHub Pages        | Hosting                                            |
-
----
-
-## 🚀 Setup & Run
-
-No build step required — just open `index.html` in a browser or clone and serve locally:
-
-```bash
-git clone https://github.com/pero-grubac/pero-grubac.github.io.git
-cd pero-grubac.github.io
-# Open index.html in browser or use Live Server in VS Code
-```
+| Technology | Usage |
+|------------|-------|
+| HTML5 | Structure, `<details>` rows, `<dialog>` command menu |
+| CSS3 | OKLCH colour tokens (light + dark), animations, responsive layout |
+| Vanilla JavaScript | Search, filters, command menu, keyboard shortcuts, theme, lazy video |
+| Google Fonts | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
+| Font Awesome | Icons |
+| `node:test` | Static checks: links, assets, anchors, ids, thumbnails |
+| Playwright | End-to-end smoke tests on desktop and phone |
+| Lighthouse CI | Performance, accessibility, best practices and SEO on every pull request |
+| GitHub Actions + GitHub Pages | CI and deployment |
 
 ---
 
@@ -79,24 +88,110 @@ cd pero-grubac.github.io
 
 ```
 pero-grubac.github.io/
-├── index.html
-├── css/
-│   └── styles.css
-├── js/
-│   └── scripts.js
+├── index.html                 The whole page
+├── css/styles.css             Tokens, light/dark theme, layout, components
+├── js/scripts.js              Search, filters, command menu, keyboard, theme, videos
 ├── assets/
-│   ├── avatar.jpeg
-│   ├── favicon.ico
-│   ├── apple-touch-icon.png
-│   ├── og-card.png          # link-preview image
-│   ├── incident_alert/      # featured systems: demo.mp4 + poster image
-│   ├── e-mobility-hub/
-│   ├── chatroom/
-│   ├── library/
-│   ├── live/                # live app screenshots (WebP)
-│   ├── fitforge/            # mobile & desktop: preview.webp built from real app screens
-│   ├── asset_manager/
-│   ├── etf_oglasi/
-│   └── store_management/
-└── README.md
+│   ├── avatar.jpeg, favicon.ico, apple-touch-icon.png
+│   ├── og-card.png            Link-preview image
+│   ├── live/                  Live app screenshots (800×500 WebP)
+│   ├── incident_alert/ …      Featured systems: demo.mp4 + poster
+│   └── fitforge/ …            Mobile & desktop previews
+├── tests/
+│   ├── site.test.js           Links, assets, anchors, unique ids, thumbnails, meta tags
+│   └── e2e/                   Playwright smoke tests and a tiny static server
+├── readme_assets/demo.gif
+├── playwright.config.js
+├── lighthouserc.json
+├── package.json               Test scripts only; the site has no dependencies
+└── .github/workflows/
+    ├── ci.yml                 Static checks, e2e, Lighthouse on pull requests and branches
+    └── deploy.yml             Checks, then deploy to GitHub Pages
 ```
+
+---
+
+## 📦 Installation
+
+You need [Git](https://git-scm.com/) and, for the tests only, [Node.js](https://nodejs.org/) 20 or newer.
+
+```bash
+git clone https://github.com/pero-grubac/pero-grubac.github.io.git
+cd pero-grubac.github.io
+npm install        # test tools only
+```
+
+---
+
+## ▶️ Usage
+
+```bash
+npm start          # http://localhost:8080
+```
+
+Any static server works too (`python -m http.server`, VS Code Live Server).
+
+### Tests
+
+```bash
+npm test           # static checks
+npm run test:e2e   # browser smoke tests (desktop + phone)
+```
+
+The static checks fail if any local file the page points to is missing, an in-page `#anchor` has no target, an id is duplicated, a live app has no thumbnail, or a `target="_blank"` link lacks `rel="noopener"`. The e2e tests load the page, search, filter, open a deep link, use the command menu, switch the theme and make sure nothing is wider than a phone screen; any JavaScript error fails them.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    HTML[index.html<br/>cards · index rows · dialog] --> JS[js/scripts.js]
+    JS --> IDX[buildIndex<br/>name · tags · text per item]
+    IDX --> S[Search + kind filters]
+    S <--> URL[(URL<br/>?q · ?kind · #id)]
+    JS --> P[Command menu<br/>Ctrl+K]
+    P --> S
+    JS --> T[Theme toggle] <--> LS[(localStorage)]
+    JS --> V[IntersectionObserver<br/>plays videos on screen]
+```
+
+### Opening a shared link
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Visitor
+    participant P as Page
+    participant I as Index
+
+    U->>P: open /?q=pwa#countdown
+    P->>I: build the index from the page
+    P->>I: apply ?q and ?kind
+    I-->>U: matching projects, matches highlighted
+    P->>I: find #countdown
+    I-->>U: row opened and scrolled into view
+```
+
+---
+
+## 🚀 CI/CD
+
+| Workflow | Runs on | What it does |
+|----------|---------|--------------|
+| `ci.yml` | Pull requests and pushes to branches other than `main` | Static checks, Playwright e2e (desktop + phone), Lighthouse report |
+| `deploy.yml` | Push to `main`, or a manual run | Static checks and e2e, then publishes the site to GitHub Pages |
+
+Both workflows **skip documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the site's files are deployed (`index.html`, `css/`, `js/`, `assets/`). Lighthouse scores are warnings, so a low score is visible in the report without blocking a change.
+
+**One-time setup:** **Settings → Pages → Build and deployment → Source** → **GitHub Actions**. Until then GitHub keeps publishing `main` directly and the checks don't gate the deploy.
+
+---
+
+## 🧭 Design Decisions
+
+- **No framework, no build.** The page is content first; plain HTML is fast, crawlable and works without JavaScript, which then adds search and shortcuts on top.
+- **One search for everything** instead of separate sections, so a visitor looking for "docker" or "pwa" finds every match at once.
+- **State in the URL**, so any view can be shared.
+- **Videos only play on screen**, which keeps the page light on phones.
+- **Decorations never widen the page**: the background glows are clipped to their sections, and a test checks that nothing is wider than the screen.

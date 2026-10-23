@@ -1,0 +1,18 @@
+{
+  "name": "pero-grubac.github.io",
+  "version": "1.0.0",
+  "description": "Portfolio site of Pero Grubač",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node tests/e2e/server.mjs 8080",
+    "test": "node --test",
+    "test:e2e": "playwright test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}

@@ -539,7 +539,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.play();
+        // play() rejects when a quick scroll pauses the video before it starts
+        if (entry.isIntersecting) entry.target.play().catch(() => {});
         else entry.target.pause();
       });
     },

@@ -592,6 +592,9 @@ section {
 #projects,
 #contact {
   position: relative;
+  /* The glows reach past the edge; without clipping they widen the page on
+     phones and push the navigation buttons off screen. */
+  overflow-x: clip;
 }
 #projects::before,
 #contact::before {
