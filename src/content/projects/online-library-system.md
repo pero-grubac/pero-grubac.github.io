@@ -4,7 +4,7 @@ slug: online-library-system
 title: "Online Library System"
 kind: system
 year: 2024
-summary: "Distributed library platform; each link uses the protocol that fits."
+summary: "Distributed library: Java apps talking over sockets, RMI and queues."
 description: "Distributed library platform of seven Java applications: three Swing clients for the library, members and suppliers, plus a REST API, a discovery server, a supplier server that downloads books from Project Gutenberg, and an RMI accounting server. Each link uses the protocol that fits it: REST, TCP and TLS sockets, UDP multicast, RabbitMQ and RMI. Supplier orders go through durable queues, invoices get 17% VAT over RMI, and nothing is Java-deserialized off the wire. 171 tests."
 flow: "Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis"
 highlights: []

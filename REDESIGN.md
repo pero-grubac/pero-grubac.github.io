@@ -267,8 +267,12 @@ Notes:
   a link that already carried the name). Write a real `imageAlt` for each
   in phase 2 from what the screenshot shows, and list them in the phase
   summary so the owner can check them.
-- RepoHealth's repo is private and will never be public: `repos: []`,
-  `privateRepo: true`. Never ask for or invent a GitHub link.
+- RepoHealth's repo is private and must stay private: `repos: []`,
+  `privateRepo: true`. Never ask for or invent a GitHub link, and **never
+  link to the repo anywhere**: not in the index, `/apps/`, the command
+  palette, JSON-LD (no `codeRepository` for it) or the sitemap. Only the
+  live Vercel URL is public. A "Private repo" label without a link is
+  fine.
 - `flow` strings differ from the current site: no counts next to
   technologies ("2 × PostgreSQL", "4 ASP.NET services") and each
   technology once. Use these:
@@ -591,6 +595,9 @@ the crowding.
   decides): description, highlights, stack, "Open app" (live only),
   "Download APK" (when `apk` is set), "Source" per repo or a "Private repo"
   label. `Esc` closes. Only one open at a time.
+- Never show the same sentence twice. Where the `description` is barely
+  longer than the `summary` (today FitForge, Store Management, ETF Oglasi
+  and AssetManager), the details don't repeat it under the summary.
 - Empty search: "No project matches “{query}”." plus a "Clear search"
   button.
 
