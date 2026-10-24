@@ -278,13 +278,13 @@ LCP passes 2.5 s or the CLS 0.05.
 
 ```mermaid
 flowchart LR
-    MD[src/content/projects<br/>one .md per project] --> Z{Schema<br/>content.config.ts}
-    Z --> B[astro build]
-    F[@fontsource fonts] --> SF[subset-fonts] --> B
-    B --> P[Pages<br/>home · /apps/ · case studies · 404]
-    B --> E[Endpoints<br/>og.png · favicons · manifest]
-    B --> S[Sitemap · robots.txt]
-    P & E & S --> D[(dist/)] --> GP[GitHub Pages]
+    MD["src/content/projects<br/>one .md per project"] --> Z{"Schema<br/>content.config.ts"}
+    Z --> B["astro build"]
+    F["@fontsource fonts"] --> SF["subset-fonts"] --> B
+    B --> P["Pages<br/>home · /apps/ · case studies · 404"]
+    B --> E["Endpoints<br/>og.png · favicons · manifest"]
+    B --> S["Sitemap · robots.txt"]
+    P & E & S --> D[("dist/")] --> GP["GitHub Pages"]
 ```
 
 Everything is decided at build time: counts, the index, the palette rows, the structured data and the social images all come from the project files. The browser gets plain HTML with every project's details already in it, and small scripts that show and hide them.
