@@ -86,7 +86,12 @@ the long run of small browser apps, games and side projects.
   `demo.mp4` plays only on user action: hover on devices that can hover,
   click/tap everywhere (and a real play button for keyboard users). Use
   `preload="none"` with the still as the poster. Never autoplay on page
-  load. No window frame or other chrome around videos.
+  load. No window frame or other chrome around videos. Since the CI fix
+  after phase 5 each video has two sources, `demo.webm` (AV1) first and
+  `demo.mp4` (H.264) second: Playwright's Chromium, which CI tests with,
+  can't decode H.264 (`MediaError` 4, "no supported streams"), and nor
+  can some Linux Chromium builds. README, "Demo videos", has the encoding
+  command.
 - Keep the email, GitHub and LinkedIn links exactly as they are now.
 - Lighthouse targets on the home page (mobile): Performance ≥ 95,
   Accessibility 100, Best Practices 100, SEO 100. Since phase 5 CI
@@ -177,8 +182,9 @@ image?:      image()                // relative to the project file, e.g.
                                     // (a file in src/assets/)
 imageAlt?:   string
 video?:      string                 // public URL, e.g. /assets/chatroom/demo.mp4
-                                    // (a file in public/assets/), systems
-                                    // only; follows the video rule in section 2
+                                    // (a file in public/assets/, with demo.webm
+                                    // beside it), systems only; follows the
+                                    // video rule in section 2
 commands?:   { cmd: string; text: string }[]  // slash commands (8.4)
 applicationCategory?: string        // live apps only: schema.org category for
                                     // /apps/ JSON-LD (10.3), e.g. GameApplication

@@ -2,11 +2,14 @@
 // a real browser at 360 and 1440 px, keyboard only and with reduced
 // motion, the command palette, axe, and the SEO output of the build.
 // usage: npm run build && npm test
-//   PW_CHANNEL=msedge|chrome  browser channel (default: msedge on Windows,
-//                             Playwright's own Chromium elsewhere, as in CI)
+//   PW_CHANNEL=msedge|chrome|bundled  browser (default: msedge on Windows,
+//                             Playwright's own Chromium elsewhere, as in CI;
+//                             "bundled" picks that one on Windows too. It
+//                             has no H.264, so it plays the demos' AV1 WebM)
 import { defineConfig } from "@playwright/test";
 
 const PORT = 4399;
+const channel = process.env.PW_CHANNEL ?? (process.platform === "win32" ? "msedge" : undefined);
 
 export default defineConfig({
   testDir: "tests",
@@ -17,7 +20,7 @@ export default defineConfig({
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
     trace: "retain-on-failure",
-    channel: process.env.PW_CHANNEL ?? (process.platform === "win32" ? "msedge" : undefined),
+    channel: channel === "bundled" ? undefined : channel,
   },
   webServer: {
     // --ignore-lock: runs beside a preview server that may already be open

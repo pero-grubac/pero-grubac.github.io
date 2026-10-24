@@ -168,12 +168,34 @@ several parts that talk to each other can also have an architecture
 diagram, `src/components/diagrams/<slug>.astro`. A live app also names its
 `applicationCategory`. See sections 5, 6.8, 8.2 and 10 of `REDESIGN.md`.
 
+### Demo videos
+
+A system's demo plays only when a visitor asks for it, from two files in
+`public/assets/<name>/`: `demo.webm` (AV1), which the page offers first,
+and `demo.mp4` (H.264) for browsers that can't decode AV1, such as Safari
+on most Apple devices. The WebM is there because some Chromium builds,
+including the one Playwright tests with, can't play H.264. The project
+file names only the MP4 (`video:`); the build fails if the WebM beside it
+is missing. To make the WebM from the MP4 with FFmpeg:
+
+```bash
+ffmpeg -i demo.mp4 -an -c:v libsvtav1 -crf 42 -preset 5 -svtav1-params scm=1 -pix_fmt yuv420p demo.webm
+```
+
+`scm=1` is SVT-AV1's screen-content mode, which keeps UI text sharp. Compare
+it with the MP4 (`ffmpeg -i demo.webm -i demo.mp4 -lavfi ssim -f null -`)
+and lower `-crf` if the SSIM is under about 0.98; Incident Alert's busy map
+needed 36. The page declares both files as level 3.1 (`av01.0.05M.08`,
+`avc1.64001f`), which covers video up to about 960×720.
+
 ### Tests
 
 `npm test` runs the Playwright tests against the built site (run
 `npm run build` first); it starts its own `astro preview` on port 4399
 beside any you have open. Locally it uses Edge on Windows (`PW_CHANNEL`
-to change); CI uses Playwright's Chromium.
+to change); CI uses Playwright's own Chromium, which has no H.264 decoder.
+To test with that one locally too: `npx playwright install chromium`, then
+`PW_CHANNEL=bundled npm test`.
 
 | File | What it checks |
 |------|----------------|
@@ -181,7 +203,7 @@ to change); CI uses Playwright's Chromium.
 | `tests/pages.spec.ts` | `/apps/`, the case studies (breadcrumb, pager, margin, diagram) and the 404, the same ways |
 | `tests/palette.spec.ts` | The command palette: shortcut, Esc, backdrop, ↑ ↓ Enter, fuzzy matching, every kind of row |
 | `tests/a11y.spec.ts` | axe (WCAG 2.1 A and AA) on every kind of page, with an entry open and with the palette open |
-| `tests/build.spec.ts` | `dist/` without a browser: internal links, titles and descriptions, canonical, Open Graph, JSON-LD, sitemap, robots.txt, icons, social images, font subsets |
+| `tests/build.spec.ts` | `dist/` without a browser: internal links, titles and descriptions, canonical, Open Graph, JSON-LD, sitemap, robots.txt, icons, social images, demo video sources, font subsets |
 
 `npm run lighthouse` runs Lighthouse CI (fetched with `npx`) on mobile
 for home, `/apps/` and a case study, and fails below the targets of

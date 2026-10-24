@@ -71,11 +71,17 @@ const projects = defineCollection({
       // Path relative to this file, e.g. ../../assets/live/devkit.webp
       image: image().optional(),
       imageAlt: text.optional(),
-      // Public URL of the demo video, e.g. /assets/chatroom/demo.mp4
+      // Public URL of the demo video, e.g. /assets/chatroom/demo.mp4, with
+      // an AV1 demo.webm of the same name beside it
       video: z
         .string()
         .regex(/^\/assets\/[\w./-]+\.mp4$/, "video: a path like /assets/<name>/demo.mp4")
         .refine((p) => existsSync(join(process.cwd(), "public", p)), "video: file not found under public/")
+        // The first source: AV1, for browsers without H.264 (components/DemoFigure.astro)
+        .refine(
+          (p) => existsSync(join(process.cwd(), "public", p.replace(/\.mp4$/, ".webm"))),
+          "video: put an AV1 demo.webm beside the demo.mp4 (see README, Demo videos)"
+        )
         .optional(),
       commands: z.array(z.object({ cmd: z.string().regex(/^\/[\w-]+$/), text }).strict()).optional(),
       // What kind of app a live app is, for the structured data on /apps/ (10.3)

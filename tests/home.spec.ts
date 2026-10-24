@@ -2,15 +2,15 @@
 // hash, details on demand, the demo video, Copy, the stack terms, keyboard
 // only, reduced motion, and 360 and 1440 px. Ported from the phase 3
 // check script.
-import { test, expect, desktop, phone, overflow, pokingOut, visible, visibleKinds, hash, activeId, activeText, topOf, tabThrough, SCROLL_PAD } from "./helpers";
+import { test, expect, desktop, phone, overflow, pokingOut, visible, visibleKinds, hash, activeId, activeText, topOf, tabThrough, videoOf, SCROLL_PAD } from "./helpers";
 
 test.describe("home at 1440", () => {
   test.use(desktop);
 
-  test("layout, headings and counts", async ({ page, mp4 }) => {
+  test("layout, headings and counts", async ({ page, videos }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     expect(await overflow(page), "no horizontal scroll").toBeLessThanOrEqual(0);
-    expect(mp4, "no video requested on load").toEqual([]);
+    expect(videos, "no video requested on load").toEqual([]);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator("video"), "no <video> until one is played").toHaveCount(0);
     const flows = await page.$$eval(".flow", (els) => els.map((e) => e.textContent ?? ""));
@@ -138,15 +138,21 @@ test.describe("home at 1440", () => {
       .toBe(true);
   });
 
-  test("the demo video plays only on demand", async ({ page, mp4 }) => {
+  test("the demo video plays only on demand", async ({ page, videos }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     const fig = page.locator("#incident-alert figure");
     await fig.scrollIntoViewIfNeeded();
     await fig.hover();
     await expect(page.locator("#incident-alert video"), "hover loads the video").toHaveCount(1);
-    expect(mp4.length).toBeGreaterThan(0);
     await expect(page.locator("#incident-alert video")).toHaveAttribute("preload", "none");
-    await expect.poll(() => page.evaluate(() => !document.querySelector<HTMLVideoElement>("#incident-alert video")!.paused), { message: "playing" }).toBe(true);
+    await expect.poll(async () => (await videoOf(page, "#incident-alert figure"))?.playing, { message: "playing" }).toBe(true);
+    const v = (await videoOf(page, "#incident-alert figure"))!;
+    expect(v.sources, "AV1 WebM first, H.264 MP4 second").toEqual([
+      { src: "/assets/incident_alert/demo.webm", type: 'video/webm; codecs="av01.0.05M.08"' },
+      { src: "/assets/incident_alert/demo.mp4", type: 'video/mp4; codecs="avc1.64001f"' },
+    ]);
+    expect(v.chosen, "the browser plays the first source it can decode").toBe(v.firstPlayable);
+    expect(new Set(videos.map((u) => new URL(u).pathname)), "and fetches only that one").toEqual(new Set([v.chosen]));
     await expect(fig).toHaveAttribute("data-state", "preview");
     await expect(page.locator("#incident-alert [data-play-text]"), "the button still offers Play demo while previewing").toHaveText("Play demo");
     expect(await page.getAttribute("#incident-alert video", "poster"), "the poster is the optimized still").toMatch(/\/_astro\/demo\..+\.(avif|webp)$/);
@@ -156,6 +162,7 @@ test.describe("home at 1440", () => {
     const chat = page.locator("#chat-room figure");
     await page.click("#chat-room [data-play]");
     await expect(chat, "Play demo plays (after the hover had started a preview)").toHaveAttribute("data-state", "playing");
+    await expect.poll(async () => (await videoOf(page, "#chat-room figure"))?.playing, { message: "the video really plays" }).toBe(true);
     await expect(page.locator("#chat-room [data-play-text]")).toHaveText("Pause demo");
     await page.mouse.move(5, 5);
     await expect(chat, "a clicked video keeps playing when the pointer leaves").toHaveAttribute("data-state", "playing");
@@ -251,7 +258,7 @@ test.describe("home, keyboard only", () => {
 test.describe("home, reduced motion", () => {
   test.use({ ...desktop, contextOptions: { reducedMotion: "reduce" } });
 
-  test("no smooth scrolling, no hover video, no fades", async ({ page, mp4 }) => {
+  test("no smooth scrolling, no hover video, no fades", async ({ page, videos }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), "instant scrolling").toBe("auto");
     const fig = page.locator("#incident-alert figure");
@@ -259,9 +266,10 @@ test.describe("home, reduced motion", () => {
     await fig.hover();
     await page.waitForTimeout(400);
     await expect(page.locator("#incident-alert video"), "hovering doesn't start the video").toHaveCount(0);
-    expect(mp4).toEqual([]);
+    expect(videos).toEqual([]);
     await page.click("#incident-alert [data-play]");
     await expect(fig, "a click still plays").toHaveAttribute("data-state", "playing");
+    await expect.poll(async () => (await videoOf(page, "#incident-alert figure"))?.playing, { message: "the video really plays" }).toBe(true);
     expect(await page.evaluate(() => getComputedStyle(document.querySelector("#incident-alert video")!).transitionDuration), "no video fade").toBe("0s");
     await page.mouse.move(5, 5);
     await page.waitForTimeout(200);
@@ -273,7 +281,7 @@ test.describe("home, reduced motion", () => {
 test.describe("home at 360", () => {
   test.use(phone);
 
-  test("layout, inline details, tap to play", async ({ page, mp4 }) => {
+  test("layout, inline details, tap to play", async ({ page, videos }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     expect(await page.evaluate(() => innerWidth)).toBe(360);
     expect(await overflow(page), "no horizontal scroll").toBeLessThanOrEqual(0);
@@ -294,7 +302,8 @@ test.describe("home at 360", () => {
     const fig = page.locator("#incident-alert figure");
     await fig.tap({ position: { x: 60, y: 60 } });
     await expect(fig, "a tap plays the video").toHaveAttribute("data-state", "playing");
-    expect(mp4.length).toBeGreaterThan(0);
+    await expect.poll(async () => (await videoOf(page, "#incident-alert figure"))?.playing, { message: "the video really plays" }).toBe(true);
+    expect(videos.length).toBeGreaterThan(0);
     await fig.tap({ position: { x: 60, y: 60 } });
     await expect(fig, "a tap again pauses").toHaveAttribute("data-state", "paused");
     await page.tap('[data-term="Docker"]');

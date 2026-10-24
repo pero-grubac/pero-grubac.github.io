@@ -1,7 +1,7 @@
 // /apps/, the case studies and the 404 (REDESIGN.md 6.8, 8.1, 8.2, 8.5) in a
 // browser at 1440 and 360 px, keyboard only and with reduced motion.
 // Ported from the phase 4 check script.
-import { test, expect, desktop, phone, overflow, pokingOut, visible, activeId, tabThrough } from "./helpers";
+import { test, expect, desktop, phone, overflow, pokingOut, visible, activeId, tabThrough, videoOf } from "./helpers";
 import type { Page } from "@playwright/test";
 
 const footer = (page: Page) => page.$eval(".site-footer", (f) => f.textContent!.replace(/\s+/g, " ").trim());
@@ -59,10 +59,10 @@ test.describe("/apps/ at 1440", () => {
 test.describe("case studies at 1440", () => {
   test.use(desktop);
 
-  test("a system: Incident Alert", async ({ page, mp4 }) => {
+  test("a system: Incident Alert", async ({ page, videos }) => {
     await page.goto("/projects/incident-alert/", { waitUntil: "networkidle" });
     expect(await overflow(page)).toBeLessThanOrEqual(0);
-    expect(mp4, "no video requested on load").toEqual([]);
+    expect(videos, "no video requested on load").toEqual([]);
     await expect(page.locator("h1")).toHaveText("Incident Alert");
     expect(await page.$$eval(".crumbs li", (lis) => lis.map((l) => l.textContent!.trim()).join(" / "))).toBe("Home / Systems / Incident Alert");
     await expect(page.locator('.crumbs a:text-is("Systems")'), "the breadcrumb leads back to the systems").toHaveAttribute("href", "/#systems");
@@ -93,7 +93,11 @@ test.describe("case studies at 1440", () => {
     expect(await footer(page), "no / hint without a find field").not.toContain("/ to");
     await page.click("[data-play]");
     await expect(page.locator(".media"), "Play demo plays").toHaveAttribute("data-state", "playing");
-    expect(mp4).toHaveLength(1);
+    // the request goes out after the state changes: wait for the video to really play
+    await expect.poll(async () => (await videoOf(page, ".media"))?.playing, { message: "the video really plays" }).toBe(true);
+    const v = (await videoOf(page, ".media"))!;
+    expect(v.chosen, "the first source the browser can decode").toBe(v.firstPlayable);
+    expect(videos.map((u) => new URL(u).pathname), "one request, for that file").toEqual([v.chosen]);
   });
 
   test("the pager of the systems, and the keyboard", async ({ page }) => {
@@ -171,14 +175,15 @@ test.describe("404", () => {
 test.describe("case study, reduced motion", () => {
   test.use({ ...desktop, contextOptions: { reducedMotion: "reduce" } });
 
-  test("hover doesn't start the video, the button does", async ({ page, mp4 }) => {
+  test("hover doesn't start the video, the button does", async ({ page, videos }) => {
     await page.goto("/projects/chat-room/", { waitUntil: "networkidle" });
     await page.hover(".media");
     await page.waitForTimeout(400);
-    expect(mp4).toEqual([]);
+    expect(videos).toEqual([]);
     await expect(page.locator(".media")).toHaveAttribute("data-state", "idle");
     await page.click("[data-play]");
     await expect(page.locator(".media")).toHaveAttribute("data-state", "playing");
+    await expect.poll(async () => (await videoOf(page, ".media"))?.playing, { message: "the video really plays" }).toBe(true);
   });
 });
 

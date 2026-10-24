@@ -4,7 +4,10 @@ import { test as base, expect, type Page } from "@playwright/test";
 
 export { expect };
 
-export const test = base.extend<{ errors: string[]; mp4: string[] }>({
+/** A demo video file, either source (components/DemoFigure.astro) */
+const VIDEO = /\/demo\.(webm|mp4)$/;
+
+export const test = base.extend<{ errors: string[]; videos: string[] }>({
   // Every test fails on a console error, an uncaught exception or a failed
   // request. Videos are exempt from "failed": pausing one aborts its request.
   errors: [
@@ -12,20 +15,38 @@ export const test = base.extend<{ errors: string[]; mp4: string[] }>({
       const errors: string[] = [];
       page.on("console", (m) => m.type() === "error" && !m.text().includes("404") && errors.push(`console: ${m.text()}`));
       page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
-      page.on("requestfailed", (r) => !r.url().endsWith(".mp4") && errors.push(`failed: ${r.url()}`));
+      page.on("requestfailed", (r) => !VIDEO.test(r.url()) && errors.push(`failed: ${r.url()}`));
       page.on("response", (r) => r.status() >= 400 && !r.url().endsWith("/no-such-page/") && errors.push(`${r.status()} ${r.url()}`));
       await use(errors);
       expect(errors, "no console, page or network errors").toEqual([]);
     },
     { auto: true },
   ],
-  // The demo videos the page has asked for
-  mp4: async ({ page }, use) => {
-    const mp4: string[] = [];
-    page.on("request", (r) => r.url().endsWith(".mp4") && mp4.push(r.url()));
-    await use(mp4);
+  // The demo video files the page has asked for
+  videos: async ({ page }, use) => {
+    const videos: string[] = [];
+    page.on("request", (r) => VIDEO.test(r.url()) && videos.push(r.url()));
+    await use(videos);
   },
 });
+
+/**
+ * How the demo video in `figure` is doing: playing or not, its sources in
+ * order, and whether the browser chose the first source it can decode.
+ */
+export const videoOf = (page: Page, figure: string) =>
+  page.$eval(figure, (fig) => {
+    const video = fig.querySelector("video");
+    if (!video) return null;
+    const sources = [...video.querySelectorAll("source")].map((s) => ({ src: new URL(s.src).pathname, type: s.type }));
+    const playable = sources.find((s) => video.canPlayType(s.type) !== "");
+    return {
+      playing: !video.paused && video.readyState >= 2 && !video.error,
+      sources,
+      chosen: new URL(video.currentSrc || location.href).pathname,
+      firstPlayable: playable?.src,
+    };
+  });
 
 export const desktop = { viewport: { width: 1440, height: 900 } };
 export const phone = { viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true };

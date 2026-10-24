@@ -75,6 +75,19 @@ test("the other repos' apps are linked at absolute URLs, so they open in dev too
   expect([...apps].sort()).toEqual([...OTHER_REPOS].sort());
 });
 
+test("demo videos: an AV1 WebM first, the H.264 MP4 second, both in dist/", () => {
+  let figures = 0;
+  for (const p of pages)
+    for (const [, json] of p.html.matchAll(/<figure class="media"[^>]*data-video="([^"]+)"/g)) {
+      figures++;
+      const sources: { src: string; type: string }[] = JSON.parse(decode(json!));
+      expect(sources.map((s) => s.type), p.path).toEqual(['video/webm; codecs="av01.0.05M.08"', 'video/mp4; codecs="avc1.64001f"']);
+      expect(sources[0]!.src.replace(/\.webm$/, ".mp4"), `${p.path}: the same video`).toBe(sources[1]!.src);
+      for (const s of sources) expect(existsSync(join(dist, s.src)), `${p.path}: ${s.src}`).toBe(true);
+    }
+  expect(figures, "the four systems on home and on their case studies").toBe(8);
+});
+
 test("one h1 per page, and the RepoHealth repo is never linked", () => {
   for (const p of pages) {
     expect((p.html.match(/<h1[\s>]/g) ?? []).length, `${p.path}: one h1`).toBe(1);
