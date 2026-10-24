@@ -115,7 +115,7 @@ test.describe("case studies at 1440", () => {
     await page.goto("/projects/devkit/", { waitUntil: "networkidle" });
     const open = page.locator(".primary a");
     await expect(open, "a live app: Open app at the top").toHaveCount(1);
-    await expect(open).toHaveAttribute("href", "/devkit/");
+    await expect(open, "at its absolute URL, so it works in dev too").toHaveAttribute("href", "https://pero-grubac.github.io/devkit/");
     expect(await open.evaluate((a) => getComputedStyle(a).color), "in accent").toBe("rgb(164, 50, 31)");
     expect(await crumbs(page), "back to Browser apps").toBe("/ /apps/");
     expect(await pager(page)).toBe("next:/projects/catan-map-generator/:Next live app →");

@@ -15,7 +15,7 @@ highlights:
   - "32 tests · pytest + ruff on Python 3.11 and 3.13 · notebook executed in CI"
 stack: ["Python", "NumPy", "Pyodide", "WebAssembly", "Jupyter", "pytest"]
 links:
-  live: "/Monte-Carlo-based-Pi-Calculator-py/"
+  live: "https://pero-grubac.github.io/Monte-Carlo-based-Pi-Calculator-py/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/Monte-Carlo-based-Pi-Calculator-py"

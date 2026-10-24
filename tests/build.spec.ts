@@ -6,10 +6,9 @@ import { join, relative } from "node:path";
 import { test, expect } from "@playwright/test";
 import * as fontkit from "fontkit";
 import sharp from "sharp";
+import { OTHER_REPOS, SITE } from "../src/lib/other-repos.mjs";
 
 const dist = join(process.cwd(), "dist");
-const SITE = "https://pero-grubac.github.io";
-const OTHER_REPOS = /^\/(arcane-keep|devkit|github-dashboard|dev-timeline|countdown|catan-map-generator|excuse-generator|sedmica|lora-score-table|yamb-table|brick-breaker|Monte-Carlo-based-Pi-Calculator-py)\//;
 const SYSTEMS = ["incident-alert", "e-mobility-hub", "chat-room", "online-library-system"];
 const DIAGRAMS = readdirSync("src/components/diagrams").map((f) => f.replace(/\.astro$/, ""));
 
@@ -57,10 +56,23 @@ test("every internal link resolves to a file in dist/", () => {
   for (const p of pages)
     for (const [, href] of p.html.matchAll(/\s(?:href|src)="(\/[^"/][^"]*|\/)"/g)) {
       const path = decodeURI(href!.split(/[?#]/)[0]!);
-      if (OTHER_REPOS.test(path)) continue; // the other repos' apps: check:links' job
       if (!existsSync(join(dist, path.endsWith("/") ? path + "index.html" : path))) broken.push(`${p.path} → ${href}`);
     }
   expect(broken).toEqual([]);
+});
+
+test("the other repos' apps are linked at absolute URLs, so they open in dev too", () => {
+  const relative: string[] = [];
+  const apps = new Set<string>();
+  for (const p of pages) {
+    for (const repo of OTHER_REPOS) {
+      if (p.html.includes(`href="/${repo}/`)) relative.push(`${p.path} → /${repo}/`);
+      if (p.html.includes(`href="${SITE}/${repo}/"`)) apps.add(repo);
+    }
+  }
+  expect(relative, "no root-relative link to another repo").toEqual([]);
+  // every other repo on this domain is a live app the site links to (check:links checks they answer)
+  expect([...apps].sort()).toEqual([...OTHER_REPOS].sort());
 });
 
 test("one h1 per page, and the RepoHealth repo is never linked", () => {
@@ -233,6 +245,19 @@ test("favicons and the manifest (10.7)", async () => {
   for (const p of pages) {
     expect(p.html, p.path).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml">');
     expect(p.html, p.path).toContain('<link rel="manifest" href="/site.webmanifest">');
+  }
+});
+
+test("fonts: the italic has one optical size; roman and italic latin are preloaded (6.3)", () => {
+  const cache = "node_modules/.cache/subset-fonts";
+  for (const file of readdirSync(cache)) {
+    const axes = Object.keys((fontkit.openSync(join(cache, file)) as fontkit.Font).variationAxes ?? {}).sort();
+    const expected = file.includes("italic") || file.startsWith("instrument-sans") ? ["wght"] : ["opsz", "wght"];
+    expect(axes, file).toEqual(expected);
+  }
+  for (const p of pages) {
+    const preloads = [...p.html.matchAll(/<link rel="preload" href="\/_astro\/([a-z-]+)\.[^"]+\.woff2" as="font"/g)].map((m) => m[1]);
+    expect(preloads, p.path).toEqual(["newsreader-latin-opsz-normal", "newsreader-latin-opsz-italic"]);
   }
 });
 

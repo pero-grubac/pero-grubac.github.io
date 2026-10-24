@@ -4,33 +4,19 @@ import { readdir } from "node:fs/promises";
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { subsetFonts } from "./src/integrations/subset-fonts.mjs";
-
-// GitHub Pages user site. Other repos are served as project pages under the
-// same domain (REDESIGN.md section 2), so this site must never create a
-// route with one of their names.
-const RESERVED = [
-  "arcane-keep",
-  "devkit",
-  "github-dashboard",
-  "dev-timeline",
-  "countdown",
-  "catan-map-generator",
-  "excuse-generator",
-  "sedmica",
-  "lora-score-table",
-  "yamb-table",
-  "brick-breaker",
-  "Monte-Carlo-based-Pi-Calculator-py",
-];
+import { OTHER_REPOS, SITE } from "./src/lib/other-repos.mjs";
 
 /**
- * Fails the build when a page, or anything at the top of dist/ (public/
- * files included), would take one of those paths. Compared without case,
- * so not even a look-alike path gets through.
+ * GitHub Pages user site: other repos are served as project pages under the
+ * same domain (REDESIGN.md section 2), so this site must never create a
+ * route with one of their names (src/lib/other-repos.mjs). Fails the build
+ * when a page, or anything at the top of dist/ (public/ files included),
+ * would take one of those paths. Compared without case, so not even a
+ * look-alike path gets through.
  * @returns {import("astro").AstroIntegration}
  */
 function reservedPaths() {
-  const reserved = new Set(RESERVED.map((name) => name.toLowerCase()));
+  const reserved = new Set(OTHER_REPOS.map((name) => name.toLowerCase()));
   return {
     name: "reserved-paths",
     hooks: {
@@ -85,7 +71,7 @@ function lastmodOf(url) {
 }
 
 export default defineConfig({
-  site: "https://pero-grubac.github.io",
+  site: SITE,
   trailingSlash: "always",
   // The CSS is small; in the page it costs no extra round trip before the first paint
   build: { inlineStylesheets: "always" },

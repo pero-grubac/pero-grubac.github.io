@@ -16,7 +16,7 @@ highlights:
   - "Installable PWA · zero dependencies · 57 unit + 10 Playwright e2e tests"
 stack: ["JavaScript", "Web Audio", "Canvas", "PWA", "Playwright"]
 links:
-  live: "/countdown/"
+  live: "https://pero-grubac.github.io/countdown/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/countdown"

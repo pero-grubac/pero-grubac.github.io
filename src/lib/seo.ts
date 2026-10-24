@@ -61,7 +61,7 @@ export function appsJsonLd(apps: Project[]): Thing {
       item: {
         "@type": "SoftwareApplication",
         name: p.title,
-        url: absolute(p.links.live!),
+        url: p.links.live,
         applicationCategory: p.applicationCategory,
         operatingSystem: "Web browser",
         description: p.description ?? p.summary,

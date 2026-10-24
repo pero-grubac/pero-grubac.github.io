@@ -49,7 +49,8 @@ async function svgOf(card: Card): Promise<string> {
   const spans: Span[] = card.flow
     ? flowParts(card.line).map((part) => ({ text: part.text, fill: part.op ? C.accent : C.inkSoft }))
     : [{ text: card.line, fill: C.inkSoft }];
-  let italic = await setter({ family: "serif-italic", size: 40, weight: 300 });
+  // the italic at the optical size the site fixes it at (6.3)
+  let italic = await setter({ family: "serif-italic", size: 40, weight: 300, opsz: 24 });
   let lines = italic.wrap(spans, 980);
   while (italic.style.size > 30 && lines.length > 3) {
     italic = await setter({ ...italic.style, size: italic.style.size - 2 });

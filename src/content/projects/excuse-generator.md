@@ -15,7 +15,7 @@ highlights:
   - "Zero dependencies, self-hosted fonts · 27 unit + 12 Playwright e2e tests"
 stack: ["JavaScript", "HTML/CSS", "PWA", "Playwright"]
 links:
-  live: "/excuse-generator/"
+  live: "https://pero-grubac.github.io/excuse-generator/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/excuse-generator"

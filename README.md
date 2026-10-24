@@ -105,8 +105,9 @@ pero-grubac.github.io/
 │   │   ├── home/              The home page sections: hero, about, systems, index, apps, contact
 │   │   ├── diagram/           Shapes for architecture diagrams (Diagram, Node, Edge, Actor, Group)
 │   │   └── diagrams/          One architecture diagram per system, named after its slug
-│   ├── lib/                   Project helpers, the owner's facts, structured data (seo.ts), and the
-│   │                          build-time typesetter for social images and favicons (glyphs, og, icons)
+│   ├── lib/                   Project helpers, the owner's facts, structured data (seo.ts), the other
+│   │                          repos' app paths (other-repos.mjs: the path guard and live links share it),
+│   │                          and the build-time typesetter for social images and favicons (glyphs, og, icons)
 │   ├── integrations/          subset-fonts.mjs: cuts the font files down to what the site uses (build only)
 │   ├── scripts/               Browser scripts: the projects index, the palette, copy, the toast
 │   ├── types/                 Declarations for the two build packages that ship none

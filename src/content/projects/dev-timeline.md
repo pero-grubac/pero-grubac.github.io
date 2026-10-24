@@ -16,7 +16,7 @@ highlights:
   - "React 19 + Vite, no UI or state libraries · 25 unit + 5 Playwright e2e tests"
 stack: ["React", "JavaScript", "GitHub API", "Vite", "Playwright"]
 links:
-  live: "/dev-timeline/"
+  live: "https://pero-grubac.github.io/dev-timeline/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/dev-timeline"

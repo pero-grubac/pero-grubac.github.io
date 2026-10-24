@@ -195,5 +195,20 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-if (readHash()) requestAnimationFrame(() => section.scrollIntoView({ behavior: "instant" }));
-else requestAnimationFrame(readEntryHash);
+/* ---------- a #projects?… or #p-<slug> link opened from elsewhere ---------- */
+
+/**
+ * Scrolls to what the hash names, and again once the fonts are in: a font
+ * that arrives after the first scroll reflows the text above, and scroll
+ * anchoring then leaves the section's top under the masthead. Not again if
+ * the visitor has scrolled or pressed a key in the meantime.
+ */
+function land(scroll: () => void) {
+  let moved = false;
+  for (const type of ["wheel", "touchstart", "pointerdown", "keydown"]) addEventListener(type, () => (moved = true), { once: true, passive: true });
+  requestAnimationFrame(scroll);
+  document.fonts.ready.then(() => !moved && requestAnimationFrame(scroll));
+}
+
+if (readHash()) land(() => section.scrollIntoView({ behavior: "instant" }));
+else if (location.hash.startsWith("#p-")) land(readEntryHash);

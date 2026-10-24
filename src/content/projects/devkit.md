@@ -16,7 +16,7 @@ highlights:
   - "Installable offline PWA, one lazy chunk per tool · 19 unit + 7 Playwright e2e tests"
 stack: ["React", "JavaScript", "Vite", "PWA", "Playwright"]
 links:
-  live: "/devkit/"
+  live: "https://pero-grubac.github.io/devkit/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/devkit"

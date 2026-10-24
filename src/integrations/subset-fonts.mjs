@@ -7,7 +7,9 @@
 //   - glyphs: printable ASCII, the Serbian letters, typographic punctuation,
 //     and every other character found anywhere in src/, so text added to
 //     the content keeps its glyphs without a change here;
-//   - axes: only the ranges the CSS uses (AXES below), still variable.
+//   - axes: only the ranges the CSS uses (AXES below), still variable in
+//     weight; the italic, which only appears at 16–30 px, has its optical
+//     size fixed at 24 (owner's call, phase 5 review), half its bytes.
 // The @font-face rules (components/FontFaces.astro) keep the packages'
 // unicode-ranges; a character a file doesn't have falls back to the next
 // font in the stack, as it does for π and the arrows today.
@@ -15,11 +17,16 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import subsetFont from "subset-font";
 
-/** Axis ranges per family; FontFaces.astro declares the same weights */
-const AXES = {
-  newsreader: { wght: { min: 300, max: 600 }, opsz: { min: 16, max: 72 } },
-  "instrument-sans": { wght: { min: 400, max: 600 } },
-};
+/**
+ * Axis ranges per font file, the first match by file name winning. A
+ * number pins the axis. FontFaces.astro declares the same weights.
+ * @type {[RegExp, Record<string, number | { min: number; max: number }>][]}
+ */
+const AXES = [
+  [/^newsreader-.*-italic\./, { wght: { min: 300, max: 600 }, opsz: 24 }],
+  [/^newsreader-/, { wght: { min: 300, max: 600 }, opsz: { min: 16, max: 72 } }],
+  [/^instrument-sans-/, { wght: { min: 400, max: 600 } }],
+];
 
 const BASE =
   Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("") + " ČčĆćĐđŠšŽž‘’‚“”„–—…·•×−©°²³¹";
@@ -56,10 +63,9 @@ export function subsetFonts() {
       if (!out) {
         out = (async () => {
           text ??= sourceText().then((src) => [...new Set(BASE + src)].join(""));
-          const family = Object.keys(AXES).find((name) => basename(file).startsWith(name + "-"));
           const subset = await subsetFont(await readFile(file), await text, {
             targetFormat: "woff2",
-            variationAxes: family ? AXES[/** @type {keyof typeof AXES} */ (family)] : undefined,
+            variationAxes: AXES.find(([name]) => name.test(basename(file)))?.[1],
           });
           await mkdir(cache, { recursive: true });
           const path = join(process.cwd(), cache, basename(file));

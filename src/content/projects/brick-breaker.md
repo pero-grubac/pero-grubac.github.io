@@ -15,7 +15,7 @@ highlights:
   - "190 GUT tests in 18 scripts · builds for the web, Windows and Android"
 stack: ["Godot", "GDScript", "GUT", "WebAssembly", "Android", "Game"]
 links:
-  live: "/brick-breaker/"
+  live: "https://pero-grubac.github.io/brick-breaker/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/brick-breaker"

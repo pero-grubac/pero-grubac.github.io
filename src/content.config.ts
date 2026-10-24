@@ -7,6 +7,7 @@ import { basename, extname, join } from "node:path";
 import { defineCollection } from "astro:content";
 import { glob, type Loader } from "astro/loaders";
 import { z } from "astro/zod";
+import { OTHER_REPOS, SITE } from "./lib/other-repos.mjs";
 
 const KINDS = ["system", "live", "web", "mobile", "desktop", "tool"] as const;
 // schema.org applicationCategory values (Google's list) that fit these apps
@@ -19,8 +20,12 @@ const APP_CATEGORIES = [
 ] as const;
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const GITHUB = /^https:\/\/github\.com\/pero-grubac\/[\w.-]+(?:\/[\w./-]*)?$/;
-// Absolute https URL, or a root-relative app path such as /devkit/
-const LIVE = /^(?:https:\/\/\S+|\/[\w.-]+\/)$/;
+// An absolute https URL, so the link works wherever the site runs (in dev
+// too). On this domain it must be one of the other repos' apps, e.g.
+// https://pero-grubac.github.io/devkit/ (section 2).
+const LIVE = /^https:\/\/\S+$/;
+const ON_SITE = new RegExp(`^${SITE.replace(/[.]/g, "\\.")}/`);
+const APP_PATHS = new Set(OTHER_REPOS.map((repo) => `${SITE}/${repo}/`));
 
 const text = z.string().trim().min(1);
 
@@ -48,7 +53,14 @@ const projects = defineCollection({
       stack: z.array(text).min(1),
       links: z
         .object({
-          live: z.string().regex(LIVE, "links.live: https URL or a root-relative path like /devkit/").optional(),
+          live: z
+            .string()
+            .regex(LIVE, `links.live: an absolute https URL, such as ${SITE}/devkit/`)
+            .refine(
+              (url) => !ON_SITE.test(url) || APP_PATHS.has(url),
+              `links.live on this domain must be one of the other repos' apps (src/lib/other-repos.mjs), such as ${SITE}/devkit/`
+            )
+            .optional(),
           repos: z
             .array(z.object({ label: text, url: z.string().regex(GITHUB, "repo URL must be under github.com/pero-grubac/") }).strict())
             .default([]),

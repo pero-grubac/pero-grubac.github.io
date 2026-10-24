@@ -15,7 +15,7 @@ highlights:
   - "Offline PWA · vanilla JS · 31 unit + 8 Playwright e2e tests"
 stack: ["JavaScript", "HTML/CSS", "PWA", "Playwright"]
 links:
-  live: "/sedmica/"
+  live: "https://pero-grubac.github.io/sedmica/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/sedmica"

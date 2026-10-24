@@ -15,7 +15,7 @@ highlights:
   - "Exports to HTML, PNG or PDF · 19 unit + 10 Playwright e2e tests with the API mocked"
 stack: ["React", "JavaScript", "GitHub API", "Vite", "Playwright"]
 links:
-  live: "/github-dashboard/"
+  live: "https://pero-grubac.github.io/github-dashboard/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/github-dashboard"

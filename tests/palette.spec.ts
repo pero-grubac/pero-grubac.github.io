@@ -6,9 +6,18 @@ import type { Page } from "@playwright/test";
 
 const palette = (page: Page) => page.locator("#palette");
 const input = (page: Page) => page.locator("[data-pal-q]");
-/** The labels of the rows on screen, in order */
-const rows = (page: Page) => page.$$eval("#pal-list [data-row]:not([hidden]) .label", (ls) => ls.map((l) => l.textContent));
-const selected = (page: Page) => page.$eval('#pal-list [aria-selected="true"] .label', (l) => l.textContent).catch(() => null);
+/** The labels of the rows on screen, in order, as they show (without the text only screen readers get) */
+const rows = (page: Page) =>
+  page.$$eval("#pal-list [data-row]:not([hidden]) .label", (ls) =>
+    ls.map((l) => [...l.childNodes].filter((n) => !(n instanceof Element && n.matches(".sr-only"))).map((n) => n.textContent).join("").replace(/\s+/g, " ").trim())
+  );
+/** The selected row's label, as it shows */
+const selected = (page: Page) =>
+  page
+    .$eval('#pal-list [aria-selected="true"] .label', (l) =>
+      [...l.childNodes].filter((n) => !(n instanceof Element && n.matches(".sr-only"))).map((n) => n.textContent).join("").replace(/\s+/g, " ").trim()
+    )
+    .catch(() => null);
 
 async function openWithKeys(page: Page) {
   await page.keyboard.press("Control+k");
@@ -52,16 +61,25 @@ test.describe("palette at 1440", () => {
     const labels = await rows(page);
     expect(labels.slice(0, 6)).toEqual(["Home", "About", "Systems", "Index of projects", "Browser apps", "Contact"]);
     expect(labels.at(-1)).toBe("Copy email");
-    // 30 projects, and "Open …" for the 13 live apps; one theme, so no theme toggle
+    // 30 projects, and "Open … app ↗" for the 13 live apps; one theme, so no theme toggle
     expect(labels.length).toBe(6 + 30 + 13 + 1);
-    expect(labels.filter((l) => l?.startsWith("Open "))).toHaveLength(13);
+    const opens = labels.filter((l) => l?.startsWith("Open "));
+    expect(opens).toHaveLength(13);
+    expect(opens).toContain("Open Brick Breaker app ↗");
+    expect(opens.every((l) => / app ↗$/.test(l!))).toBe(true);
     expect(labels.join(" ")).not.toMatch(/theme/i);
+    // screen readers hear what the ↗ shows
+    await expect(page.getByRole("option", { name: /^Open Brick Breaker app\s*\(opens in a new tab\)/ })).toHaveCount(1);
+    // every live app opens at its absolute URL, which also works in dev
+    const appHrefs = await page.$$eval("#pal-list a[target=_blank]", (as) => as.map((a) => a.getAttribute("href")));
+    expect(appHrefs.filter((h) => !h?.startsWith("https://")), "absolute app URLs").toEqual([]);
+    await expect(page.locator('#pal-list a[href="https://pero-grubac.github.io/brick-breaker/"]')).toHaveCount(1);
     // every case study is in it (10.4)
     const studies = await page.$$eval('#pal-list a[href^="/projects/"]', (as) => as.length);
     expect(studies).toBe(29);
     // RepoHealth's repo is private: its row shows its details in the index, its app opens
     await expect(page.locator('#pal-list a:has(.label:text-is("RepoHealth"))')).toHaveAttribute("href", "/#p-repohealth");
-    await expect(page.locator('#pal-list a:has(.label:text-is("Open RepoHealth"))')).toHaveAttribute("href", "https://repository-health-monitor.vercel.app/");
+    await expect(page.locator('#pal-list a[target=_blank][href="https://repository-health-monitor.vercel.app/"] .label')).toContainText("Open RepoHealth app");
     await expect(page.locator('#pal-list a[href*="github.com"]')).toHaveCount(0);
   });
 
@@ -77,7 +95,7 @@ test.describe("palette at 1440", () => {
     await expect(input(page)).toHaveAttribute("aria-activedescendant", /^pal-\d+$/);
 
     await input(page).fill("devkit");
-    expect((await rows(page)).slice(0, 2), "the title first, then its app").toEqual(["DevKit", "Open DevKit"]);
+    expect((await rows(page)).slice(0, 2), "the title first, then its app").toEqual(["DevKit", "Open DevKit app ↗"]);
     expect(await selected(page)).toBe("DevKit");
     await expect(page.locator("[data-pal-status]")).toHaveText(/^\d+ results?$/);
     await input(page).fill("flutter");
@@ -126,14 +144,15 @@ test.describe("palette at 1440", () => {
     await expect(page.locator("#d-repohealth")).toBeVisible();
   });
 
-  test("Open … opens the app in a new tab", async ({ page, context }) => {
+  test("Open … app opens the app in a new tab", async ({ page, context }) => {
+    // the app lives in another repo; answer for it here instead of going online
+    await context.route("https://pero-grubac.github.io/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<title>app</title>" }));
     await page.goto("/", { waitUntil: "networkidle" });
     await openWithKeys(page);
     await input(page).fill("open devkit");
-    expect(await selected(page)).toBe("Open DevKit");
+    expect(await selected(page)).toBe("Open DevKit app ↗");
     const [tab] = await Promise.all([context.waitForEvent("page"), page.keyboard.press("Enter")]);
-    // the app itself is another repo's; here the preview server answers 404
-    await tab.waitForURL("**/devkit/");
+    await tab.waitForURL("https://pero-grubac.github.io/devkit/");
     await tab.close();
     await expect(palette(page)).not.toHaveAttribute("open", "");
   });
@@ -170,6 +189,53 @@ test.describe("palette at 1440", () => {
     }
   });
 });
+
+// The dialog is never taller than the window and never scrolls; only the
+// results list does, with the Journal scrollbar (6.4)
+for (const [name, viewport] of [
+  ["1366×768", { viewport: { width: 1366, height: 768 } }],
+  ["360×780", phone],
+  ["360×560", { ...phone, viewport: { width: 360, height: 560 } }],
+] as const) {
+  test.describe(`palette at ${name}`, () => {
+    test.use(viewport);
+
+    test("only the list scrolls, and the dialog fits the window", async ({ page }) => {
+      await page.goto("/", { waitUntil: "networkidle" });
+      await page.click(".masthead [data-palette]");
+      await expect(palette(page)).toHaveAttribute("open", "");
+      // ↑ from the first row selects the last one, which scrolls the list to its end
+      await page.keyboard.press("ArrowUp");
+      expect(await selected(page)).toBe("Copy email");
+      const m = await page.evaluate(() => {
+        const dialog = document.getElementById("palette")!;
+        const list = document.getElementById("pal-list")!;
+        return {
+          overflow: getComputedStyle(dialog).overflowY,
+          dialogScrolls: dialog.scrollHeight - dialog.clientHeight,
+          dialogScrollTop: dialog.scrollTop,
+          bottom: dialog.getBoundingClientRect().bottom,
+          innerHeight,
+          listScrolls: list.scrollHeight > list.clientHeight,
+          listAtEnd: list.scrollTop + list.clientHeight >= list.scrollHeight - 1,
+          rowShown: (() => {
+            const row = list.querySelector('[aria-selected="true"]')!.getBoundingClientRect();
+            const box = list.getBoundingClientRect();
+            return row.top >= box.top && row.bottom <= box.bottom;
+          })(),
+        };
+      });
+      expect(m.overflow, "the dialog clips, it doesn't scroll").toBe("clip");
+      expect(m.dialogScrolls, "nothing in the dialog overflows it").toBeLessThanOrEqual(0);
+      expect(m.dialogScrollTop).toBe(0);
+      expect(m.bottom, "the dialog ends inside the window").toBeLessThanOrEqual(m.innerHeight);
+      expect(m.listScrolls, "the list scrolls").toBe(true);
+      expect(m.rowShown, "the selected row is in view").toBe(true);
+      expect(m.listAtEnd, "with the list's padding below it").toBe(true);
+      await expect(page.locator("#pal-list")).toHaveClass(/\bthin-scroll\b/);
+    });
+  });
+}
 
 test.describe("palette at 360", () => {
   test.use(phone);

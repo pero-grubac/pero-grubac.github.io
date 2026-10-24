@@ -1,12 +1,12 @@
 // Checks every URL in the project content (src/content/projects/*.md): live
-// apps, repos and APK downloads. Root-relative app paths such as /devkit/ are
-// checked on the live domain. Redirects are followed; each link must end in a
-// 200, otherwise the script exits with 1.
+// apps, repos and APK downloads, all absolute (the apps of the other repos
+// on this domain too, such as https://pero-grubac.github.io/devkit/).
+// Redirects are followed; each link must end in a 200, otherwise the script
+// exits with 1.
 // usage: npm run check:links
 import { readFileSync, readdirSync } from "node:fs";
 import { parse } from "yaml";
 
-const SITE = "https://pero-grubac.github.io";
 const dir = new URL("../src/content/projects/", import.meta.url);
 
 function frontmatter(file) {
@@ -19,7 +19,7 @@ function frontmatter(file) {
 const links = [];
 for (const file of readdirSync(dir).filter((f) => f.endsWith(".md"))) {
   const p = frontmatter(file);
-  const add = (what, url) => links.push({ order: p.order, project: p.slug, what, url: url.startsWith("/") ? SITE + url : url });
+  const add = (what, url) => links.push({ order: p.order, project: p.slug, what, url });
   if (p.links?.live) add("live", p.links.live);
   for (const r of p.links?.repos ?? []) add(`repo: ${r.label}`, r.url);
   if (p.links?.apk) add("apk", p.links.apk);

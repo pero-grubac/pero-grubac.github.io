@@ -16,7 +16,7 @@ highlights:
   - "Installable offline PWA · 21 unit + 5 Playwright e2e tests"
 stack: ["React", "JavaScript", "Vite", "PWA", "Playwright"]
 links:
-  live: "/yamb-table/"
+  live: "https://pero-grubac.github.io/yamb-table/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/yamb-table"

@@ -1,9 +1,11 @@
 ---
 // Self-hosted fonts from @fontsource (REDESIGN.md 6.3): latin and latin-ext
-// subsets only, `font-display: swap`, and a preload for the one file the
-// first screen needs most, Newsreader roman latin (h1 and body text).
-// The build cuts the files down to the glyphs and weights the site uses
-// (integrations/subset-fonts.mjs); the weights here match its ranges.
+// subsets only, `font-display: swap`, and preloads for the two files the
+// first screen needs most: Newsreader roman latin (h1 and body text) and
+// italic latin (the wordmark and the standfirst, the largest text).
+// The build cuts the files down to the glyphs and weights the site uses,
+// and fixes the italic's optical size at 24 (integrations/subset-fonts.mjs);
+// the weights here match its ranges.
 import newsreaderLatin from "@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url";
 import newsreaderLatinExt from "@fontsource-variable/newsreader/files/newsreader-latin-ext-opsz-normal.woff2?url";
 import newsreaderItalicLatin from "@fontsource-variable/newsreader/files/newsreader-latin-opsz-italic.woff2?url";
@@ -35,4 +37,5 @@ const css = faces
 ---
 
 <link rel="preload" href={newsreaderLatin} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={newsreaderItalicLatin} as="font" type="font/woff2" crossorigin />
 <Fragment set:html={`<style>${css}</style>`} />

@@ -2,7 +2,8 @@
 // The command palette (REDESIGN.md 6.6, 8.3), on every page: ⌘K / Ctrl K
 // or the masthead's Search pill opens it. It lists the sections and
 // pages, every project (its case study, or its entry in the index when it
-// has none), "Open …" for every live app, and "Copy email". One theme, so
+// has none), "Open {title} app ↗" for every live app, the ↗ saying that it
+// opens in a new tab, and "Copy email". One theme, so
 // no "Toggle theme". Each row is a real link where it can be, so a middle
 // click or "Open in new tab" works too. Behaviour: scripts/palette.ts.
 import { getProjects, KIND_NOUNS } from "../lib/projects";
@@ -33,7 +34,7 @@ const rows: Row[] = [
     const own: Row = p.caseStudy
       ? { label: p.title, hint: `${kind} · case study`, href: `/projects/${p.slug}/`, keywords: p.stack.join(" ") }
       : { label: p.title, hint: `${kind} · details`, href: `/#p-${p.slug}`, keywords: p.stack.join(" ") };
-    return p.links.live ? [own, { label: `Open ${p.title}`, hint: "new tab ↗", href: p.links.live, external: true }] : [own];
+    return p.links.live ? [own, { label: `Open ${p.title} app`, hint: kind, href: p.links.live, external: true }] : [own];
   }),
   { label: "Copy email", hint: site.email, copy: site.email },
 ];
@@ -59,7 +60,7 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
     />
     <kbd aria-hidden="true">esc</kbd>
   </div>
-  <div class="list" id="pal-list" role="listbox" aria-label="Commands" data-pal-list>
+  <div class="list thin-scroll" id="pal-list" role="listbox" aria-label="Commands" data-pal-list>
     {
       rows.map((r, i) =>
         r.href ? (
@@ -74,7 +75,15 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
             data-row
             data-hay={hay(r)}
           >
-            <span class="label">{r.label}</span>
+            <span class="label">
+              {r.label}
+              {r.external && (
+                <Fragment>
+                  <span aria-hidden="true"> ↗</span>
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </Fragment>
+              )}
+            </span>
             <span class="hint">{r.hint}</span>
           </a>
         ) : (
@@ -91,15 +100,26 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
 </dialog>
 
 <style>
+  /* Never taller than the window (its top margin, then room for the print
+     shadow below), and never scrolled itself: the results list takes what
+     height is left and is the one part that scrolls. `clip`, unlike
+     `hidden`, can't be scrolled by script either. */
   .palette {
+    --top: clamp(16px, 12vh, 90px);
     width: min(620px, calc(100vw - 32px));
-    max-height: calc(100dvh - 48px);
-    margin: clamp(24px, 12vh, 90px) auto auto;
+    max-height: calc(100dvh - var(--top) - 24px);
+    margin: var(--top) auto auto;
     padding: 0;
+    overflow: clip;
     border: 1px solid var(--ink);
     background: var(--card);
     color: var(--ink);
     box-shadow: var(--shadow-print);
+  }
+
+  .palette[open] {
+    display: flex;
+    flex-direction: column;
   }
 
   .palette::backdrop {
@@ -107,6 +127,7 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
   }
 
   .bar {
+    flex: none;
     display: flex;
     align-items: center;
     gap: var(--s-3);
@@ -132,10 +153,18 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
     color: var(--muted);
   }
 
+  /* shrinks to the height the dialog has left; the Journal scrollbar (6.4).
+     Positioned, so the rows' screen-reader text (.sr-only, absolute) stays
+     inside the list instead of stretching the dialog. */
   .list {
-    max-height: min(440px, calc(100dvh - 190px));
+    position: relative;
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 440px;
     padding: var(--s-2) 0;
-    overflow: auto;
+    /* a row scrolled into view keeps the list's padding around it */
+    scroll-padding-block: var(--s-2);
+    overflow-y: auto;
     overscroll-behavior: contain;
   }
 
@@ -169,6 +198,7 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
   }
 
   .none {
+    flex: none;
     margin: 0;
     padding: 14px 18px 18px;
     font-style: italic;

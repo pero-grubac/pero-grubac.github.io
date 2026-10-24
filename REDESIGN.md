@@ -13,6 +13,16 @@ conflicts with what you find in the repo, stop and ask instead of guessing.
 > the owner pushes and merges himself. Read-only commands (`git status`,
 > `git diff`, `git log`, `git show`) are always fine.
 
+> **Attribution rule (owner, phase 5 review).** Never mention Claude,
+> Claude Code, Anthropic, AI or agents anywhere: no `Co-Authored-By` or
+> "Generated with" lines in commit messages or pull requests, and nothing
+> in code comments, the README, site content, metadata or file names.
+> Commit attribution is off in this repo's `.claude/settings.local.json`
+> (`attribution.commit` and `attribution.pr` empty, `attribution.sessionUrl`
+> false; git keeps that file out of commits). Don't touch existing
+> commits: the owner cleans their messages himself. This file is the only
+> exception, and it is deleted in phase 6 (section 12).
+
 **The visual design is not decided yet.** Phase 0 is a design exploration
 where you build three different directions and the owner picks one. Do not
 start phase 1 until the owner has chosen and section 6 has been filled in.
@@ -59,7 +69,11 @@ the long run of small browser apps, games and side projects.
   one live app hosted elsewhere (Vercel), so it has no subpath here.
   Since phase 4 the build enforces this: `astro.config.mjs` fails it when
   a page or anything at the top of `dist/` (files from `public/`
-  included) takes one of these names, in any letter case.
+  included) takes one of these names, in any letter case. Since the
+  phase 5 review the list lives in `src/lib/other-repos.mjs`, which the
+  content schema shares: the site links these apps at absolute URLs
+  (`https://pero-grubac.github.io/devkit/`), so they open in dev too, and
+  a live URL on this domain must be one of them.
 - Reuse every existing image and video under `/assets/` (paths listed in
   section 5). Do not delete `/assets/` or `assets/og-card.png`. Since
   phase 2 the project screenshots live in `src/assets/` (same sub-paths)
@@ -151,7 +165,8 @@ highlights:  string[]               // 2–5 short bullets, shown when expanded;
                                     // systems have none on the current site
 stack:       string[]               // display names, e.g. "Spring Boot"
 links: {
-  live?:     string                 // absolute or root-relative URL
+  live?:     string                 // absolute https URL; another repo's app as
+                                    // https://pero-grubac.github.io/<repo>/
   repos:     { label: string; url: string }[]  // empty when the repo is private
   apk?:      string                 // Android download (latest GitHub release)
   privateRepo?: boolean             // true → show "Private repo" where
@@ -187,6 +202,9 @@ on, so **`astro build` fails on an invalid project file**:
   `flow` or `video`. `repeatsSummary` needs a `description` and isn't
   for systems.
 - `links.live` is present exactly for `live`; `apk` only for `mobile`.
+  `links.live` is an absolute https URL, and on this domain one of the
+  other repos' apps of section 2 (phase 5 review; root-relative paths
+  such as `/devkit/` 404 in dev, where those repos aren't served).
   Either `repos` is non-empty, or it's empty and `privateRepo: true`. A
   single repo is labelled `Source`; with several, none is.
 - `image` and `imageAlt` come together, and the image file must exist.
@@ -201,9 +219,10 @@ on, so **`astro build` fails on an invalid project file**:
   `github.com/pero-grubac/`.
 - Across files: every `order` and every `metaDescription` is used once.
 
-`npm run check:links` fetches every `live`, repo and `apk` URL (root-relative
-app paths on `https://pero-grubac.github.io`), follows redirects and fails
-unless each ends in 200. It hits the network, so it isn't part of CI.
+`npm run check:links` fetches every `live`, repo and `apk` URL as written,
+follows redirects and fails unless each ends in 200. It hits the network,
+so it isn't part of CI. (The `live` column of the inventory below shows
+the original root-relative paths; the files now hold the absolute URLs.)
 
 Markdown body = long-form case study text (only rendered when
 `caseStudy: true`). Leave the body empty for now; the owner will write it.
@@ -424,20 +443,29 @@ the hero. It must never lower text contrast.
 
 - **Newsreader Variable** (`@fontsource-variable/newsreader`, `opsz.css`
   and `opsz-italic.css`: optical size 6–72 and weight axes). Family
-  name in CSS: `"Newsreader Variable"`.
+  name in CSS: `"Newsreader Variable"`. The italic's optical size is
+  fixed at 24 (owner's call, phase 5 review): italic text only appears
+  at 16–30 px (wordmark, standfirst, deks, intros, the find fields), and
+  one optical size halves the file. The roman keeps the whole range.
 - **Instrument Sans Variable** (`@fontsource-variable/instrument-sans`,
   weight 400–700). Family name: `"Instrument Sans Variable"`.
-- Subsets: latin + latin-ext only. Preload only the Newsreader roman
-  latin file (h1 and body text). `font-display: swap`.
+- Subsets: latin + latin-ext only. Preload the Newsreader roman latin
+  file (h1 and body text) and, since the phase 5 review, the italic
+  latin file (the wordmark, and the standfirst, the largest text on the
+  first screen). `font-display: swap`.
 - Since phase 5 the build cuts each file down further
   (`src/integrations/subset-fonts.mjs`, a Vite plugin; dev serves the
   originals): only printable ASCII, the Serbian letters, typographic
   punctuation and every other character found in `src/`, and only the
-  axis ranges the CSS uses: Newsreader weight 300–600 and optical size
-  16–72, Instrument Sans weight 400–600, both still variable. The fonts
-  went from 502 kB to 198 kB, which took the home page's mobile
-  Lighthouse performance from 77 to 95. `tests/build.spec.ts` fails if a
-  subset lacks a glyph that a page shows and the original font has.
+  axis ranges the CSS uses: Newsreader weight 300–600, the roman's
+  optical size 16–72 and the italic's fixed at 24, Instrument Sans
+  weight 400–600, all still variable in weight. The fonts went from
+  502 kB to 142 kB. With both preloads, Lighthouse mobile performance is
+  97 on home, 98 on `/apps/` and 99 on a case study (77, 85 and 86 before
+  phase 5), LCP 2.48, 2.41 and 2.18 s (10.6). The social images and the
+  favicon set the italic at optical size 24 too. `tests/build.spec.ts` checks the axes and the two
+  preloads, and fails if a subset lacks a glyph that a page shows and the
+  original font has.
 - Stacks: `--serif: "Newsreader Variable", Georgia, "Times New Roman",
   serif`; `--sans: "Instrument Sans Variable", "Segoe UI", system-ui,
   sans-serif`. No web mono font: the Discord command block uses
@@ -478,6 +506,13 @@ oldstyle-nums`).
   hairlines; 1px `--rule-soft` row separators; 1px dotted `--muted`
   leaders. The only shadow is the palette's print offset
   `8px 8px 0 var(--rule)`.
+- Scrollbar (phase 5 review; the prototype had none): an area inside
+  the page that scrolls, today only the palette's results, gets the
+  Journal scrollbar, the `.thin-scroll` class in `global.css`: 6px, a
+  `--rule` thumb with no track and no arrow buttons, `--muted` while the
+  pointer is over it, square ends. Chrome, Edge and Safari draw it from
+  `::-webkit-scrollbar`; Firefox gets `scrollbar-width: thin` in the same
+  colours. The page's own scrollbar stays the browser's.
 - Images: system figures 16:9 (`object-fit: cover`, top aligned),
   portrait 4:5 (`sepia(.12)`), apps teaser 4:3, reader thumbnails at
   their own ratio with a 1px `--rule` border. Videos follow the video
@@ -520,7 +555,11 @@ oldstyle-nums`).
 - **Footer**: a colophon line, "© {year} Pero Grubač. Set in Newsreader
   and Instrument Sans.", plus `/` and `⌘K` hints.
 - **Palette**: `--card` panel, italic serif input over a 2px ink rule,
-  selected row on `--paper-deep` with the label in accent.
+  selected row on `--paper-deep` with the label in accent. The panel is
+  never taller than the window and never scrolls itself; only the
+  results list does, with the Journal scrollbar (6.4), shrinking to the
+  height that's left (phase 5 review; checked at 1366×768, 360×780 and
+  360×560).
 - **Toast**: ink pill with paper text, bottom centre.
 - **Focus**: 2px solid accent outline with 3px offset; list rows show it
   around the whole row.
@@ -747,7 +786,10 @@ Since phase 5 (`components/Palette.astro`, `scripts/palette.ts`), on every
 page: Home, the four home sections and Browser apps; every project by its
 title, opening its case study, or for RepoHealth (no case study) its entry
 in the index (`/#p-repohealth`; any `#p-<slug>` opens that entry); an
-"Open {title}" row per live app that opens it in a new tab; "Copy email".
+"Open {title} app ↗" row per live app, the ↗ saying that it opens in a
+new tab (screen readers hear "(opens in a new tab)"; phase 5 review: the
+case study row keeps the bare title, so the two read apart); "Copy
+email".
 No "Toggle theme": Journal has one theme. Rows are links where they can
 be, so a middle click works too. Picking a section of the current page
 leaves the focus there, so Tab goes on from that section; anything else
@@ -872,8 +914,9 @@ Build one reusable `<Seo>` component used by every page. It takes
   apps") opposite the name. Satori renders a variable font only at its
   default instance, which would lose Newsreader's display optical size,
   so `src/lib/glyphs.ts` sets the text as SVG paths with fontkit from
-  the site's own @fontsource files (opsz 72 for the title, as the h1)
-  and `sharp` turns the SVG into a PNG. The site's fonts have no π or
+  the site's own @fontsource files (opsz 72 for the title, as the h1;
+  the italic line at opsz 24, as the site's italic, 6.3) and `sharp`
+  turns the SVG into a PNG. The site's fonts have no π or
   arrows, so it falls back per character, as a browser does, to Noto
   Serif (Greek) and Noto Sans Math, both build-time only. Long titles
   shrink to fit two balanced lines. If anything fails, the endpoint
@@ -941,7 +984,10 @@ Build one reusable `<Seo>` component used by every page. It takes
 - No render-blocking third-party resources.
 - Demo videos follow the video rule in section 2 (`preload="none"`, still
   as poster), so they add nothing to the initial page load.
-- Targets on mobile: LCP < 2.0 s, CLS < 0.05, INP < 200 ms.
+- Targets on mobile: LCP < 2.5 s (Google's "good" threshold; it was
+  2.0 s until the phase 5 review), CLS < 0.05, INP < 200 ms.
+  `lighthouserc.json` warns, without failing CI, when the median run of
+  a page passes the LCP or CLS target; home's LCP is 2.48 s, close to it.
 
 ### 10.7 Favicons and manifest
 
@@ -950,7 +996,8 @@ Build one reusable `<Seo>` component used by every page. It takes
 - Generate them from a simple monogram in the chosen design if none exist.
 - Since phase 5: the italic "pg" of 6.8, made at build time by endpoints
   at the site root (`src/lib/icons.ts`, with the OG images' typesetter;
-  Newsreader's text cut, opsz 18, so it holds up at 16 px). The old
+  the italic at opsz 24, as on the site, and a medium weight, so it
+  holds up at 16 px). The old
   site's `/assets/favicon.ico` and `/assets/apple-touch-icon.png` stay
   (section 2) but no page links them any more.
 
@@ -1039,8 +1086,14 @@ at the top). **Stop after every phase and wait for the owner.**
 - After he deploys, verify the live site, that every app subpath listed in
   section 2 (`/arcane-keep/` etc.) still loads, and that the RepoHealth
   link still opens.
-- Remove `legacy/` and `design-explorations/` only after the owner
-  confirms.
+- Before the owner merges, delete `REDESIGN.md` and
+  `design-explorations/` (owner's instruction, phase 5 review). In the
+  same commit, rewrite what points to them so nothing dangles: code
+  comments that cite "REDESIGN.md" sections, the README's mentions,
+  `ci.yml`'s comment and `tsconfig.json`'s exclude (45 lines in 34 files
+  at the end of phase 5). Keep the decisions the code relies on in its
+  own comments or the README, not in a reference to the deleted spec.
+- Remove `legacy/` only after the owner confirms.
 - Include the after-launch SEO steps from 10.8 in the summary.
 
 ---
@@ -1050,6 +1103,11 @@ at the top). **Stop after every phase and wait for the owner.**
 - Don't commit anywhere but the `redesign` branch, and never commit to
   `main`. Don't push, merge, rebase, reset, or delete branches (see the
   git rule at the top).
+- Don't mention Claude, Claude Code, Anthropic, AI or agents anywhere:
+  no `Co-Authored-By` or "Generated with" lines in commits or pull
+  requests, nothing in code comments, the README, site content, metadata
+  or file names (the attribution rule at the top). Don't rewrite
+  existing commits; the owner cleans their messages.
 - Don't start phase 1 before the owner picks a direction.
 - Don't add analytics, cookies, or third-party scripts to the real site.
 - Don't invent project facts. If something is missing, leave

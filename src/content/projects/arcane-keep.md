@@ -15,7 +15,7 @@ highlights:
   - "All audio synthesised with Web Audio · 8 Vitest suites, 106 assertions · plays offline"
 stack: ["React", "JavaScript", "Canvas", "Web Audio", "Vite", "Vitest", "PWA"]
 links:
-  live: "/arcane-keep/"
+  live: "https://pero-grubac.github.io/arcane-keep/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/arcane-keep"

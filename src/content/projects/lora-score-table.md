@@ -15,7 +15,7 @@ highlights:
   - "Offline PWA · vanilla JS · 27 unit + 6 Playwright e2e tests"
 stack: ["JavaScript", "HTML/CSS", "PWA", "Playwright"]
 links:
-  live: "/lora-score-table/"
+  live: "https://pero-grubac.github.io/lora-score-table/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/lora-score-table"

@@ -15,7 +15,7 @@ highlights:
   - "Fairness overlay with pips per spot · PNG export · 54 unit + 14 Playwright e2e tests"
 stack: ["JavaScript", "HTML/CSS", "SVG", "PWA", "Playwright"]
 links:
-  live: "/catan-map-generator/"
+  live: "https://pero-grubac.github.io/catan-map-generator/"
   repos:
     - label: "Source"
       url: "https://github.com/pero-grubac/catan-map-generator"
