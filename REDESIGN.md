@@ -58,7 +58,10 @@ the long run of small browser apps, games and side projects.
   under `/`, `/apps/`, `/projects/<slug>/` and `/404`. RepoHealth is the
   one live app hosted elsewhere (Vercel), so it has no subpath here.
 - Reuse every existing image and video under `/assets/` (paths listed in
-  section 5). Do not delete `/assets/` or `assets/og-card.png`.
+  section 5). Do not delete `/assets/` or `assets/og-card.png`. Since
+  phase 2 the project screenshots live in `src/assets/` (same sub-paths)
+  so Astro can optimize them; `public/assets/` keeps `og-card.png`,
+  `avatar.jpeg`, the favicons and the demo videos at their old URLs.
 - **Video rule.** Systems show their `demo.webp` still by default.
   `demo.mp4` plays only on user action: hover on devices that can hover,
   click/tap everywhere (and a real play button for keyboard users). Use
@@ -119,8 +122,7 @@ two themes). Exact look is decided in phase 0.
 
 ## 5. Content model
 
-### Schema (`src/content.config.ts` or the location the current Astro
-version expects)
+### Schema (`src/content.config.ts`)
 
 ```ts
 kind:        'system' | 'live' | 'web' | 'mobile' | 'desktop' | 'tool'
@@ -142,10 +144,13 @@ links: {
   privateRepo?: boolean             // true → show "Private repo" where
                                     // "Source" would be
 }
-image?:      string                 // path under /assets/
+image?:      image()                // relative to the project file, e.g.
+                                    // ../../assets/live/devkit.webp
+                                    // (a file in src/assets/)
 imageAlt?:   string
-video?:      string                 // path under /assets/, systems only;
-                                    // follows the video rule in section 2
+video?:      string                 // public URL, e.g. /assets/chatroom/demo.mp4
+                                    // (a file in public/assets/), systems
+                                    // only; follows the video rule in section 2
 commands?:   { cmd: string; text: string }[]  // slash commands (8.4)
 featured:    boolean                // true only for kind 'system'
 caseStudy:   boolean                // generates /projects/<slug>/
@@ -156,6 +161,29 @@ year?:       number                 // creation year if known from GitHub
 
 Repo `label`: the part name when a project has several repos (`Backend`,
 `Frontend`, `Management`), otherwise `Source`.
+
+The file is named after the slug (`src/content/projects/<slug>.md`). The
+schema is strict (unknown fields fail) and enforces what the pages rely
+on, so **`astro build` fails on an invalid project file**:
+
+- `summary` is one sentence of at most 75 characters.
+- `featured` is true exactly for `system`. Systems need `description`,
+  `flow` and `image`. Other kinds need 2–5 `highlights` and can't have
+  `flow` or `video`.
+- `links.live` is present exactly for `live`; `apk` only for `mobile`.
+  Either `repos` is non-empty, or it's empty and `privateRepo: true`. A
+  single repo is labelled `Source`; with several, none is.
+- `image` and `imageAlt` come together, and the image file must exist.
+  Without an image, `commands` is required (8.4). A `video` file must
+  exist under `public/`.
+- `flow` and `stack`: no counts next to a technology, each technology
+  once (section 11). Repo and APK URLs are under
+  `github.com/pero-grubac/`.
+- Across files: every `order` is used once.
+
+`npm run check:links` fetches every `live`, repo and `apk` URL (root-relative
+app paths on `https://pero-grubac.github.io`), follows redirects and fails
+unless each ends in 200. It hits the network, so it isn't part of CI.
 
 Markdown body = long-form case study text (only rendered when
 `caseStudy: true`). Leave the body empty for now; the owner will write it.
@@ -223,11 +251,15 @@ existed.
 All repos and APK links are under `https://github.com/pero-grubac/`.
 Verify every link returns 200 before finishing phase 2.
 
-Since phase 1 the files live in `public/assets/`, served unchanged at
-`/assets/...`. Astro's `<Image>` only optimizes images imported from
-`src/`, so phase 2 decides how project images reach `<Image>` (10.6)
-while `/assets/og-card.png`, `/assets/avatar.jpeg` and the videos keep
-their URLs.
+The `image` paths in the table are the old URLs. Since phase 2 those
+files are in `src/assets/` under the same sub-path (Astro's `<Image>` only
+optimizes images under `src/`, see 10.6), and the project files point to
+them relatively. Videos, `og-card.png` and `avatar.jpeg` stay in
+`public/assets/` at their old URLs.
+
+`year` is the GitHub creation year of the project's repo (the earliest
+one when there are several). RepoHealth has none: its repo is private
+(`TODO(owner)` in its file).
 
 Notes:
 
@@ -643,7 +675,9 @@ direction's style.
   modals use `<dialog>` with focus management.
 - Filter controls are toggle buttons with `aria-pressed`.
 - Search input has a label announced by screen readers.
-- All images have meaningful `alt` (take from the current site).
+- All images have meaningful `alt` (`imageAlt` in each project file:
+  from the current site where it had one, written from the screenshot in
+  phase 2 where it didn't).
 - Text contrast meets WCAG AA in every theme.
 - `prefers-reduced-motion` respected everywhere.
 - Keyboard shortcuts don't fire while typing in an input.

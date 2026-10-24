@@ -95,11 +95,15 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 ```
 pero-grubac.github.io/
 ├── src/
+│   ├── content/projects/      One Markdown file per project (<slug>.md)
+│   ├── content.config.ts      The projects schema; the build fails on an invalid file
+│   ├── assets/                Project screenshots, optimized by Astro
 │   ├── pages/                 Routes (index.astro so far)
 │   ├── layouts/Base.astro     Head, fonts, masthead, main, footer
 │   ├── components/            Masthead, Footer, FontFaces
 │   └── styles/                tokens.css (design tokens), global.css
-├── public/assets/             Images, videos, og-card.png, served at /assets/
+├── public/assets/             Demo videos, avatar, og-card.png, favicons, served at /assets/
+├── scripts/check-links.mjs    Checks every live, repo and APK link in the content
 ├── astro.config.mjs           Static output, trailingSlash "always"
 ├── design-explorations/       Phase 0 prototypes (direction B is the reference)
 ├── legacy/                    The old hand-written site, until launch
@@ -130,7 +134,15 @@ npm run dev        # http://localhost:4321, reloads on change
 npm run check      # TypeScript and Astro diagnostics
 npm run build      # static site in dist/
 npm run preview    # serves dist/
+npm run check:links  # every live, repo and APK link in the content must return 200
 ```
+
+### Adding a project
+
+Add one file, `src/content/projects/<slug>.md`, with the fields described
+in section 5 of `REDESIGN.md` (copy an existing project of the same kind),
+and put its screenshot under `src/assets/`. `npm run build` tells you
+exactly which field is wrong if something doesn't fit.
 
 ### Tests
 
