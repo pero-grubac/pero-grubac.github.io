@@ -52,5 +52,3 @@ Earlier versions read a GitHub token at build time, and Vite inlines such variab
 ## Testing and deployment
 
 There are 25 unit tests on Node's built-in test runner, for the aggregation, the snapshot, the calendar layout and the colours, and 5 Playwright tests on desktop and mobile with the GitHub API and the snapshot mocked. GitHub Actions lints, tests and builds the app and audits it with Lighthouse CI. The deploy runs after CI passes on main and daily at 04:17 UTC; if the API refuses the snapshot, the build stops and the previous deployment stays online.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

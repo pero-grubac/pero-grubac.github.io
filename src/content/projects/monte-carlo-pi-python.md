@@ -54,5 +54,3 @@ In the browser, JavaScript loads Pyodide, runs the loop and draws; each step cal
 ## Testing and deployment
 
 32 pytest tests and ruff run in GitHub Actions on Python 3.11 and 3.13, and CI also executes the notebook, so it never breaks. A second workflow publishes the page to GitHub Pages when the page or the package changes on master.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

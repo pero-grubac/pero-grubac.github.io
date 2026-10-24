@@ -44,5 +44,3 @@ The game is saved after every move, and the last 10 moves can be undone, even af
 ## Testing and deployment
 
 21 unit tests cover scoring, house rules, column rules, turns, undo and the dice suggestions, and 5 Playwright tests run on desktop and mobile. Only a green CI run on main is deployed to GitHub Pages.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

@@ -57,5 +57,3 @@ Top repositories put the pinned ones first and fill the rest of the nine slots b
 19 unit tests cover the aggregation, the heatmap layout, the comparison, the snapshot and the HTML export. 10 Playwright tests run on desktop and mobile without touching the real API: GitHub, the avatars and the fonts are answered by the test, and the snapshot comes from a fixture. They check the snapshot load, the heatmap, the comparison, the three exports and the print stylesheet, and fail on any console error.
 
 CI runs lint, the tests, the build and a Lighthouse report on every push and pull request, and only a green run on main is deployed to GitHub Pages. A daily run refreshes the snapshot; if GitHub refuses it, the deploy stops and the previous deployment stays online.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

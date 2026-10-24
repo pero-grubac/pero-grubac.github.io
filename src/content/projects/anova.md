@@ -52,5 +52,3 @@ The statistics and the CSV handling live in a plain .NET class library that know
 ## Testing and deployment
 
 37 xUnit tests cover the statistics and the CSV handling. On every push, GitHub Actions builds and tests the app and produces a self-contained Windows .exe that runs without a .NET installation. Edits to the README, images, samples or licence don't start a build.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

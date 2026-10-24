@@ -38,5 +38,3 @@ The interface is in Bosnian/Serbian/Croatian. The app has no build step and no d
 - **Scores are stored per round** and the totals are recomputed from them, so undo and the šuster reset can never drift out of sync.
 - **The rules are pure functions**, so the end of the game is decided from the stored rounds and tested without a browser. That is also why undo can reopen a finished game.
 - **History entries carry the game's id**, so a finished game is never stored twice, and undoing an ending takes it out of the history.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

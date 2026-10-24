@@ -42,5 +42,3 @@ Every excuse has a stable id such as en-0042, which the address bar always shows
 ## Testing
 
 There are 27 unit tests and 12 Playwright tests on desktop and mobile. The data tests check every excuse file for ids, categories, blanks and duplicates, and check that the "N+" counts in the subtitle are true.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

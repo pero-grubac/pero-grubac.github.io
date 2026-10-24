@@ -49,5 +49,3 @@ The random numbers come from xoshiro256**, implemented in the core. Point number
 ## Testing and deployment
 
 28 xUnit tests cover the estimate, the statistics and reproducibility. On every push to master, GitHub Actions builds the app, runs the tests and produces a self-contained Windows .exe that needs no .NET installation. Edits to the README, images or license do not start a build.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

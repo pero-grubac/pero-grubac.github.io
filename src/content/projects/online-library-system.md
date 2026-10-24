@@ -59,5 +59,3 @@ All of these except RMI carry the same JSON messages, and every application uses
 171 tests run on every push in GitHub Actions, and every protocol is tested over a real socket, queue or registry. Socket and RMI tests open their own servers on free ports, the REST API runs in memory, and Redis and RabbitMQ run in throwaway containers through Testcontainers. The tests cover, among other things, 401 and 403 on every protected endpoint, a blocked member being cut off at once, discovery entries expiring without a heartbeat, VAT on quantities, an order sent while a supplier is offline arriving later, and foreign classes being rejected by the RMI filter.
 
 Redis, RabbitMQ and the REST API run in Docker Compose; the desktop apps and the other servers are runnable jars from one multi-module Maven build. CI builds every module, runs all the tests and builds the Docker image.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

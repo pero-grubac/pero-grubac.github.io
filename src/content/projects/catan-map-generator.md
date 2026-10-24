@@ -52,5 +52,3 @@ In the fairness view, an intersection's strength is the sum of the pips of the l
 ## Testing and deployment
 
 The 54 unit tests run on Node's built-in test runner and cover the hex grid against the real hex geometry, all three placement rules over many random runs, scoring and the fallback path, and share links, both round trips and corrupt ones. The 14 Playwright tests run in Chromium at a desktop and a phone size, from all three modes and a reopened share link to the PNG download, and any console error fails a test. GitHub Actions also runs a Lighthouse CI audit, and only a green run on main is published to GitHub Pages, from exactly the commit that was tested.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

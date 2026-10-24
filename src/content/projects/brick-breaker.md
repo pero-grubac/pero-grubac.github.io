@@ -60,5 +60,3 @@ Six autoloads hold the global parts, among them an EventBus of signals such as b
 Gameplay is also checked with headless simulations at a fixed 60 frames per second, so minutes of game time pass in seconds. One of them plays every built-in level with endless lives until the last brick breaks, and a level that is not cleared within 8 minutes of game time fails the check.
 
 GitHub Actions publishes the browser version to GitHub Pages on every push to main. A GitHub release carries all three builds: a .zip with a single portable .exe for Windows, the web build as a .zip, and a signed APK for Android 7.0 and newer, installed directly rather than from a store. There are no iOS or macOS builds, because both need a Mac to build and sign.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

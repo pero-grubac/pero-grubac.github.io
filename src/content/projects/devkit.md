@@ -52,5 +52,3 @@ One registry lists every tool, and the sidebar, the top bar and the palette are 
 ## Testing and deployment
 
 There are 19 unit tests on Node's built-in test runner. Among other things they check MD5 against the RFC 1321 vectors, a JWT against the jwt.io example, `curl` quoting, Python to proto3 generation, the fuzzy ranking and the size-capped input storage. The 7 Playwright tests each run on a desktop and a Pixel 7 viewport and fail on any console error; they cover the palette, deep links with back and forward, inputs surviving a reload, and the app working offline. GitHub Actions also runs lint and a Lighthouse CI report, and only a green run on main is deployed to GitHub Pages, from exactly the commit that was tested.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

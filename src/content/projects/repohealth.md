@@ -4,7 +4,7 @@ slug: repohealth
 title: "RepoHealth"
 kind: live
 applicationCategory: DeveloperApplication
-# TODO(owner): year. The repo is private, so GitHub can't tell when it was created.
+year: 2026
 summary: "Scores each of my public repositories from 0 to 100, every week."
 description: "A health monitor for all of my public repositories. Each one is checked for a README, a license, tests, CI/CD and recent commits, then scored from 0 to 100, every week."
 highlights:

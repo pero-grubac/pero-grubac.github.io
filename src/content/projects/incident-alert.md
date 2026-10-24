@@ -66,5 +66,3 @@ The moderation app calls Management, ML and Statistics with the same JWT. The pu
 The backend has 94 automated tests: the services against an in-memory database, and the APIs hosted in memory with a test message bus and a fake Google. They cover the moderation flow (approving publishes and removes the report, nothing skips approval), sign-in and roles, accounts waiting for approval, Google sign-in with forged tokens and foreign addresses, every statistic and the ML grouping. The public app adds 52 tests and the moderation app 56, with Vitest and Testing Library.
 
 Every service has a health endpoint, and the whole backend starts with one Docker Compose command. CI builds and tests the backend, then starts the stack and runs an end-to-end smoke test: it reports an incident, approves it as a moderator, waits for it on the public API, and checks that Statistics refuses a request without a token and answers one with it. On the default branch, the images of the four services and both apps are published to the GitHub Container Registry.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

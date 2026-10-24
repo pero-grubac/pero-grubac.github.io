@@ -36,5 +36,3 @@ Every round has to add up. With 32 cards a deal has 8 tricks, and under the defa
 - **The rounds are the truth.** Totals, turns, played games and the winner are all derived from the list of rounds, so deleting a round fixes everything at once. The turn is the number of rounds mod 4, so no separate counter can get out of sync.
 - **Points are entered, not computed, but checked.** Scoring varies from table to table, so the app records the points you type and only checks the round's total. That catches the usual mistakes, a missed trick or a wrong sign in Plus, without the app having to know who took which card.
 - **History is a summary, not a replay**, so 50 games take a few kilobytes.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

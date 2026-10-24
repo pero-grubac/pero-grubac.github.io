@@ -47,5 +47,3 @@ SQLite holds seven tables. Exercises live in one global catalogue with unique na
 ## Testing and deployment
 
 The tests cover the progression rule, the 1RM formula, backup, the database migration, the demo data, quote rotation and the rest timer. The app is published as an APK on GitHub Releases, so it installs without a Google Play account.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

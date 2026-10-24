@@ -53,5 +53,3 @@ On every tick the session asks the bot for a direction for each snake it steers,
 Of the 136 tests, 118 cover the game logic in Snake.Core, from the two-turn buffer and head-on draws to broken score files and the bot playing whole seeded games. The app adds 13 unit tests and 5 UI Automation tests that start the real game and go through the menu, saving settings, a round ending in game over, a two-player draw and the controls panel.
 
 GitHub Actions builds with warnings as errors and runs every test except the UI ones, with coverage. The UI tests need a desktop, so they run locally.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

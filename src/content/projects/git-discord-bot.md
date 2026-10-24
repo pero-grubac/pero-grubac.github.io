@@ -73,5 +73,3 @@ Two limits come from GitHub. Its API returns at most 100 commits per request, so
 ## Deployment
 
 The bot, webhook receiver included, runs as one web service on Render. The free tier spins down after 15 minutes of inactivity, so an UptimeRobot monitor has to call the service's health endpoint every five minutes to keep the bot online. Syncing the slash commands adds about 5 to 10 seconds to each start.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

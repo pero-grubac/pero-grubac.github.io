@@ -49,5 +49,3 @@ The echo lives in a plain .NET library that knows nothing about WPF and uses onl
 ## Testing and deployment
 
 36 xUnit tests cover the echo, the tail, the file processing and the waveforms. The core uses only NAudio.Core, so they run without audio hardware. On every push, GitHub Actions builds and tests the app and produces a self-contained Windows .exe. Edits to the README, images, samples or licence don't start a build.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

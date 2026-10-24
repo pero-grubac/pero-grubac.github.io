@@ -47,5 +47,3 @@ Posts are written in the Medium Editor, a rich-text editor whose toolbar appears
 90 tests, at 99% coverage, cover the models, the forms, the post and comment views and the other pages, including the sign-in rules, draft privacy, HTML escaping in comments and POST-only actions.
 
 GitHub Actions runs on every push to main and every pull request. It lints with Ruff, runs Django's system checks and fails if a model change is missing a migration. Then it runs the whole suite on SQLite and on PostgreSQL, with coverage that must stay at 90% or more. Last, it builds the Docker image, starts the app and PostgreSQL with Docker Compose, and checks that the home page answers. In Docker the app applies its migrations when it starts.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

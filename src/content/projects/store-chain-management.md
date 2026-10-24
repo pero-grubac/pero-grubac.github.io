@@ -66,5 +66,3 @@ There are 76 unit tests and 101 integration tests. The unit tests cover the doma
 The integration tests start their own MySQL 8.4 container through Testcontainers and load the same scripts as Docker Compose, so they test exactly what the application runs on. They check the schema, the functions, the triggers, the repositories and the reports, and orders: the database price equals the cart price with discount and coupon, and missing stock rolls the whole order back. Without Docker they are skipped locally and fail in CI.
 
 CI runs only when something that affects the build changes, so documentation edits use no runner minutes. A Windows job builds the solution and runs the unit and UI tests, and the database tests run on Linux, where containers are available. For version tags, once both pass, a release job zips a self-contained, single-file win-x64 build with the database scripts and the Docker Compose file and attaches it to a GitHub release.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

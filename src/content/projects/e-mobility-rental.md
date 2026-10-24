@@ -54,5 +54,3 @@ The simulation runs in a background thread and knows nothing about Swing. It rep
 123 JUnit 5 tests cover the configuration, the parsers, the routes, the vehicles, the billing (the task's own example included), every report item and the loading of the sample data. The simulation tests run the real simulation without a GUI: time slots run in order, the rentals of a slot run in parallel, the next slot waits for the previous one, and a ride lasts its duration. The GUI is not tested.
 
 GitHub Actions builds the project, runs the tests and generates the Javadoc on every push to main and every pull request, but only when something that affects the build has changed. On a push to main it keeps the JAR and the Javadoc as build artifacts for 14 days.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

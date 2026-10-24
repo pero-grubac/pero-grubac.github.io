@@ -48,5 +48,3 @@ The maps use OpenStreetMap tiles, and addresses come from OpenStreetMap's Nomina
 The unit and widget tests run on an in-memory SQLite database and need no device. CI runs the analyzer, the tests, a check that the generated translations are up to date, and a debug build on every push and pull request.
 
 A release workflow checks that the tag matches the app's version, runs the analyzer and the tests, builds an APK per CPU type and a Google Play app bundle, and publishes them as a GitHub Release, with the changelog section as the release notes. Releases are signed with an upload key.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

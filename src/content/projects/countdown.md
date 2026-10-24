@@ -46,5 +46,3 @@ Every timer stores one absolute target timestamp, and the display is always the 
 ## Testing and deployment
 
 The 57 unit tests on Node's built-in test runner cover formatting, recurrence (month-end and leap-day clamping, skipped occurrences), share links with old or broken payloads, recovery from corrupt or blocked storage, the `.ics` builder and backup merging. The 10 Playwright tests run on desktop and mobile Chromium, from creating a countdown and a daily timer rolling over to a JSON export and import round trip, all without console errors. GitHub Actions also runs a Lighthouse CI audit, and only a green run on main is published to GitHub Pages, from exactly the commit that was tested.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

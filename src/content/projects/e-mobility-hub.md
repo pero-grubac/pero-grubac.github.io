@@ -59,5 +59,3 @@ The API owns the database schema. Flyway migrates it when the API starts and Hib
 The API has 104 tests, the two JSP apps 73 and the Angular app 64. The API tests run the real security configuration through MockMvc (401 versus 403, broken tokens, cookie flags, when CSRF is required) and the whole API on MySQL 8 in Testcontainers, with the schema from Flyway and a 27-case role matrix. The client shop's data access is tested on a MySQL database built from the API's migrations: one active ride per client, rented or broken vehicles refused, and invoices only for their owner.
 
 CI runs only what changed: it works out which apps a commit touched and runs the API, JSP and Angular jobs for those. Then it builds every image, starts the stack with health checks, checks that every app answers, and signs in through Nginx to verify the cookie session and the CSRF protection. Maven, npm, the Angular build and the Docker layers are cached, and a newer push cancels the run before it. On main, the four images are published to the GitHub Container Registry.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

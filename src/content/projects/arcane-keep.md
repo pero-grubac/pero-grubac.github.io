@@ -58,5 +58,3 @@ The simulation runs in tiles and seconds on a fixed timestep, with no DOM, no Re
 Eight Vitest suites with 106 assertions are built around the properties that broke during development rather than line coverage: a deterministic RNG, paths that never touch themselves, a hard entity cap, frame-rate independence, and a run saved between waves and restored through JSON playing on bit-for-bit identically. A balance bot plays real waves end to end to catch stalls, leaks and unbounded entity growth.
 
 On every push, a GitHub Actions workflow lints, tests and builds the game and publishes it to GitHub Pages, and a failing lint or test stops the deploy. A web manifest and a service worker make it installable, and after one visit it runs with no connection.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

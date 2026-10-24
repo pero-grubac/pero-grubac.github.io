@@ -65,5 +65,3 @@ It has known limits: the CA runs on the same machine as the application, so whoe
 The 144 tests include integration tests against real OpenSSL. They cover, among other things, foreign, expired and revoked certificates, reactivation, a certificate that belongs to someone else, damaged parts named by number, swapped and missing parts, a tampered signature or key, path traversal, and whole sessions through the menus, each run on a temporary copy with its own CA.
 
 CI runs every test against real OpenSSL on Windows and Linux, fails if any NuGet package has a known vulnerability, and checks the CA setup script on a clean checkout.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."

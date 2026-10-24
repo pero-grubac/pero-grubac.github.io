@@ -53,5 +53,3 @@ One periodic WorkManager task checks every board whose interval has passed for n
 Besides the Flutter tests and static analysis, the widgets' native time logic has its own Kotlin unit tests, and an integration test runs on an emulator or a connected phone.
 
 Releases are built by GitHub Actions when a version tag is pushed. The workflow checks that the tag matches the app's version, runs the analyzer and the tests, builds the APKs, checks that they are signed with the release key, and creates a draft release that is published by hand; the in-app update check only sees published releases. There is one APK per CPU type (arm64-v8a and armeabi-v7a) and no universal APK, because a universal APK would get a lower version code and Android would refuse to install it over a split one.
-
-[//]: # "TODO(owner): What I learned. A short closing section in your own words, under a '## What I learned' heading."
