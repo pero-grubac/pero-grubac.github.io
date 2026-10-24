@@ -6,13 +6,17 @@ import type { Project } from "../lib/projects";
 
 interface Props {
   project: Project;
-  /** Lead with "Read the case study →" (systems) */
+  /** Lead with "Read the case study →" (pass the project's caseStudy) */
   caseStudy?: boolean;
   /** "Open" instead of "Open app", as in the /apps/ gallery (6.8) */
   short?: boolean;
+  /** Open app and Download APK (false: only the repos, as in a case study's margin) */
+  actions?: boolean;
+  /** The repo links or the "Private repo" label (false: only the actions) */
+  repos?: boolean;
 }
 
-const { project: p, caseStudy = false, short = false } = Astro.props;
+const { project: p, caseStudy = false, short = false, actions = true, repos = true } = Astro.props;
 ---
 
 <div class="links">
@@ -25,7 +29,7 @@ const { project: p, caseStudy = false, short = false } = Astro.props;
     )
   }
   {
-    p.links.live && (
+    actions && p.links.live && (
       <a class="lnk" href={p.links.live} target="_blank" rel="noopener">
         {short ? "Open" : "Open app"}
         <span class="sr-only">{short ? ` ${p.title}` : `: ${p.title}`}</span>
@@ -34,7 +38,7 @@ const { project: p, caseStudy = false, short = false } = Astro.props;
     )
   }
   {
-    p.links.apk && (
+    actions && p.links.apk && (
       <a class="lnk" href={p.links.apk} target="_blank" rel="noopener">
         Download APK<span class="sr-only"> of {p.title}</span>
         <span aria-hidden="true"> ↗</span>
@@ -42,14 +46,15 @@ const { project: p, caseStudy = false, short = false } = Astro.props;
     )
   }
   {
-    p.links.repos.map((repo) => (
-      <a class="lnk" href={repo.url} target="_blank" rel="noopener">
-        Source<span class="sr-only"> code for {p.title}</span>{repo.label !== "Source" && `: ${repo.label}`}
-        <span aria-hidden="true"> ↗</span>
-      </a>
-    ))
+    repos &&
+      p.links.repos.map((repo) => (
+        <a class="lnk" href={repo.url} target="_blank" rel="noopener">
+          Source<span class="sr-only"> code for {p.title}</span>{repo.label !== "Source" && `: ${repo.label}`}
+          <span aria-hidden="true"> ↗</span>
+        </a>
+      ))
   }
-  {p.links.privateRepo && <span class="private">Private repo</span>}
+  {repos && p.links.privateRepo && <span class="private">Private repo</span>}
 </div>
 
 <style>

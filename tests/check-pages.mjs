@@ -34,6 +34,8 @@ const htmlFiles = (dir) =>
     return statSync(path).isDirectory() ? htmlFiles(path) : name.endsWith(".html") ? [path] : [];
   });
 const pages = htmlFiles(dist);
+const SYSTEMS = ["incident-alert", "e-mobility-hub", "chat-room", "online-library-system"];
+const DIAGRAMS = readdirSync(join(repo, "src/components/diagrams")).map((f) => f.replace(/\.astro$/, ""));
 const titles = new Map();
 const broken = [];
 for (const file of pages) {
@@ -51,11 +53,17 @@ for (const file of pages) {
   }
   ok(!/github\.com\/pero-grubac\/[^"]*repo(sitory)?-?health/i.test(html), `${page}: no link to the RepoHealth repo`);
   if (page.startsWith("/projects/")) {
-    const sections = (html.match(/<h2[\s>]/g) ?? []).length;
-    ok(html.includes("data-diagram-frame") && sections === 5 && !html.includes("Case study in progress") && !html.includes("TODO(owner)"), `${page}: diagram, five body sections, no in-progress note or TODO (${sections} h2)`);
+    // a written body, its sections listed in the margin, a diagram exactly when the project has one
+    const slug = page.split("/")[2];
+    const body = html.slice(html.indexOf('class="body'));
+    const sections = (body.match(/<h2[\s>]/g) ?? []).length;
+    const toc = (html.match(/<ol class="toc[^"]*"[^>]*>([\s\S]*?)<\/ol>/)?.[1].match(/<li/g) ?? []).length;
+    const system = SYSTEMS.includes(slug);
+    ok(sections >= 1 && (!system || sections === 5) && toc === sections && !html.includes("Case study in progress") && !html.includes("TODO(owner)"), `${page}: ${sections} body sections, all in "On this page" (${toc}), no in-progress note or TODO`);
+    ok(html.includes("data-diagram-frame") === DIAGRAMS.includes(slug), `${page}: ${DIAGRAMS.includes(slug) ? "has its" : "no"} architecture diagram`);
   }
 }
-ok(pages.length === 7, `seven pages built (${pages.length})`);
+ok(pages.length === 32, `32 pages built: home, /apps/, 404 and 29 case studies (${pages.length})`);
 ok(broken.length === 0, "every internal link resolves" + (broken.length ? ": " + broken.slice(0, 8).join(" ; ") : ""));
 
 /* ================= 2. in the browser ================= */
@@ -210,7 +218,49 @@ async function tabThrough(page) {
   // every case study is linked from the home page
   await page.goto(base + "/", { waitUntil: "networkidle" });
   const fromHome = await page.$$eval('a[href^="/projects/"]', (as) => [...new Set(as.map((a) => a.getAttribute("href")))]);
-  ok(fromHome.length === 4, "case: all four case studies linked from home: " + fromHome.join(" "));
+  ok(fromHome.length === 29, `case: all 29 case studies linked from home (${fromHome.length})`);
+  await ctx.close();
+}
+
+/* ---------- case studies of the other kinds, and the links to them ---------- */
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  watch(page, "kinds");
+  const crumb = () => page.$$eval(".crumbs a", (as) => as.map((a) => a.getAttribute("href")).join(" "));
+  const pager = () => page.evaluate(() => [...document.querySelectorAll(".pager a")].map((a) => a.className + ":" + a.getAttribute("href") + ":" + a.querySelector(".dir").textContent.trim()).join(" | "));
+
+  await page.goto(base + "/projects/devkit/", { waitUntil: "networkidle" });
+  await shot(page, "case-devkit-1440");
+  const open = page.locator(".primary a");
+  ok((await open.count()) === 1 && (await open.getAttribute("href")) === "/devkit/" && (await open.evaluate((a) => getComputedStyle(a).color)) === "rgb(164, 50, 31)", "live case study: Open app at the top, in accent");
+  ok((await crumb()) === "/ /apps/", "live case study: breadcrumb back to Browser apps: " + (await crumb()));
+  ok((await pager()) === "next:/projects/catan-map-generator/:Next live app →", "live case study: prev/next within the live apps: " + (await pager()));
+  ok((await page.locator(".flowline, .architecture, .media").count()) === 0 && (await page.locator(".shot img").count()) === 1, "live case study: screenshot, no flow line, diagram or video");
+  const m = await page.evaluate(() => {
+    const margin = document.querySelector(".margin"), body = document.querySelector(".body");
+    return { sticky: getComputedStyle(margin).position, right: margin.getBoundingClientRect().left > body.getBoundingClientRect().right, labels: [...margin.querySelectorAll(".label")].map((l) => l.textContent.trim()).join(", ") };
+  });
+  ok(m.sticky === "sticky" && m.right && m.labels === "On this page, Built with, Code", "1440: a sticky margin right of the body: " + JSON.stringify(m));
+  const tocHref = await page.getAttribute(".toc a", "href");
+  ok(tocHref && (await page.locator(tocHref).count()) === 1, `"On this page" links resolve (${tocHref})`);
+
+  await page.goto(base + "/projects/fitforge/", { waitUntil: "networkidle" });
+  ok((await page.locator(".primary a").textContent()).includes("Download APK") && (await crumb()) === "/ /#projects?kind=mobile", "mobile case study: Download APK at the top, breadcrumb to the mobile index");
+  ok((await pager()) === "next:/projects/etf-oglasi/:Next mobile app →", "mobile case study: prev/next within the mobile apps: " + (await pager()));
+  await page.goto(base + "/projects/git-discord-bot/", { waitUntil: "networkidle" });
+  ok((await page.locator(".shot .cmds li").count()) === 8 && (await page.locator(".primary").count()) === 0, "Discord bot: its commands instead of a screenshot, no app link at the top");
+  ok((await pager()) === "prev:/projects/secure-repository/:← Previous tool", "tool case study: prev/next within the tools: " + (await pager()));
+  await page.goto(base + "/projects/minimal-blog/", { waitUntil: "networkidle" });
+  ok((await page.locator(".pager").count()) === 0, "the only web project has no prev/next");
+  ok((await page.locator(".margin .private, .margin a[href*='github.com']").count()) >= 1, "the margin has the repo link");
+
+  await page.goto(base + "/", { waitUntil: "networkidle" });
+  const fromIndex = await page.$$eval(".panel a[href^='/projects/']", (as) => as.length);
+  ok(fromIndex === 25, `every index entry with a case study links to it (${fromIndex} of 26; RepoHealth has none)`);
+  await page.goto(base + "/apps/", { waitUntil: "networkidle" });
+  const fromApps = await page.$$eval(".gallery a[href^='/projects/']", (as) => as.length);
+  ok(fromApps === 12, `every /apps/ card with a case study links to it (${fromApps} of 13)`);
   await ctx.close();
 }
 
@@ -250,7 +300,7 @@ async function tabThrough(page) {
   const m = await browser.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   const mp = await m.newPage();
   watch(mp, "360");
-  for (const path of ["/apps/", "/projects/incident-alert/", "/projects/online-library-system/", "/no-such-page/"]) {
+  for (const path of ["/apps/", "/projects/incident-alert/", "/projects/online-library-system/", "/projects/devkit/", "/projects/git-discord-bot/", "/projects/fitforge/", "/no-such-page/"]) {
     await mp.goto(base + path, { waitUntil: "networkidle" });
     const o = await mp.evaluate(() => document.documentElement.scrollWidth - 360);
     // the diagram is allowed past the edge: it scrolls inside its own frame
@@ -258,6 +308,9 @@ async function tabThrough(page) {
     ok(o <= 0 && wide.length === 0, `360 ${path}: no horizontal scroll` + (wide.length ? " " + wide.join(",") : ""));
     await shot(mp, `360${path.replace(/\//g, "-")}top`);
   }
+  await mp.goto(base + "/projects/devkit/", { waitUntil: "networkidle" });
+  const order = await mp.evaluate(() => document.querySelector(".margin").getBoundingClientRect().bottom <= document.querySelector(".body").getBoundingClientRect().top && getComputedStyle(document.querySelector(".margin")).position !== "sticky");
+  ok(order, "360: one column, the margin's content above the body");
   await mp.goto(base + "/apps/", { waitUntil: "networkidle" });
   await shot(mp, "360-apps-full", { fullPage: true });
   const cols = await mp.$$eval(".gallery li", (lis) => new Set(lis.map((l) => Math.round(l.getBoundingClientRect().left))).size);

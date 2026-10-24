@@ -137,7 +137,7 @@ const active = (page) => page.evaluate(() => ({ tag: document.activeElement?.tag
   await page.focus('[data-slug="fitforge"] [data-toggle]');
   await page.keyboard.press("Tab");
   const afterTab = await active(page);
-  ok(afterTab.text?.startsWith("Download APK"), "Tab from an open entry goes into its details: " + afterTab.text);
+  ok(afterTab.text?.startsWith("Read the case study"), "Tab from an open entry goes into its details: " + afterTab.text);
   await page.click('[data-slug="devkit"] [data-toggle]');
   ok(!(await page.isVisible("#d-fitforge")) && (await page.isVisible("#d-devkit")), "only one open at a time");
   ok((await page.locator("#d-devkit .desc").count()) === 1, "DevKit shows its description");
@@ -229,7 +229,7 @@ const active = (page) => page.evaluate(() => ({ tag: document.activeElement?.tag
   // links that must stay as they are
   const hrefs = await page.$$eval("a", (as) => as.map((a) => a.getAttribute("href")));
   ok(hrefs.includes("mailto:pero.grubac00@gmail.com") && hrefs.includes("https://github.com/pero-grubac") && hrefs.includes("https://www.linkedin.com/in/perogrubac/"), "email, GitHub and LinkedIn links unchanged");
-  ok(hrefs.filter((h) => h?.startsWith("/projects/")).length === 4, "four case study links");
+  ok(new Set(hrefs.filter((h) => h?.startsWith("/projects/"))).size === 29, "links to all 29 case studies (the systems and every index entry but RepoHealth)");
   await ctx.close();
 }
 

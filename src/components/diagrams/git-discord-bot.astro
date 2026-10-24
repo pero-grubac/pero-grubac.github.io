@@ -1,0 +1,36 @@
+---
+// GitHub Discord Bot, from the git-discord-bot README (features, project
+// structure, deployment). That the bot and the webhook receiver are one
+// service comes from the single Render web service in the deployment steps
+// and from webhook.py sitting among the bot's Cogs.
+// TODO(owner): the README says closing an issue on GitHub sends an instant
+// Discord notification, but not how it gets there (through the bot's
+// client or a Discord webhook), so that line is left out. It also doesn't
+// say how the bot connects to Supabase; the line only names what it keeps.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+---
+
+<Diagram
+  width={1000}
+  height={410}
+  label="Architecture of the GitHub Discord Bot"
+  caption="The bot and its webhook receiver run as one web service on Render. Discord users drive the bot with slash commands; the bot works with GitHub through its REST API and keeps the registered repositories and issues in Supabase, and GitHub sends issue events to the receiver. UptimeRobot calls the service every five minutes so the free tier doesn't sleep."
+>
+  <Group x={240} y={50} w={360} h={250} name="Render web service" />
+
+  <Edge points={[[170, 228], [270, 228]]} both label={"slash commands,\nreplies, reports"} at={[220, 200]} />
+  <Edge points={[[790, 162], [690, 162], [690, 118], [570, 118]]} label="issue events (webhook)" at={[696, 110]} anchor="start" />
+  <Edge points={[[570, 228], [740, 228], [740, 194], [790, 194]]} label={"REST API: issues,\ncommits, search"} at={[655, 246]} />
+  <Edge points={[[420, 256], [420, 330]]} label="repos, issues" at={[428, 300]} anchor="start" />
+  <Edge points={[[790, 340], [620, 340], [620, 280], [600, 280]]} kind="side" label="health check" at={[705, 332]} />
+
+  <Node x={20} y={200} w={150} kind="external" name="Discord" note="server channels" />
+  <Node x={270} y={90} w={300} name="Webhook receiver" note="Flask · /webhook" />
+  <Node x={270} y={200} w={300} name="Bot" note="discord.py · slash commands in Cogs" />
+  <Node x={790} y={150} w={190} kind="external" name="GitHub" note="REST API · webhooks" />
+  <Node x={330} y={330} w={180} h={62} kind="store" name="Supabase" note="PostgreSQL" />
+  <Node x={790} y={312} w={190} kind="external" name="UptimeRobot" note="every 5 minutes" />
+</Diagram>

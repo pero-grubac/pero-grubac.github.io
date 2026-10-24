@@ -1,26 +1,33 @@
 ---
 // Case study (REDESIGN.md 6.8, 8.2), one page per project with
-// caseStudy: true: breadcrumb, title, summary and repos, the architecture
-// line and diagram, the demo figure, the Markdown body (or, while it's
-// empty, the description and a note), then the previous and next system.
+// caseStudy: true: breadcrumb, title and summary with the app's own link
+// (Open app, Download APK), the architecture line and diagram (systems),
+// the demo video, screenshot or command list, then the body as a reading
+// column beside a sticky margin ("On this page", stack, code), and the
+// previous and next project of the same kind.
 // A project's diagram is components/diagrams/<slug>.astro, if there is one.
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import { Picture } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Flow from "../../components/Flow.astro";
-import BuiltWith from "../../components/BuiltWith.astro";
 import ProjectLinks from "../../components/ProjectLinks.astro";
 import DemoFigure from "../../components/DemoFigure.astro";
-import type { Project } from "../../lib/projects";
+import Commands from "../../components/Commands.astro";
+import { KIND_NOUNS, listOf, type Project } from "../../lib/projects";
 
 const diagrams = import.meta.glob<{ default: AstroComponentFactory }>("../../components/diagrams/*.astro", { eager: true });
 
 export async function getStaticPaths() {
   const entries = (await getCollection("projects", (e) => e.data.caseStudy)).sort((a, b) => a.data.order - b.data.order);
-  return entries.map((entry, i) => ({
-    params: { slug: entry.data.slug },
-    props: { entry, prev: entries[i - 1]?.data, next: entries[i + 1]?.data },
-  }));
+  return entries.map((entry) => {
+    const sameKind = entries.filter((e) => e.data.kind === entry.data.kind);
+    const i = sameKind.indexOf(entry);
+    return {
+      params: { slug: entry.data.slug },
+      props: { entry, prev: sameKind[i - 1]?.data, next: sameKind[i + 1]?.data },
+    };
+  });
 }
 
 interface Props {
@@ -31,10 +38,25 @@ interface Props {
 
 const { entry, prev, next } = Astro.props;
 const p = entry.data;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const written = Boolean(entry.body?.trim());
-const Diagram = diagrams[`../../components/diagrams/${p.slug}.astro`]?.default;
-const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. Architecture: ${p.flow}.`;
+const sections = written ? headings.filter((h) => h.depth === 2) : [];
+const diagram = diagrams[`../../components/diagrams/${p.slug}.astro`] as { default: AstroComponentFactory } | undefined;
+const Diagram = diagram?.default;
+const [one, many] = KIND_NOUNS[p.kind];
+
+// Where the breadcrumb leads back to: the systems, the apps gallery, or the index filtered to this kind
+const parent =
+  p.kind === "system"
+    ? { href: "/#systems", label: "Systems" }
+    : p.kind === "live"
+      ? { href: "/apps/", label: "Browser apps" }
+      : { href: `/#projects?kind=${p.kind}`, label: "Projects" };
+
+const summary = p.summary.replace(/\.$/, "");
+const description = p.flow
+  ? `Case study of ${p.title}: ${summary}. Architecture: ${p.flow}.`
+  : `Case study of ${p.title}, a ${one}: ${summary}. Built with ${listOf(p.stack.slice(0, 4))}.`;
 ---
 
 <Base title={`${p.title} case study | Pero Grubač`} description={description}>
@@ -42,7 +64,7 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     <nav class="crumbs" aria-label="Breadcrumb">
       <ol>
         <li><a href="/">Home</a></li>
-        <li><a href="/#systems">Systems</a></li>
+        <li><a href={parent.href}>{parent.label}</a></li>
         <li><span aria-current="page">{p.title}</span></li>
       </ol>
     </nav>
@@ -50,15 +72,22 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     <header class="head">
       <h1 id="case-h" class="page-title">{p.title}</h1>
       <p class="dek">{p.summary}</p>
+      {
+        (p.links.live || p.links.apk) && (
+          <div class="primary">
+            <ProjectLinks project={p} repos={false} />
+          </div>
+        )
+      }
     </header>
 
-    <div class="facts">
-      <Flow flow={p.flow!} />
-      <div>
-        <BuiltWith stack={p.stack} />
-        <ProjectLinks project={p} />
-      </div>
-    </div>
+    {
+      p.flow && (
+        <div class="flowline">
+          <Flow flow={p.flow} />
+        </div>
+      )
+    }
 
     {
       Diagram && (
@@ -68,50 +97,105 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
       )
     }
 
-    <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} priority={!Diagram} />
-
-    <div class="body">
-      {
-        written ? (
-          <Content />
-        ) : (
-          <Fragment>
-            <p>{p.description}</p>
-            {p.highlights.length > 0 && (
-              <ul>
-                {p.highlights.map((h) => (
-                  <li>{h}</li>
-                ))}
-              </ul>
-            )}
-            <p class="note">Case study in progress.</p>
-          </Fragment>
+    {
+      p.video ? (
+        <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} priority={!Diagram} />
+      ) : p.image ? (
+        <figure class="shot">
+          <Picture
+            src={p.image}
+            alt={p.imageAlt!}
+            formats={["avif", "webp"]}
+            fallbackFormat="webp"
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 1280px) 1184px, 92vw"
+            loading={Diagram ? "lazy" : "eager"}
+            fetchpriority={Diagram ? undefined : "high"}
+            decoding="async"
+          />
+        </figure>
+      ) : (
+        p.commands && (
+          <div class="shot">
+            <Commands commands={p.commands} />
+          </div>
         )
-      }
+      )
+    }
+
+    <div class="reading">
+      {/* The margin comes first, so on phones it sits above the body */}
+      <aside class="margin" aria-label="About this project">
+        {
+          sections.length > 0 && (
+            <nav class="part" aria-labelledby="toc-h">
+              <p class="label" id="toc-h">
+                On this page
+              </p>
+              <ol class="toc">
+                {sections.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )
+        }
+        <div class="part">
+          <p class="label">Built with</p>
+          <p class="stack">{listOf(p.stack)}</p>
+        </div>
+        <div class="part">
+          <p class="label">Code</p>
+          <ProjectLinks project={p} actions={false} />
+        </div>
+      </aside>
+
+      <div class="body">
+        {
+          written ? (
+            <Content />
+          ) : (
+            <Fragment>
+              <p>{p.description}</p>
+              {p.highlights.length > 0 && (
+                <ul>
+                  {p.highlights.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+              <p class="note">Case study in progress.</p>
+            </Fragment>
+          )
+        }
+      </div>
     </div>
 
-    <nav class="pager" aria-label="Other systems">
-      {
-        prev && (
-          <a class="prev" href={`/projects/${prev.slug}/`} rel="prev">
-            <span class="dir">
-              <span aria-hidden="true">← </span>Previous system
-            </span>{" "}
-            <span class="name">{prev.title}</span>
-          </a>
-        )
-      }
-      {
-        next && (
-          <a class="next" href={`/projects/${next.slug}/`} rel="next">
-            <span class="dir">
-              Next system<span aria-hidden="true"> →</span>
-            </span>{" "}
-            <span class="name">{next.title}</span>
-          </a>
-        )
-      }
-    </nav>
+    {
+      (prev || next) && (
+        <nav class="pager" aria-label={`Other ${many}`}>
+          {prev && (
+            <a class="prev" href={`/projects/${prev.slug}/`} rel="prev">
+              <span class="dir">
+                <span aria-hidden="true">← </span>Previous {one}
+              </span>{" "}
+              <span class="name">{prev.title}</span>
+            </a>
+          )}
+          {next && (
+            <a class="next" href={`/projects/${next.slug}/`} rel="next">
+              <span class="dir">
+                Next {one}
+                <span aria-hidden="true"> →</span>
+              </span>{" "}
+              <span class="name">{next.title}</span>
+            </a>
+          )}
+        </nav>
+      )
+    }
   </article>
 </Base>
 
@@ -152,6 +236,7 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
   .head {
     padding-top: 18px;
     border-top: var(--rule-double);
+    margin-bottom: clamp(28px, 4vw, 44px);
   }
 
   .dek {
@@ -164,32 +249,124 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     color: var(--ink-soft);
   }
 
-  .facts {
-    display: grid;
-    gap: var(--s-5) var(--s-7);
-    margin: clamp(28px, 4vw, 44px) 0;
+  /* the app's own link, in accent: the one thing to act on at the top */
+  .primary {
+    margin-top: 22px;
   }
 
-  /* a hairline over the stack and links too, level with the flow line's */
-  .facts > div {
-    padding-top: 14px;
-    border-top: var(--hairline);
+  .primary :global(.lnk) {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
 
-  @media (min-width: 900px) {
-    .facts {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    }
+  .flowline {
+    max-width: 68ch;
+    margin-bottom: clamp(28px, 4vw, 44px);
   }
 
   .architecture {
     margin-bottom: clamp(36px, 5vw, 56px);
   }
 
+  /* a screenshot at its own size, never stretched past it */
+  .shot {
+    margin: 0;
+  }
+
+  .shot :global(img) {
+    max-width: 100%;
+    border: var(--hairline);
+  }
+
+  .shot :global(.cmds) {
+    max-width: 520px;
+  }
+
+  /* ---------- the reading column and its margin ---------- */
+  .reading {
+    display: grid;
+    gap: var(--s-6);
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+
+  @media (min-width: 1040px) {
+    .reading {
+      grid-template-columns: minmax(0, 68ch) minmax(220px, 290px);
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .body {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .margin {
+      grid-column: 2;
+      grid-row: 1;
+      position: sticky;
+      top: 92px;
+      padding-left: var(--s-5);
+      border-left: var(--hairline);
+    }
+  }
+
+  .margin {
+    font: 400 0.9rem/1.5 var(--sans);
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 1039px) {
+    .margin {
+      padding-bottom: var(--s-5);
+      border-bottom: var(--hairline);
+    }
+  }
+
+  .part + .part {
+    margin-top: var(--s-5);
+  }
+
+  .label {
+    margin: 0 0 var(--s-2);
+    font-weight: 600;
+    font-size: var(--fs-caption);
+    color: var(--muted);
+  }
+
+  .toc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc li + li {
+    margin-top: 6px;
+  }
+
+  .toc a {
+    color: var(--ink);
+    text-decoration-color: var(--rule);
+  }
+
+  .toc a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .stack {
+    margin: 0;
+  }
+
+  .margin :global(.links) {
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+
   /* ---------- body: the reading column, aligned with the title ---------- */
   .body {
     max-width: 68ch;
-    margin-top: clamp(36px, 5vw, 56px);
     font-size: var(--fs-body);
     line-height: 1.6;
     color: var(--ink);
@@ -263,7 +440,7 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     color: var(--muted);
   }
 
-  /* ---------- previous / next ---------- */
+  /* ---------- previous / next of the same kind ---------- */
   .pager {
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -116,7 +116,7 @@ note the change in the commit message.
 ```
 /                       Home: hero, about, systems, all projects, contact
 /apps/                  Gallery of every live app (kind: live)
-/projects/<slug>/       Case study page (only for projects with caseStudy: true)
+/projects/<slug>/       Case study page (projects with caseStudy: true: all but RepoHealth)
 /404                    Not found
 ```
 
@@ -260,6 +260,10 @@ existed.
 
 All repos and APK links are under `https://github.com/pero-grubac/`.
 Verify every link returns 200 before finishing phase 2.
+
+Since the phase 4 review (round 2), `caseStudy` is true for every project
+except RepoHealth, whose repo is private; the column above is the
+original plan.
 
 The `image` paths in the table are the old URLs. Since phase 2 those
 files are in `src/assets/` under the same sub-path (Astro's `<Image>` only
@@ -525,16 +529,26 @@ value.
 
 - **/apps/**: same masthead and footer; h1 "Browser apps" and an italic
   intro; a grid of figures (4:3 screenshot, serif title, summary, "Built
-  with …", "Open" and "Source" or "Private repo"); the same "Find"
-  search on top.
-- **Case study**: an article: sans breadcrumb, h1 title, italic dek
-  (summary), "Architecture" flow line, the architecture diagram, the demo
-  figure, the body, then "Previous system / Next system". The body is the
-  main reading column: aligned with the title, at most 68ch, body size
-  (1.125rem) in ink, h2 sections, en-dash lists. Accent is never used for
-  body text; links in it are ink and turn accent on hover (phase 4
-  review).
-- **Architecture diagrams** (one per system, phase 4 review): an inline
+  with …", "Read the case study →", "Open" and "Source" or "Private
+  repo"); the same "Find" search on top.
+- **Case study**: an article: sans breadcrumb (back to the systems, the
+  apps gallery for a live app, or the index filtered to the project's
+  kind), h1 title, italic dek (summary), and the app's own link in accent
+  ("Open app ↗" for a live app, "Download APK ↗" for a mobile app). Then,
+  full width: the "Architecture" flow line and diagram where there is
+  one, and the demo video, the screenshot at its own size, or the
+  Discord bot's command list. Then the body as the main reading column:
+  aligned with the title, at most 68ch, body size (1.125rem) in ink, h2
+  sections, en-dash lists. Accent is never used for body text; links in
+  it are ink and turn accent on hover (phase 4 review). From 1040px a
+  sticky margin sits to its right like a book's, behind a hairline:
+  "On this page" (links to the body's h2 sections), "Built with" (the
+  stack) and "Code" (the repo links or "Private repo"). Below 1040px the
+  page is one column, with the margin's content above the body. Last,
+  "Previous … / Next …" within the same kind ("Next live app"); a kind
+  with one case study has none (phase 4 review, round 2).
+- **Architecture diagrams** (one per system, phase 4 review; since round
+  2 only for projects with several parts that talk to each other): an inline
   SVG figure drawn like an illustration in a printed magazine, with a
   short sans caption. Ink lines on paper, component names in Newsreader,
   notes and line labels in Instrument Sans, no colour fills; the accent
@@ -631,9 +645,10 @@ the crowding.
   accessible name "Open {title}"), so a visitor can launch an app without
   expanding it.
 - Details on demand (inline expand, drawer or modal; the direction
-  decides): description, highlights, stack, "Open app" (live only),
-  "Download APK" (when `apk` is set), "Source" per repo or a "Private repo"
-  label. `Esc` closes. Only one open at a time.
+  decides): description, highlights, stack, "Read the case study" (when
+  the project has one), "Open app" (live only), "Download APK" (when `apk`
+  is set), "Source" per repo or a "Private repo" label. `Esc` closes.
+  Only one open at a time.
 - Never show the same sentence twice. Where the `description` is barely
   longer than the `summary` (today FitForge, Store Management, ETF Oglasi
   and AssetManager), the details don't repeat it under the summary. No
@@ -665,28 +680,37 @@ button (shows "Copied" for 2s), GitHub and LinkedIn links.
 ### 8.1 `/apps/`
 
 Visual gallery of every `live` project: screenshot, title, summary, stack,
-and two separate links, "Open" and "Source" ("Private repo" label instead
-of "Source" when `privateRepo` is set). Same search component as the home
-page. Styled in the chosen direction.
+"Read the case study" (when the project has one), and two separate links,
+"Open" and "Source" ("Private repo" label instead of "Source" when
+`privateRepo` is set). Same search component as the home page. Styled in
+the chosen direction.
 
 ### 8.2 `/projects/<slug>/` (case study)
 
-Generated only for `caseStudy: true`:
+Generated only for `caseStudy: true`, which since the phase 4 review
+(round 2) is every project except RepoHealth (6.8 has the layout):
 
-1. Breadcrumb back to the projects.
-2. Title, summary, repo links.
-3. Architecture: render the `flow` string and the system's diagram (6.8).
-4. Screenshot.
-5. Markdown body. The four systems have one since the phase 4 review,
-   written in first person from each repo's README for a client or an
-   employer: What it does, Architecture, Decisions and why (only reasons
-   the README gives), Security, Testing and deployment. No installation
-   steps, commands or configuration. Each ends with a hidden
-   `TODO(owner)` (a Markdown comment, `[//]: # "…"`) for a short "What I
-   learned" section in the owner's words. If the body is empty, show the
-   `description`, any highlights, and a note "Case study in progress."
-   (no lorem ipsum).
-6. Prev/next links to the other systems.
+1. Breadcrumb back to the systems, the apps gallery, or the index
+   filtered to the project's kind.
+2. Title, summary, and "Open app" (live) or "Download APK" (mobile).
+3. Architecture: the `flow` string (systems) and a diagram (6.8), only
+   for projects with several parts that talk to each other. Single apps
+   get none.
+4. The demo video, the screenshot, or the Discord bot's commands.
+5. Markdown body, written in first person from the project's README for
+   a client or an employer, with only the sections the README supports,
+   in this order: What it does, How it works (one application) or
+   Architecture (several parts), Decisions and why (only reasons the
+   README gives), Security, Testing and deployment. Scaled to the
+   project: a score table gets a short page with one to three sections,
+   a system the full set; no empty or padded sections. No installation
+   steps, commands or configuration, and no facts the README doesn't
+   state. Each ends with a hidden `TODO(owner)` (a Markdown comment,
+   `[//]: # "…"`) for a short "What I learned" section in the owner's
+   words. If the body is empty, show the `description`, any highlights,
+   and a note "Case study in progress." (no lorem ipsum).
+6. The margin: "On this page", the stack and the repo links.
+7. Prev/next links to the other projects of the same kind.
 
 ### 8.3 Command palette
 

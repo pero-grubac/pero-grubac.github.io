@@ -153,10 +153,12 @@ in section 5 of `REDESIGN.md` (copy an existing project of the same kind),
 and put its screenshot under `src/assets/`. `npm run build` tells you
 exactly which field is wrong if something doesn't fit.
 
-A system (`caseStudy: true`) also gets a page at `/projects/<slug>/`. Its
-case study is the Markdown body of the same file, and its architecture
-diagram, if it has one, is `src/components/diagrams/<slug>.astro`; see
-sections 6.8 and 8.2 of `REDESIGN.md`.
+With `caseStudy: true` (every project but RepoHealth) it also gets a page
+at `/projects/<slug>/`. Its case study is the Markdown body of the same
+file, written from the project's README; a project with several parts
+that talk to each other can also have an architecture diagram,
+`src/components/diagrams/<slug>.astro`. See sections 6.8 and 8.2 of
+`REDESIGN.md`.
 
 ### Tests
 

@@ -52,7 +52,7 @@ const description = `Browser apps by Pero Grubač that you can open right now: $
             <h2 class="title">{p.title}</h2>
             <p class="sum">{p.summary}</p>
             <BuiltWith stack={p.stack} />
-            <ProjectLinks project={p} short />
+            <ProjectLinks project={p} caseStudy={p.caseStudy} short />
           </li>
         ))
       }
