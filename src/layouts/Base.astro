@@ -5,6 +5,7 @@ import "../styles/global.css";
 import FontFaces from "../components/FontFaces.astro";
 import Masthead from "../components/Masthead.astro";
 import Footer from "../components/Footer.astro";
+import Toast from "../components/Toast.astro";
 
 interface Props {
   title: string;
@@ -34,6 +35,7 @@ const { title, description } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <Toast />
     <script>
       // Show ⌘ instead of Ctrl in the keyboard hints on Apple devices.
       if (/Mac|iPhone|iPad/.test(navigator.platform)) {

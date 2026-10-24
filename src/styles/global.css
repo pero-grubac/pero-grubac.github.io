@@ -49,6 +49,20 @@ a {
   text-underline-offset: 4px;
 }
 
+/* Text links in link rows and lists (6.6): ink with a rule-coloured
+   underline, accent on hover; .lnk-strong is the one accent call to
+   action ("Read the case study →", "Browse the apps →") */
+.lnk {
+  color: var(--ink);
+  text-decoration-color: var(--rule);
+}
+
+.lnk:hover,
+.lnk-strong {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
 button,
 input {
   font: inherit;

@@ -6,6 +6,7 @@ kind: mobile
 year: 2026
 summary: "Plan weekly workouts, log sets and watch strength grow over time."
 description: "Plan weekly workouts, log sets as you train, and watch strength grow over time."
+repeatsSummary: true
 highlights:
   - "Plans per weekday from 230+ exercises, each with its own sets, reps and weight targets"
   - "Automatic progression after N good sets in a row (default 8); reps or seconds for bodyweight"

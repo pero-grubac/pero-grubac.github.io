@@ -97,10 +97,13 @@ pero-grubac.github.io/
 ├── src/
 │   ├── content/projects/      One Markdown file per project (<slug>.md)
 │   ├── content.config.ts      The projects schema; the build fails on an invalid file
-│   ├── assets/                Project screenshots, optimized by Astro
+│   ├── assets/                Project screenshots and the portrait, optimized by Astro
 │   ├── pages/                 Routes (index.astro so far)
-│   ├── layouts/Base.astro     Head, fonts, masthead, main, footer
-│   ├── components/            Masthead, Footer, FontFaces
+│   ├── layouts/Base.astro     Head, fonts, masthead, main, footer, toast
+│   ├── components/            Masthead, Footer, FontFaces and shared pieces (links, demo figure, …)
+│   │   └── home/              The home page sections: hero, about, systems, index, apps, contact
+│   ├── lib/                   Project helpers (counts, search matching) and the owner's contact facts
+│   ├── scripts/               Browser scripts: the projects index, the toast
 │   └── styles/                tokens.css (design tokens), global.css
 ├── public/assets/             Demo videos, avatar, og-card.png, favicons, served at /assets/
 ├── scripts/check-links.mjs    Checks every live, repo and APK link in the content

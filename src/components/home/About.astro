@@ -1,0 +1,216 @@
+---
+// About (6.6, 7.2): two columns of text, the portrait, and the stack.
+// A stack term searches the projects index; a term no project matches
+// (same matching as the search) is plain text.
+import { Picture } from "astro:assets";
+import SectionHead from "../SectionHead.astro";
+import avatar from "../../assets/avatar.jpeg";
+import { matches, type Project } from "../../lib/projects";
+import { site } from "../../lib/site";
+
+interface Props {
+  projects: Project[];
+}
+
+const STACK = {
+  Languages: ["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart"],
+  Frameworks: ["Spring Boot", "ASP.NET", "FastAPI", "Flutter", "React", "Angular", "Django", "WPF", "SvelteKit", "Godot"],
+  Infrastructure: ["Docker", "RabbitMQ", "PostgreSQL", "MySQL", "Redis", "Nginx", "Canvas", "PWA", "GCP", "Vite", "OpenSSL", "Testcontainers", "Playwright"],
+};
+
+const { projects } = Astro.props;
+const groups = Object.entries(STACK).map(([group, terms]) => ({
+  group,
+  terms: terms.map((term) => ({ term, found: projects.some((p) => matches(p, term)) })),
+}));
+---
+
+<section id="about" aria-labelledby="about-h">
+  <SectionHead id="about-h" title="About" />
+  <div class="about">
+    <div>
+      <div class="text">
+        <p>
+          I'm a Software Engineering graduate from Trebinje, now based in Banja Luka, with a focus on backend systems. I
+          build reliable, scalable applications, from microservices to mobile apps.
+        </p>
+        <p>
+          My work spans distributed systems with RabbitMQ and Docker, real-time platforms, REST APIs and full-stack web
+          applications. I'm comfortable across several ecosystems and like picking the right tool for the job.
+        </p>
+        <p>
+          I work professionally as a backend developer and I'm open to freelance work on backend, API or full-stack
+          projects.
+        </p>
+      </div>
+
+      <dl class="stack">
+        {
+          groups.map(({ group, terms }) => (
+            <div>
+              <dt>{group}</dt>
+              <dd>
+                {terms.map(({ term, found }, i) => (
+                  <Fragment>
+                    <span class="term">
+                      {found ? (
+                        <button type="button" data-term={term} aria-label={`Find ${term} in the projects index`}>
+                          {term}
+                        </button>
+                      ) : (
+                        <span class="plain">{term}</span>
+                      )}
+                      {i < terms.length - 1 && <span class="sep">,</span>}
+                    </span>{" "}
+                  </Fragment>
+                ))}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="hint">Select a technology to find it in the projects index.</p>
+    </div>
+
+    <figure class="portrait">
+      <Picture
+        src={avatar}
+        alt={site.name}
+        formats={["avif", "webp"]}
+        fallbackFormat="jpeg"
+        width={380}
+        height={475}
+        widths={[380, 760]}
+        sizes="380px"
+        fit="cover"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{site.name}, backend developer</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 40px;
+  }
+
+  @media (min-width: 1000px) {
+    .about {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    }
+  }
+
+  .text {
+    column-gap: var(--s-7);
+    column-rule: var(--hairline-soft);
+  }
+
+  @media (min-width: 760px) {
+    .text {
+      columns: 2;
+    }
+  }
+
+  .text p {
+    margin: 0 0 1em;
+    hyphens: auto;
+  }
+
+  .portrait {
+    margin: 0;
+    max-width: 380px;
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: sepia(0.12) contrast(1.02);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    padding-top: var(--s-2);
+    border-top: var(--hairline);
+    font: 500 var(--fs-caption) var(--sans);
+    color: var(--muted);
+  }
+
+  .stack {
+    margin: var(--s-7) 0 0;
+    border-top: var(--hairline);
+  }
+
+  .stack > div {
+    display: grid;
+    gap: var(--s-1) var(--s-6);
+    padding: 14px 0;
+    border-bottom: var(--hairline-soft);
+  }
+
+  @media (min-width: 760px) {
+    .stack > div {
+      grid-template-columns: 180px minmax(0, 1fr);
+    }
+  }
+
+  dt {
+    padding-top: var(--s-1);
+    font: 600 0.85rem var(--sans);
+    color: var(--muted);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+  }
+
+  .term {
+    white-space: nowrap;
+  }
+
+  .term button {
+    padding: 0;
+    border: 0;
+    background: none;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 5px;
+    cursor: pointer;
+  }
+
+  .term button:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .plain {
+    color: var(--ink-soft);
+  }
+
+  .sep {
+    color: var(--muted);
+  }
+
+  .hint {
+    margin: var(--s-3) 0 0;
+    font: 400 0.85rem var(--sans);
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  import { setSearch } from "../../scripts/project-index";
+
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-term]")) {
+    btn.addEventListener("click", (e) => {
+      // Take keyboard and mouse users to the search box; on touch, focusing
+      // it would open the on-screen keyboard over the results
+      setSearch(btn.dataset.term!, { scroll: true, focus: (e as PointerEvent).pointerType !== "touch" });
+    });
+  }
+</script>

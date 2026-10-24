@@ -1,0 +1,86 @@
+---
+// Systems (6.6, 7.3): each featured project as a magazine feature, with
+// the most visual weight on the page.
+import SectionHead from "../SectionHead.astro";
+import Flow from "../Flow.astro";
+import BuiltWith from "../BuiltWith.astro";
+import ProjectLinks from "../ProjectLinks.astro";
+import DemoFigure from "../DemoFigure.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  systems: Project[];
+}
+---
+
+<section id="systems" aria-labelledby="systems-h">
+  <SectionHead
+    id="systems-h"
+    title="Systems"
+    intro="Backends made of several services that talk over queues, sockets and REST. Each one gets a case study."
+  />
+  {
+    Astro.props.systems.map((p) => (
+      <article class="feature" id={p.slug} aria-labelledby={`${p.slug}-h`}>
+        <div>
+          <h3 id={`${p.slug}-h`}>{p.title}</h3>
+          <p class="dek">{p.summary}</p>
+          <Flow flow={p.flow!} />
+        </div>
+        <div>
+          <p class="desc">{p.description}</p>
+          <BuiltWith stack={p.stack} />
+          <ProjectLinks project={p} caseStudy={p.caseStudy} />
+        </div>
+        <div class="figure">
+          <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} />
+        </div>
+      </article>
+    ))
+  }
+</section>
+
+<style>
+  .feature {
+    display: grid;
+    gap: var(--s-5) var(--s-7);
+    padding-bottom: clamp(44px, 6vw, 72px);
+  }
+
+  .feature + .feature {
+    padding-top: clamp(44px, 6vw, 72px);
+    border-top: var(--hairline);
+  }
+
+  @media (min-width: 900px) {
+    .feature {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+
+    .figure {
+      grid-column: 1 / -1;
+    }
+  }
+
+  h3 {
+    margin: 0 0 var(--s-3);
+    font-size: var(--fs-feature);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    font-variation-settings: "opsz" 60;
+  }
+
+  .dek {
+    margin: 0 0 20px;
+    font-size: var(--fs-dek);
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .desc {
+    max-width: 65ch;
+    margin: 0 0 18px;
+  }
+</style>

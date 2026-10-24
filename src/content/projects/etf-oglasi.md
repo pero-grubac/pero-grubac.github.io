@@ -6,6 +6,7 @@ kind: mobile
 year: 2025
 summary: "University announcements and class schedules, offline; my thesis."
 description: "University announcements and class schedules with full offline support — my graduation thesis."
+repeatsSummary: true
 highlights:
   - "All boards cached in SQLite; search ignores case, diacritics and Latin/Cyrillic script"
   - "Weekly schedules by programme and year, teacher or room; export to calendar (.ics)"

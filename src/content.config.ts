@@ -30,6 +30,9 @@ const projects = defineCollection({
         .max(75, "summary: one sentence of about 70 characters")
         .refine((s) => !/[.!?]\s+\S/.test(s), "summary: one sentence only"),
       description: text.optional(),
+      // The description only rewords the summary, so the expanded view
+      // leaves it out instead of showing the same sentence twice (7.4)
+      repeatsSummary: z.boolean().default(false),
       flow: text.optional(),
       highlights: z.array(text).max(5).default([]),
       stack: z.array(text).min(1),
@@ -71,6 +74,8 @@ const projects = defineCollection({
         if (p.video) fail("video is for systems only", ["video"]);
         if (p.highlights.length < 2) fail("2–5 highlights", ["highlights"]);
       }
+      if (p.repeatsSummary && (system || !p.description))
+        fail("repeatsSummary is for non-system projects that have a description", ["repeatsSummary"]);
 
       // Section 11: no counts next to technologies, each technology once
       if (p.flow) {

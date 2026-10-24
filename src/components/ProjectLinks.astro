@@ -1,0 +1,64 @@
+---
+// A project's actions, in the same order everywhere: case study, open app,
+// APK, then one Source link per repo or a "Private repo" label (7.4). The
+// visible text stays short; the accessible name says which project.
+import type { Project } from "../lib/projects";
+
+interface Props {
+  project: Project;
+  /** Lead with "Read the case study →" (systems) */
+  caseStudy?: boolean;
+}
+
+const { project: p, caseStudy = false } = Astro.props;
+---
+
+<div class="links">
+  {
+    caseStudy && (
+      <a class="lnk lnk-strong" href={`/projects/${p.slug}/`}>
+        Read the case study<span class="sr-only">: {p.title}</span>
+        <span aria-hidden="true"> →</span>
+      </a>
+    )
+  }
+  {
+    p.links.live && (
+      <a class="lnk" href={p.links.live} target="_blank" rel="noopener">
+        Open app<span class="sr-only">: {p.title}</span>
+        <span aria-hidden="true"> ↗</span>
+      </a>
+    )
+  }
+  {
+    p.links.apk && (
+      <a class="lnk" href={p.links.apk} target="_blank" rel="noopener">
+        Download APK<span class="sr-only"> of {p.title}</span>
+        <span aria-hidden="true"> ↗</span>
+      </a>
+    )
+  }
+  {
+    p.links.repos.map((repo) => (
+      <a class="lnk" href={repo.url} target="_blank" rel="noopener">
+        Source<span class="sr-only"> code for {p.title}</span>{repo.label !== "Source" && `: ${repo.label}`}
+        <span aria-hidden="true"> ↗</span>
+      </a>
+    ))
+  }
+  {p.links.privateRepo && <span class="private">Private repo</span>}
+</div>
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    font: 600 0.95rem var(--sans);
+  }
+
+  .private {
+    font-weight: 500;
+    color: var(--muted);
+  }
+</style>

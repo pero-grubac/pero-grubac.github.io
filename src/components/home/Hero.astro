@@ -1,0 +1,168 @@
+---
+// Hero (6.6, 7.1): dateline, name, standfirst and byline, with the
+// "In this portfolio" contents beside it from 1000px.
+import type { Project } from "../../lib/projects";
+import { site } from "../../lib/site";
+
+interface Props {
+  systems: Project[];
+  /** Number of projects in the index (everything but the systems) */
+  indexCount: number;
+  liveCount: number;
+}
+
+const { systems, indexCount, liveCount } = Astro.props;
+
+const contents = [
+  ...systems.map((p) => ({ href: `#${p.slug}`, title: p.title, note: "system" })),
+  { href: "#projects", title: "Index of projects", note: `${indexCount} projects` },
+  { href: "/apps/", title: "Browser apps", note: `${liveCount} ${liveCount === 1 ? "app" : "apps"}` },
+];
+---
+
+<section class="hero" aria-labelledby="name">
+  <div>
+    <p class="dateline">Banja Luka, Bosnia and Herzegovina · Java, C# and Python</p>
+    <h1 id="name">{site.name}</h1>
+    <p class="standfirst">
+      Backend developer in Banja Luka. I build services that talk to each other over queues, sockets and REST.
+    </p>
+    <ul class="byline">
+      <li><a class="avail" href="#contact">Available for freelance projects</a></li>
+      <li><a href="#systems">Read about the systems</a></li>
+      <li><a href={site.github} target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </div>
+
+  <nav class="contents" aria-labelledby="contents-h">
+    <h2 id="contents-h">In this portfolio</h2>
+    <ol>
+      {
+        contents.map((c) => (
+          <li>
+            <a href={c.href}>
+              <span>{c.title}</span>
+              <span class="dots" aria-hidden="true" />{" "}
+              <span class="note">{c.note}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: var(--s-7);
+    padding-top: clamp(40px, 8vw, 110px);
+    padding-bottom: clamp(40px, 6vw, 80px);
+  }
+
+  @media (min-width: 1000px) {
+    .hero {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      align-items: end;
+    }
+  }
+
+  .dateline {
+    margin: 0 0 18px;
+    font: 500 0.85rem var(--sans);
+    color: var(--muted);
+  }
+
+  .standfirst {
+    max-width: 30ch;
+    margin: 28px 0 30px;
+    font-size: var(--fs-standfirst);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 26px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font: 500 0.95rem var(--sans);
+  }
+
+  .byline a {
+    padding-bottom: 2px;
+    border-bottom: var(--hairline);
+    text-decoration: none;
+  }
+
+  .byline a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .byline .avail {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    border-color: currentColor;
+    color: var(--accent);
+  }
+
+  .avail::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .contents {
+    border-top: 2px solid var(--ink);
+    padding-top: var(--s-3);
+    font-size: var(--fs-small);
+  }
+
+  .contents h2 {
+    margin: 0 0 var(--s-2);
+    font: 600 0.85rem var(--sans);
+    font-variation-settings: normal;
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .contents a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    padding: 7px 0;
+    border-bottom: var(--hairline-soft);
+    text-decoration: none;
+  }
+
+  .contents a:hover {
+    color: var(--accent);
+  }
+
+  .dots {
+    flex: 1;
+    border-bottom: var(--leader);
+    transform: translateY(-4px);
+  }
+
+  .note {
+    font: 500 var(--fs-caption) var(--sans);
+    color: var(--muted);
+  }
+</style>

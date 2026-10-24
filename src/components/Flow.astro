@@ -1,0 +1,39 @@
+---
+// A system's architecture line under an "Architecture" label, with the
+// arrows in accent (6.6). Also used by the case study pages.
+import { flowParts } from "../lib/projects";
+
+interface Props {
+  flow: string;
+}
+
+const parts = flowParts(Astro.props.flow);
+---
+
+<p class="flow">
+  <span class="label">Architecture</span>
+  {parts.map((part) => (part.op ? <span class="op">{` ${part.text} `}</span> : part.text))}
+</p>
+
+<style>
+  .flow {
+    margin: 0;
+    padding-top: 14px;
+    border-top: var(--hairline);
+    font: 500 0.9rem/1.7 var(--sans);
+    color: var(--ink-soft);
+  }
+
+  .label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .op {
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

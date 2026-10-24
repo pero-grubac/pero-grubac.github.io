@@ -6,6 +6,7 @@ kind: mobile
 year: 2024
 summary: "Android app that tracks company assets, who has them and where."
 description: "Android app for tracking company assets — furniture, electronics, office supplies — who has them and where they are."
+repeatsSummary: true
 highlights:
   - "Full CRUD, with barcodes typed in or scanned with the camera"
   - "OpenStreetMap view: city pins that list the assets at each location"

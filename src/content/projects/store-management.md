@@ -6,6 +6,7 @@ kind: desktop
 year: 2023
 summary: "Desktop app for a retail store, with admin and cashier roles."
 description: "Desktop app for running a retail store, with separate administrator and cashier roles."
+repeatsSummary: true
 highlights:
   - "Till with bar code scanning; expired or out-of-stock goods refused by the app and the DB"
   - "Dashboard: today's sales, stock value, low stock and expiry counts, 14-day sales chart"

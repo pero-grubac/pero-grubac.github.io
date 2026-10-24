@@ -1,0 +1,157 @@
+---
+// Contact as a magazine colophon (6.7, 7.6), between two 1px ink rules.
+import { site } from "../../lib/site";
+---
+
+<section id="contact" aria-labelledby="contact-h">
+  <div class="colophon">
+    <div class="lead">
+      <h2 id="contact-h">Let's work together</h2>
+      <p>{site.freelanceLine}</p>
+    </div>
+    <dl>
+      <div>
+        <dt>Email</dt>
+        <dd>
+          <a class="lnk" href={`mailto:${site.email}`}>{site.email}</a>
+          <button type="button" class="copy" data-copy={site.email} aria-label="Copy email">
+            <span data-copy-label>Copy</span>
+          </button>
+        </dd>
+      </div>
+      <div>
+        <dt>GitHub</dt>
+        <dd><a class="lnk" href={site.github} target="_blank" rel="noopener">github.com/pero-grubac<span aria-hidden="true"> ↗</span></a></dd>
+      </div>
+      <div>
+        <dt>LinkedIn</dt>
+        <dd><a class="lnk" href={site.linkedin} target="_blank" rel="noopener">linkedin.com/in/perogrubac<span aria-hidden="true"> ↗</span></a></dd>
+      </div>
+      <div>
+        <dt>Based in</dt>
+        <dd>{site.basedIn}</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .colophon {
+    display: grid;
+    gap: 28px 56px;
+    padding: 26px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  @media (min-width: 900px) {
+    .colophon {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .lead p {
+    max-width: 36ch;
+    margin: 0;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  dl {
+    margin: 0;
+  }
+
+  dl > div {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--s-1) var(--s-4);
+    padding: 9px 0;
+    border-bottom: var(--hairline-soft);
+  }
+
+  dl > div:first-child {
+    padding-top: 0;
+  }
+
+  dl > div:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    dl > div {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  dt {
+    font: 600 var(--fs-caption) var(--sans);
+    color: var(--muted);
+  }
+
+  dd {
+    min-width: 0;
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .lnk {
+    overflow-wrap: anywhere;
+  }
+
+  .copy {
+    margin-left: 6px;
+    padding: 2px 10px;
+    border: var(--hairline);
+    border-radius: var(--radius-pill);
+    background: var(--card);
+    font: 600 0.75rem/1.5 var(--sans);
+    color: var(--ink-soft);
+    vertical-align: 2px;
+    cursor: pointer;
+  }
+
+  .copy:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .copy[data-copied] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+  }
+</style>
+
+<script>
+  import { toast } from "../../scripts/toast";
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+    const label = button.querySelector("[data-copy-label]")!;
+    let timer: number | undefined;
+    button.addEventListener("click", async () => {
+      const email = button.dataset.copy!;
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        toast(`Couldn't copy. The address is ${email}`);
+        return;
+      }
+      toast("Email copied");
+      label.textContent = "Copied";
+      button.dataset.copied = "";
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        label.textContent = "Copy";
+        delete button.dataset.copied;
+      }, 2000);
+    });
+  }
+</script>

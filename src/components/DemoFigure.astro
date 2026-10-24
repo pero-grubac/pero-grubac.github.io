@@ -1,0 +1,141 @@
+---
+// A system's full-width figure (6.4): the demo.webp still, and the demo
+// video only on a user action (the video rule in section 2). The <video>
+// is created on the first play, so nothing of it loads with the page.
+// Hovering with a mouse previews the video until the pointer leaves; a
+// click or tap (or the button) plays it for good, and the next one pauses.
+import type { ImageMetadata } from "astro";
+import { Picture } from "astro:assets";
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  title: string;
+  video?: string | undefined;
+}
+
+const { image, alt, title, video } = Astro.props;
+---
+
+<figure class="media" data-video={video} data-state="idle">
+  <Picture
+    src={image}
+    alt={alt}
+    formats={["avif", "webp"]}
+    fallbackFormat="webp"
+    widths={[480, 960]}
+    sizes="(min-width: 1280px) 1184px, 92vw"
+    loading="lazy"
+    decoding="async"
+  />
+  {
+    video && (
+      <button type="button" class="play" data-play>
+        <span class="icon" aria-hidden="true" data-play-icon>▶</span>
+        <span data-play-text>Play demo</span><span class="sr-only">: {title}</span>
+      </button>
+    )
+  }
+</figure>
+
+<style>
+  .media {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--paper-deep);
+  }
+
+  .media[data-video] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .media :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  .media :global(img),
+  .media :global(video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .media :global(video) {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--t-video);
+  }
+
+  .media:not([data-state="idle"]) :global(video) {
+    opacity: 1;
+  }
+
+  .play {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    padding: 7px 14px;
+    background: var(--card);
+    box-shadow: 0 1px 0 var(--rule);
+    font: 600 var(--fs-caption) var(--sans);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .icon {
+    margin-right: 0.35em;
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+  for (const fig of document.querySelectorAll<HTMLElement>("figure[data-video]")) {
+    const img = fig.querySelector("img")!;
+    const btn = fig.querySelector<HTMLButtonElement>("[data-play]")!;
+    const icon = btn.querySelector("[data-play-icon]")!;
+    const text = btn.querySelector("[data-play-text]")!;
+    let video: HTMLVideoElement | undefined;
+
+    const ensureVideo = () => {
+      if (video) return video;
+      video = document.createElement("video");
+      video.muted = video.defaultMuted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.preload = "none";
+      video.poster = img.currentSrc || img.src;
+      video.src = fig.dataset.video!;
+      video.setAttribute("aria-hidden", "true");
+      img.closest("picture")!.after(video);
+      return video;
+    };
+
+    // idle: the still · preview: playing while hovered · playing: started by a click · paused
+    type State = "idle" | "preview" | "playing" | "paused";
+    const state = () => fig.dataset.state as State;
+
+    const setState = (next: State) => {
+      if (next === "idle" || next === "paused") video?.pause();
+      else ensureVideo().play().catch(() => {});
+      fig.dataset.state = next;
+      icon.textContent = next === "playing" ? "❚❚" : "▶";
+      text.textContent = next === "playing" ? "Pause demo" : "Play demo";
+    };
+
+    // Hover previews only with a mouse and without reduced motion; click or tap always works
+    const hover = (e: PointerEvent) => e.pointerType === "mouse" && !reduceMotion.matches;
+    fig.addEventListener("pointerenter", (e) => hover(e) && state() === "idle" && setState("preview"));
+    fig.addEventListener("pointerleave", (e) => hover(e) && state() === "preview" && setState("idle"));
+    fig.addEventListener("click", () => setState(state() === "playing" ? "paused" : "playing"));
+  }
+</script>

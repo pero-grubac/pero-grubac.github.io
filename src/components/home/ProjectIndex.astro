@@ -1,0 +1,491 @@
+---
+// Index of projects (6.6, 7.4): every non-system project as a one-line
+// entry that opens on demand, with search, kind filters and the state in
+// the URL hash. From 980px the open entry reads in a pane beside the list;
+// the details stay right after their entry in the HTML either way, so
+// they are indexed and the tab order follows the page.
+import { Picture } from "astro:assets";
+import SectionHead from "../SectionHead.astro";
+import BuiltWith from "../BuiltWith.astro";
+import ProjectLinks from "../ProjectLinks.astro";
+import Commands from "../Commands.astro";
+import { KIND_NOUNS, countOf, haystack, kindCounts, listOf, type Project } from "../../lib/projects";
+
+interface Props {
+  systems: Project[];
+  /** Everything but the systems, in order */
+  projects: Project[];
+}
+
+const { systems, projects } = Astro.props;
+const kinds = kindCounts(projects);
+const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.count, k.kind)))}.`;
+---
+
+<section id="projects" aria-labelledby="projects-h">
+  <SectionHead
+    id="projects-h"
+    title="Index of projects"
+    intro="Live apps, mobile and desktop apps, and tools, with the most serious work first."
+  />
+  <div class="index-grid" data-index>
+    <div>
+      <div class="find" role="search">
+        <div class="find-in">
+          <label for="q">Find in the index</label>
+          <input id="q" type="search" placeholder="a title or a technology" autocomplete="off" spellcheck="false" />
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <div class="show" role="group" aria-label="Filter by kind">
+          <span aria-hidden="true">Show</span>
+          <button type="button" data-filter="" data-one="project" data-many="projects" aria-pressed="true">
+            All <span data-count>{projects.length}</span>
+          </button>
+          {
+            kinds.map((k) => (
+              <button
+                type="button"
+                data-filter={k.kind}
+                data-one={KIND_NOUNS[k.kind][0]}
+                data-many={KIND_NOUNS[k.kind][1]}
+                aria-pressed="false"
+              >
+                {k.label} <span data-count>{k.count}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      <p class="sr-only" aria-live="polite" data-status></p>
+
+      <ul class="index">
+        {
+          /* Systems join the list only while a search is active (7.4) */
+          systems.map((p) => (
+            <li class="entry entry-system" data-item data-kind="system" data-hay={haystack(p)} hidden>
+              <p class="title">
+                <a href={`#${p.slug}`}>{p.title}</a>
+              </p>
+              <span class="leader" aria-hidden="true" />
+              <span class="kind">system</span>
+              <span class="open" aria-hidden="true">
+                ↑
+              </span>
+              <p class="sum">{p.summary}</p>
+            </li>
+          ))
+        }
+        {
+          projects.map((p) => (
+            <li class="entry" id={`p-${p.slug}`} data-item data-slug={p.slug} data-kind={p.kind} data-hay={haystack(p)}>
+              <h3 class="title">
+                <button type="button" aria-expanded="false" aria-controls={`d-${p.slug}`} data-toggle>
+                  {p.title}
+                </button>
+              </h3>
+              <span class="leader" aria-hidden="true" />
+              <span class="kind">{p.kind}</span>
+              <span class="open">
+                {p.links.live && (
+                  <a href={p.links.live} target="_blank" rel="noopener">
+                    Open<span class="sr-only"> {p.title}</span>
+                    <span aria-hidden="true"> ↗</span>
+                  </a>
+                )}
+              </span>
+              <p class="sum">{p.summary}</p>
+              <div class="panel" id={`d-${p.slug}`} hidden>
+                <div class="panel-body">
+                  <p class="panel-title" aria-hidden="true">
+                    {p.title}
+                  </p>
+                  {p.image ? (
+                    <Picture
+                      class="thumb"
+                      src={p.image}
+                      alt={p.imageAlt!}
+                      formats={["avif", "webp"]}
+                      fallbackFormat="webp"
+                      widths={[480, 960]}
+                      sizes="(min-width: 980px) 430px, 92vw"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    p.commands && <Commands commands={p.commands} />
+                  )}
+                  {!p.repeatsSummary && <p class="desc">{p.description}</p>}
+                  <ul class="highlights">
+                    {p.highlights.map((h) => (
+                      <li>{h}</li>
+                    ))}
+                  </ul>
+                  <BuiltWith stack={p.stack} />
+                  <ProjectLinks project={p} />
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="empty" data-empty hidden>
+        <p>No <span data-empty-noun>project</span> matches “<span data-empty-q></span>”.</p>
+        <button type="button" data-clear>Clear search</button>
+      </div>
+    </div>
+
+    <!-- What the pane shows until an entry is open; screen readers get the details inline -->
+    <div class="reader" aria-hidden="true">
+      <p>Select a project in the index to read about it here.</p>
+      <p class="tally">{tally}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .index-grid {
+    --pane-gap: 56px;
+    position: relative; /* the open entry's pane is positioned against the grid */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px var(--pane-gap);
+  }
+
+  /* ---------- find + show ---------- */
+  .find {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .find-in {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* the field row carries the focus ring, around label, input and hint */
+  .find-in:focus-within {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  label {
+    font: 600 0.85rem var(--sans);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    font: italic 400 1.35rem var(--serif);
+  }
+
+  /* .find-in shows the focus instead */
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: var(--muted);
+  }
+
+  /* the browser's clear button, redrawn in --muted instead of system blue */
+  input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    width: 0.7em;
+    height: 0.7em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%236a6457' stroke-width='1.4'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    cursor: pointer;
+  }
+
+  .show {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-1);
+    font: 500 var(--fs-label) var(--sans);
+  }
+
+  .show > span {
+    margin-right: 6px;
+    color: var(--muted);
+  }
+
+  .show button {
+    padding: 4px var(--s-2);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .show button:hover {
+    background: var(--paper-deep);
+  }
+
+  .show button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  [data-count] {
+    font-variant-numeric: oldstyle-nums;
+    color: var(--muted);
+  }
+
+  [aria-pressed="true"] [data-count] {
+    color: inherit;
+  }
+
+  /* ---------- entries ---------- */
+  .index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: auto minmax(24px, 1fr) auto 3.6rem;
+    column-gap: 10px;
+    align-items: baseline;
+    padding: var(--s-3) 6px var(--s-3) 0;
+    border-bottom: var(--hairline-soft);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent; /* the open entry shows its own accent bar */
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--fs-entry);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  .title button {
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* the whole row shows the focus (6.6) */
+  .title button:focus-visible {
+    outline: none;
+  }
+
+  .entry:has(.title button:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .entry:hover .title,
+  .entry[data-open] .title {
+    color: var(--accent);
+  }
+
+  .entry[data-open] {
+    padding-left: 14px;
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .leader {
+    border-bottom: var(--leader);
+    transform: translateY(-6px);
+  }
+
+  .kind {
+    font: italic 400 1rem var(--serif);
+    color: var(--muted);
+  }
+
+  .open {
+    text-align: right;
+    font: 600 0.85rem var(--sans);
+  }
+
+  .open a {
+    color: var(--accent);
+    text-underline-offset: 4px;
+  }
+
+  .open a:hover {
+    color: var(--ink);
+  }
+
+  .sum {
+    grid-column: 1 / -1;
+    margin: 2px 0 0;
+    font-size: var(--fs-small);
+    color: var(--ink-soft);
+  }
+
+  /* systems, while searching: on card, pointing up to their feature */
+  .entry-system {
+    position: relative;
+    background: var(--card);
+  }
+
+  .entry-system .title a {
+    text-decoration: none;
+  }
+
+  .entry-system .title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .entry-system .kind,
+  .entry-system .open {
+    color: var(--accent);
+  }
+
+  .entry-system + .entry:not(.entry-system) {
+    border-top: 1px solid var(--ink);
+  }
+
+  /* ---------- details ---------- */
+  .panel {
+    grid-column: 1 / -1;
+    padding: var(--s-4) 0 6px;
+    cursor: auto;
+  }
+
+  .panel-title {
+    display: none;
+  }
+
+  .panel :global(.thumb) {
+    margin-bottom: var(--s-4);
+    border: var(--hairline);
+  }
+
+  .desc {
+    margin: 0 0 var(--s-3);
+  }
+
+  .highlights {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+    font-size: var(--fs-small);
+  }
+
+  .highlights li {
+    margin-bottom: var(--s-1);
+    padding-left: 1.2em;
+    text-indent: -1.2em;
+  }
+
+  .highlights li::before {
+    content: "– ";
+    color: var(--accent);
+  }
+
+  .empty {
+    padding: 28px 0;
+    border-bottom: var(--hairline-soft);
+  }
+
+  .empty p {
+    margin: 0 0 var(--s-3);
+    font-size: 1.25rem;
+    font-style: italic;
+  }
+
+  .empty button {
+    padding: 6px var(--s-4);
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-pill);
+    background: none;
+    font: 600 0.85rem var(--sans);
+    cursor: pointer;
+  }
+
+  /* ---------- the reader pane, from 980px ---------- */
+  .reader {
+    display: none;
+  }
+
+  @media (min-width: 980px) {
+    .index-grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: start;
+    }
+
+    .reader,
+    .panel-body {
+      position: sticky;
+      top: 92px;
+      max-height: calc(100vh - 112px);
+      overflow: auto;
+      padding: 22px var(--s-5);
+      border: var(--hairline);
+      background: var(--card);
+    }
+
+    .reader {
+      display: block;
+    }
+
+    .reader p {
+      margin: 0 0 10px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .reader .tally {
+      font: 500 0.85rem var(--sans);
+      color: var(--muted);
+    }
+
+    .index-grid:has(.entry[data-open]) .reader {
+      visibility: hidden;
+    }
+
+    /* The open panel spans the pane column of the whole grid, and its body
+       sticks to the top of the screen like the pane it replaces. */
+    .panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: calc((100% - var(--pane-gap)) * 5 / 12);
+      padding: 0;
+      pointer-events: none;
+    }
+
+    .panel-body {
+      pointer-events: auto;
+    }
+
+    .panel-title {
+      display: block;
+      margin: 0 0 14px;
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+  }
+</style>
+
+<script>
+  import "../../scripts/project-index";
+</script>

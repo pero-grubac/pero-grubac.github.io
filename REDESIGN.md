@@ -62,6 +62,9 @@ the long run of small browser apps, games and side projects.
   phase 2 the project screenshots live in `src/assets/` (same sub-paths)
   so Astro can optimize them; `public/assets/` keeps `og-card.png`,
   `avatar.jpeg`, the favicons and the demo videos at their old URLs.
+  Since phase 3, `src/assets/avatar.jpeg` is a copy of the avatar that
+  the About portrait is built from (a 4:5 crop at 380/760 px instead of
+  the 2048 px original); keep the two files the same.
 - **Video rule.** Systems show their `demo.webp` still by default.
   `demo.mp4` plays only on user action: hover on devices that can hover,
   click/tap everywhere (and a real play button for keyboard users). Use
@@ -132,6 +135,9 @@ summary:     string                 // one sentence, max ~70 chars
 description?: string                // one paragraph (the current site's text);
                                     // required for systems, shown in the
                                     // expanded view for everything else
+repeatsSummary?: boolean            // true → the description only rewords the
+                                    // summary, so the expanded view leaves it
+                                    // out (7.4); default false
 flow?:       string                 // architecture one-liner, systems only;
                                     // no counts, each technology once
 highlights:  string[]               // 2–5 short bullets, shown when expanded;
@@ -169,7 +175,8 @@ on, so **`astro build` fails on an invalid project file**:
 - `summary` is one sentence of at most 75 characters.
 - `featured` is true exactly for `system`. Systems need `description`,
   `flow` and `image`. Other kinds need 2–5 `highlights` and can't have
-  `flow` or `video`.
+  `flow` or `video`. `repeatsSummary` needs a `description` and isn't
+  for systems.
 - `links.live` is present exactly for `live`; `apk` only for `mobile`.
   Either `repos` is non-empty, or it's empty and `privateRepo: true`. A
   single repo is labelled `Source`; with several, none is.
@@ -597,7 +604,9 @@ the crowding.
   label. `Esc` closes. Only one open at a time.
 - Never show the same sentence twice. Where the `description` is barely
   longer than the `summary` (today FitForge, Store Management, ETF Oglasi
-  and AssetManager), the details don't repeat it under the summary.
+  and AssetManager), the details don't repeat it under the summary. No
+  length or word-overlap rule separates exactly these four, so the project
+  file says so: `repeatsSummary: true`.
 - Empty search: "No project matches “{query}”." plus a "Clear search"
   button.
 

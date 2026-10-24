@@ -1,0 +1,42 @@
+---
+// Opens a home page section (6.4): a double rule, the h2 and an optional
+// italic intro, split 5/7 from 900px.
+interface Props {
+  id: string;
+  title: string;
+  intro?: string;
+}
+
+const { id, title, intro } = Astro.props;
+---
+
+<div class="sec-head">
+  <h2 id={id}>{title}</h2>
+  {intro && <p>{intro}</p>}
+</div>
+
+<style>
+  .sec-head {
+    display: grid;
+    gap: var(--s-2) var(--s-7);
+    border-top: var(--rule-double);
+    padding-top: 18px;
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+
+  p {
+    margin: 0;
+    max-width: 46ch;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 900px) {
+    .sec-head {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: baseline;
+    }
+  }
+</style>
