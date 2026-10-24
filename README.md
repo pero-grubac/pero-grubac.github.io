@@ -10,7 +10,7 @@
 ![Build](https://img.shields.io/badge/build_step-none-2EA44F)
 ![Tests](https://img.shields.io/badge/tests-6_unit_·_7_e2e-2EA44F?logo=nodedotjs&logoColor=white)
 
-**My portfolio: 19 projects behind one search bar, live apps that open in place, a command menu and a light/dark theme, in plain HTML, CSS and JavaScript.**
+**My portfolio: 30 projects behind one search bar, live apps that open in place, a command menu and a light/dark theme, in plain HTML, CSS and JavaScript.**
 
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-pero--grubac.github.io-4C8AF5?style=for-the-badge)](https://pero-grubac.github.io)
 
@@ -31,7 +31,7 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 ## ✨ Features
 
 - 🔎 **One search for everything**: names, descriptions and tags, with matches highlighted; clicking a Tech Stack tag searches for it
-- 🗂️ **Kind filters**: systems · live · mobile · desktop · tool
+- 🗂️ **Kind filters**: systems · live · mobile · desktop · web · tool
 - 🎬 **Featured systems** with demo videos that play only while on screen
 - 📂 **Index rows** that open in place, with previews of every live app
 - ⌨️ **Command menu** (`Ctrl` + `K`): jump to a project, launch an app, copy the email, switch theme
@@ -44,17 +44,18 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 
 **Featured systems** (each with a demo video):
 
-1. **Incident Alert**: microservices incident tracking (ASP.NET · React · RabbitMQ · Docker)
-2. **eMobilityHub**: electric vehicle rental platform (Spring Boot · Angular · MySQL · Docker)
-3. **Chat Room**: secure forum with 2FA and OAuth2 (Spring Boot · React · JWT · Docker)
-4. **Online Library System**: distributed Java platform (Redis · WebSocket · RMI · RabbitMQ)
+1. **Incident Alert**: citizen incident reports with moderation, four .NET 10 services (ASP.NET · MassTransit/RabbitMQ · ML.NET · React · Docker)
+2. **eMobilityHub**: electric vehicle rental platform, four apps on one database (Spring Boot · Angular · JSP · MySQL · Docker)
+3. **Chat Room**: secure forum with 2FA, OAuth2, WAF, SIEM and TLS on every hop (Spring Boot · React · JWT · Docker)
+4. **Online Library System**: seven Java apps (REST · TCP/TLS sockets · UDP multicast · RabbitMQ · RMI · Redis)
 
 **Index**:
 
-- **Live apps**: Arcane Keep, DevKit, GitHub Dashboard, Dev Timeline, Countdown, Catan Map Generator, excuse.exe, Sedmica, Lora Score Table, Yamb Table
+- **Live apps**: [RepoHealth](https://repository-health-monitor.vercel.app/), Brick Breaker, Monte Carlo π · Python, Arcane Keep, DevKit, GitHub Dashboard, Dev Timeline, Countdown, Catan Map Generator, excuse.exe, Sedmica, Lora Score Table, Yamb Table
 - **Mobile**: FitForge, AssetManager, ETF Oglasi (Flutter · Dart · SQLite)
-- **Desktop**: Store Management System (C# · .NET · WinForms · MySQL in Docker)
-- **Tool**: GitHub Discord Bot (Python · discord.py · Flask · PostgreSQL)
+- **Desktop**: Store Management, Store Chain Management (C# · WinForms · MySQL), e-Mobility Rental (Java · Swing), ANOVA, Echo Player, Monte Carlo π, Snake (C# · WPF)
+- **Web**: Minimal Blog (Python · Django · PostgreSQL)
+- **Tools**: Secure Repository (C# · OpenSSL · PKI), GitHub Discord Bot (Python · discord.py · Flask · PostgreSQL)
 
 ### ⌨️ Keyboard
 
@@ -96,7 +97,7 @@ pero-grubac.github.io/
 │   ├── og-card.png            Link-preview image
 │   ├── live/                  Live app screenshots (800×500 WebP)
 │   ├── incident_alert/ …      Featured systems: demo.mp4 + poster
-│   └── fitforge/ …            Mobile & desktop previews
+│   └── fitforge/, snake/ …    Mobile, desktop and tool previews (16:10 WebP)
 ├── tests/
 │   ├── site.test.js           Links, assets, anchors, unique ids, thumbnails, meta tags
 │   └── e2e/                   Playwright smoke tests and a tiny static server

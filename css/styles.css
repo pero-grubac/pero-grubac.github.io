@@ -921,6 +921,11 @@ section {
 .project-link.link-accent {
   color: var(--accent);
 }
+.project-link--muted,
+.project-link--muted:hover {
+  color: var(--muted);
+  font-weight: 500;
+}
 /* STATUS BADGES (shared shape, color communicates meaning) */
 .badge-tool {
   font-family: var(--font-mono);
@@ -1161,6 +1166,12 @@ mark {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.row-new {
+  padding: 0 0.35rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.7rem;
 }
 .row-kind {
   display: inline-flex;

@@ -141,11 +141,11 @@
         <dl class="stats-strip stagger">
             <div class="stat">
                 <dt>projects on this page</dt>
-                <dd data-stat="projects">19</dd>
+                <dd data-stat="projects">30</dd>
             </div>
             <div class="stat">
                 <dt>live apps you can open</dt>
-                <dd data-stat="live">10</dd>
+                <dd data-stat="live">13</dd>
             </div>
             <div class="stat">
                 <dt>featured backend systems</dt>
@@ -183,6 +183,10 @@
                     <button type="button" class="stack-tag" data-tag="Flutter">Flutter</button>
                     <button type="button" class="stack-tag" data-tag="React">React</button>
                     <button type="button" class="stack-tag" data-tag="Angular">Angular</button>
+                    <button type="button" class="stack-tag" data-tag="Django">Django</button>
+                    <button type="button" class="stack-tag" data-tag="WPF">WPF</button>
+                    <button type="button" class="stack-tag" data-tag="SvelteKit">SvelteKit</button>
+                    <button type="button" class="stack-tag" data-tag="Godot">Godot</button>
                 </div>
             </div>
             <div class="stack-card">
@@ -198,6 +202,9 @@
                     <button type="button" class="stack-tag" data-tag="PWA">PWA</button>
                     <button type="button" class="stack-tag" data-tag="GCP">GCP</button>
                     <button type="button" class="stack-tag" data-tag="Vite">Vite</button>
+                    <button type="button" class="stack-tag" data-tag="OpenSSL">OpenSSL</button>
+                    <button type="button" class="stack-tag" data-tag="Testcontainers">Testcontainers</button>
+                    <button type="button" class="stack-tag" data-tag="Playwright">Playwright</button>
                 </div>
             </div>
         </div>
@@ -221,6 +228,7 @@
                 <button type="button" class="kind" data-kind="live" aria-pressed="false">live</button>
                 <button type="button" class="kind" data-kind="mobile" aria-pressed="false">mobile</button>
                 <button type="button" class="kind" data-kind="desktop" aria-pressed="false">desktop</button>
+                <button type="button" class="kind" data-kind="web" aria-pressed="false">web</button>
                 <button type="button" class="kind" data-kind="tool" aria-pressed="false">tool</button>
             </div>
             <p class="search-hint" id="searchHint" aria-live="polite"></p>
@@ -232,9 +240,9 @@
             <article class="project-card" id="incident-alert" data-kind="system">
                 <div class="project-img">
                     <video class="project-video" loop muted playsinline preload="metadata"
-                        poster="assets/incident_alert/demo.png">
+                        poster="assets/incident_alert/demo.webp">
                         <source src="assets/incident_alert/demo.mp4" type="video/mp4">
-                        <img src="assets/incident_alert/demo.png" alt="Incident Alert">
+                        <img src="assets/incident_alert/demo.webp" alt="Incident Alert">
                     </video>
                 </div>
                 <div class="project-info">
@@ -243,17 +251,25 @@
                         <span class="featured-badge">Microservices</span>
                     </div>
                     <h3>Incident Alert</h3>
-                    <p class="project-arch">ASP.NET services <span>→</span> RabbitMQ <span>→</span> 2 React clients</p>
-                    <p>Real-time incident tracking and management system built on a microservices architecture. Uses
-                        <strong>event-driven messaging via RabbitMQ</strong> and Docker for containerized deployment
-                        across multiple services.</p>
+                    <p class="project-arch">2 React apps <span>→</span> 4 ASP.NET services <span>⇄</span> RabbitMQ
+                        <span>+</span> 2 × PostgreSQL</p>
+                    <p>Citizens report incidents on a map with photos; <strong>nothing reaches the public map until a
+                            moderator approves it</strong>. Four ASP.NET Core 10 services: a public API, a moderation
+                        service with its own database, ML.NET k-means grouping of similar reports, and statistics with
+                        hot spots and daily trends. Reports, approvals and categories travel as MassTransit events over
+                        RabbitMQ, photos included. Accounts are approved by an admin, and Google ID tokens are verified
+                        on the server. 94 backend and 108 frontend tests; CI runs an end-to-end smoke test against the
+                        whole Docker stack and publishes the images to GHCR.</p>
                     <div class="project-tags">
                         <button type="button" class="project-tag">ASP.NET</button>
                         <button type="button" class="project-tag">C#</button>
                         <button type="button" class="project-tag">React</button>
                         <button type="button" class="project-tag">RabbitMQ</button>
-                        <button type="button" class="project-tag">Docker</button>
+                        <button type="button" class="project-tag">MassTransit</button>
                         <button type="button" class="project-tag">PostgreSQL</button>
+                        <button type="button" class="project-tag">ML.NET</button>
+                        <button type="button" class="project-tag">Leaflet</button>
+                        <button type="button" class="project-tag">Docker</button>
                         <button type="button" class="project-tag">Microservices</button>
                         <button type="button" class="project-tag">JWT</button>
                         <button type="button" class="project-tag">REST APIs</button>
@@ -272,9 +288,9 @@
             <article class="project-card reverse" id="emobility-hub" data-kind="system">
                 <div class="project-img">
                     <video class="project-video" loop muted playsinline preload="metadata"
-                        poster="assets/e-mobility-hub/demo.png">
+                        poster="assets/e-mobility-hub/demo.webp">
                         <source src="assets/e-mobility-hub/demo.mp4" type="video/mp4">
-                        <img src="assets/e-mobility-hub/demo.png" alt="eMobilityHub">
+                        <img src="assets/e-mobility-hub/demo.webp" alt="eMobilityHub">
                     </video>
                 </div>
                 <div class="project-info">
@@ -283,12 +299,12 @@
                         <span class="featured-badge">Full Stack</span>
                     </div>
                     <h3>eMobilityHub</h3>
-                    <p class="project-arch">Angular + JSP apps <span>→</span> Nginx <span>→</span> Spring Boot
-                        <span>→</span> MySQL</p>
-                    <p>Electric vehicle rental management platform with <strong>role-based access for admins,
-                            operators and managers</strong>. Features analytics dashboard, PDF invoice generation,
-                        vehicle tracking, RSS feed integration, CSV bulk vehicle import, and a separate JSP-based
-                        promotions management app. Fully containerized with Docker and Nginx reverse proxy.</p>
+                    <p class="project-arch">Angular <span>→</span> Nginx <span>→</span> Spring Boot API
+                        <span>+</span> 2 JSP apps <span>→</span> MySQL</p>
+                    <p>Electric vehicle rental platform made of <strong>four apps on one database</strong>: an
+                        Angular back office for admins, operators and managers, a mobile-first JSP shop where clients
+                        rent, pay by card and get a PDF invoice, a JSP promotions portal, and the Spring Boot API.
+                        Operators see the fleet on an OpenStreetMap map; managers get revenue and fault statistics.</p>
                     <div class="project-tags">
                         <button type="button" class="project-tag">Spring Boot</button>
                         <button type="button" class="project-tag">Java</button>
@@ -297,6 +313,10 @@
                         <button type="button" class="project-tag">JSP</button>
                         <button type="button" class="project-tag">MySQL</button>
                         <button type="button" class="project-tag">Spring Security</button>
+                        <button type="button" class="project-tag">Flyway</button>
+                        <button type="button" class="project-tag">OpenAPI</button>
+                        <button type="button" class="project-tag">Leaflet</button>
+                        <button type="button" class="project-tag">Testcontainers</button>
                         <button type="button" class="project-tag">Docker</button>
                         <button type="button" class="project-tag">Nginx</button>
                         <button type="button" class="project-tag">JWT</button>
@@ -322,20 +342,24 @@
                         <span class="featured-badge">Security</span>
                     </div>
                     <h3>Chat Room</h3>
-                    <p class="project-arch">React <span>→</span> Nginx (TLS · WAF) <span>→</span> Spring Boot
-                        <span>→</span> MySQL</p>
-                    <p>Secure internet forum with role-based access for administrators, moderators and users. Features
-                        <strong>two-factor email authentication, JWT sessions, OAuth2 Google login</strong>, WAF
-                        protection, SIEM logging, and full SSL/TLS encryption via Nginx reverse proxy. Containerized
-                        with Docker.</p>
+                    <p class="project-arch">React <span>→</span> Nginx (TLS) <span>→</span> Spring Boot (WAF ·
+                        SIEM) <span>→</span> MySQL (TLS)</p>
+                    <p>Secure internet forum where accounts are approved by an admin and every comment waits for a room
+                        moderator. <strong>Two-factor sign-in with an emailed code, Google OAuth2, and revocable JWT
+                            sessions</strong> in an httpOnly cookie. TLS on every hop with certificates from an internal
+                        OpenSSL CA; a WAF hit ends the sender's session and a SIEM logs 18 kinds of security events.
+                        219 backend and 86 frontend tests.</p>
                     <div class="project-tags">
                         <button type="button" class="project-tag">Spring Boot</button>
                         <button type="button" class="project-tag">Java</button>
                         <button type="button" class="project-tag">React</button>
+                        <button type="button" class="project-tag">Vite</button>
                         <button type="button" class="project-tag">MySQL</button>
                         <button type="button" class="project-tag">Spring Security</button>
                         <button type="button" class="project-tag">JWT</button>
                         <button type="button" class="project-tag">OAuth2</button>
+                        <button type="button" class="project-tag">OpenSSL</button>
+                        <button type="button" class="project-tag">Flyway</button>
                         <button type="button" class="project-tag">Docker</button>
                         <button type="button" class="project-tag">Nginx</button>
                     </div>
@@ -349,9 +373,9 @@
             <article class="project-card reverse" id="online-library" data-kind="system">
                 <div class="project-img">
                     <video class="project-video" loop muted playsinline preload="metadata"
-                        poster="assets/library/demo.png">
+                        poster="assets/library/demo.webp">
                         <source src="assets/library/demo.mp4" type="video/mp4">
-                        <img src="assets/library/demo.png" alt="Online Library System">
+                        <img src="assets/library/demo.webp" alt="Online Library System">
                     </video>
                 </div>
                 <div class="project-info">
@@ -360,16 +384,25 @@
                         <span class="featured-badge">Distributed</span>
                     </div>
                     <h3>Online Library System</h3>
-                    <p class="project-arch">3 Java apps <span>⇄</span> WebSocket · RMI · MQ <span>+</span> Redis</p>
-                    <p>Distributed library platform with three independent applications — library, member, and supplier
-                        — <strong>communicating via WebSockets, RMI, and message queues</strong>. Integrates Redis for
-                        inventory and Project Gutenberg for book data.</p>
+                    <p class="project-arch">7 Java apps <span>⇄</span> REST · TCP/TLS · multicast · MQ · RMI
+                        <span>+</span> Redis</p>
+                    <p>Distributed library platform of <strong>seven Java applications</strong>: three Swing clients
+                        for the library, members and suppliers, plus a REST API, a discovery server, a supplier server
+                        that downloads books from Project Gutenberg, and an RMI accounting server. Each link uses the
+                        protocol that fits it: <strong>REST, TCP and TLS sockets, UDP multicast, RabbitMQ and
+                            RMI</strong>. Supplier orders go through durable queues, invoices get 17% VAT over RMI,
+                        and nothing is Java-deserialized off the wire. 171 tests.</p>
                     <div class="project-tags">
                         <button type="button" class="project-tag">Java</button>
                         <button type="button" class="project-tag">Redis</button>
-                        <button type="button" class="project-tag">WebSocket</button>
+                        <button type="button" class="project-tag">Sockets</button>
+                        <button type="button" class="project-tag">TLS</button>
+                        <button type="button" class="project-tag">UDP Multicast</button>
                         <button type="button" class="project-tag">RMI</button>
                         <button type="button" class="project-tag">RabbitMQ</button>
+                        <button type="button" class="project-tag">JAX-RS</button>
+                        <button type="button" class="project-tag">Swing</button>
+                        <button type="button" class="project-tag">JWT</button>
                         <button type="button" class="project-tag">REST APIs</button>
                     </div>
                     <div class="project-links">
@@ -382,11 +415,499 @@
 
         <!-- INDEX: everything else, one row each; live apps launch straight from the row -->
         <div class="section-label section-label--flush group-label" data-group="index" id="index">// live apps,
-            mobile &amp; tools</div>
+            mobile, desktop &amp; tools</div>
         <div class="index stagger" id="indexList">
 
             <div class="index-row" data-kind="live">
-                <details id="arcane-keep" open>
+                <details id="repo-health" open>
+                    <summary>
+                        <span class="row-name">RepoHealth</span>
+                        <span class="row-kind"><span class="live-dot"></span>live <span class="row-new">new</span></span>
+                        <span class="row-stack">sveltekit · github api · vercel</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://repository-health-monitor.vercel.app/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img
+                                src="assets/live/repository-health-monitor.webp" alt="" loading="lazy" width="800"
+                                height="500"></a>
+                        <div class="row-text">
+                            <p>A health monitor for all of my public repositories. Each one is checked for a README, a
+                                license, tests, CI/CD and recent commits, then <strong>scored from 0 to 100, every
+                                    week</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Weekly scan of every public repository, with the time of the last scan shown</li>
+                                <li>Totals at a glance: repositories, average score, passing and needing attention</li>
+                                <li>Search plus passing / warning / critical filters; a card with the score per repo</li>
+                                <li>SvelteKit on Vercel, with a strict Content Security Policy</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">SvelteKit</button>
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">GitHub API</button>
+                                <button type="button" class="project-tag">Vercel</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://repository-health-monitor.vercel.app/" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fas fa-heart-pulse"></i> Live site</a>
+                                <span class="project-link project-link--muted"><i class="fas fa-lock"></i> Private
+                                    repo</span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://repository-health-monitor.vercel.app/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="mobile">
+                <details id="fitforge">
+                    <summary>
+                        <span class="row-name">FitForge</span>
+                        <span class="row-kind">mobile</span>
+                        <span class="row-stack">flutter · dart · sqlite</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/fitforge/preview.webp" alt="FitForge: home, a workout with progression and the rest timer, and progress charts with estimated 1RM" loading="lazy" width="1600" height="1000">
+                        </div>
+                        <div class="row-text">
+                            <p>Plan weekly workouts, log sets as you train, and <strong>watch strength grow</strong> over time.</p>
+                            <ul class="row-facts">
+                                <li>Plans per weekday from 230+ exercises, each with its own sets, reps and weight targets</li>
+                                <li>Automatic progression after N good sets in a row (default 8); reps or seconds for bodyweight</li>
+                                <li>Rest timer on the lock screen; charts with estimated 1RM (Epley) and personal records</li>
+                                <li>JSON backup · Riverpod + GoRouter, SQLite · English, Serbian Latin and Cyrillic</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Flutter</button>
+                                <button type="button" class="project-tag">Dart</button>
+                                <button type="button" class="project-tag">SQLite</button>
+                                <button type="button" class="project-tag">Riverpod</button>
+                                <button type="button" class="project-tag">GoRouter</button>
+                                <button type="button" class="project-tag">Android</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/fit_forge" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                                <a href="https://github.com/pero-grubac/fit_forge/releases/latest" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-android"></i> APK</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="store-chain">
+                    <summary>
+                        <span class="row-name">Store Chain Management</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">c# · winforms · mysql · dapper</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/store_chain/preview.webp"
+                                alt="Store Chain Management: shopping view with products and the cart" loading="lazy"
+                                width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>Desktop app for running a retail chain — stores, staff, stock, discounts, shopping and reports — built around a MySQL database that <strong>enforces the business rules itself</strong>.</p>
+                            <ul class="row-facts">
+                                <li>17 tables, 41 stored procedures, 21 triggers, 5 functions and 11 views</li>
+                                <li>An order is one transaction from a JSON cart, with a full rollback on missing stock</li>
+                                <li>Admin, employee and customer roles; EAN-8, UPC-A, EAN-13 and GTIN-14 barcode checks</li>
+                                <li>76 unit + 101 integration tests on Testcontainers MySQL 8.4 · tagged releases</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">WinForms</button>
+                                <button type="button" class="project-tag">MySQL</button>
+                                <button type="button" class="project-tag">Dapper</button>
+                                <button type="button" class="project-tag">Docker</button>
+                                <button type="button" class="project-tag">Testcontainers</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Store-Chain-Management-System" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="mobile">
+                <details id="etf-oglasi">
+                    <summary>
+                        <span class="row-name">ETF Oglasi</span>
+                        <span class="row-kind">mobile</span>
+                        <span class="row-stack">flutter · sqlite · workmanager</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/etf_oglasi/preview.webp"
+                                alt="ETF Oglasi: categories, announcements and class schedule" loading="lazy" width="1600" height="1000"></div>
+                        <div class="row-text">
+                            <p>University announcements and class schedules with <strong>full offline support</strong> — my graduation thesis.</p>
+                            <ul class="row-facts">
+                                <li>All boards cached in SQLite; search ignores case, diacritics and Latin/Cyrillic script</li>
+                                <li>Weekly schedules by programme and year, teacher or room; export to calendar (.ics)</li>
+                                <li>New-announcement notifications per board, plus reminders 5–30 min before class</li>
+                                <li>Home screen widgets in native Kotlin · Serbian Latin/Cyrillic + English</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Flutter</button>
+                                <button type="button" class="project-tag">Dart</button>
+                                <button type="button" class="project-tag">Kotlin</button>
+                                <button type="button" class="project-tag">SQLite</button>
+                                <button type="button" class="project-tag">Riverpod</button>
+                                <button type="button" class="project-tag">WorkManager</button>
+                                <button type="button" class="project-tag">Android</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/ETFOglasi" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                                <a href="https://github.com/pero-grubac/ETFOglasi/releases/latest" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-android"></i> APK</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="store-management">
+                    <summary>
+                        <span class="row-name">Store Management</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">c# · .net · mysql · docker</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/store_management/preview.webp"
+                                alt="Store Management: admin dashboard with the sales chart, and the cashier till with a cart" loading="lazy" width="1600" height="1000"></div>
+                        <div class="row-text">
+                            <p>Desktop app for running a retail store, with separate <strong>administrator and cashier roles</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Till with bar code scanning; expired or out-of-stock goods refused by the app and the DB</li>
+                                <li>Dashboard: today's sales, stock value, low stock and expiry counts, 14-day sales chart</li>
+                                <li>Sales run as transactional stored procedures with row locks · BCrypt passwords</li>
+                                <li>.NET 10 · 3 languages · 90 unit + 30 Testcontainers integration tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">MySQL</button>
+                                <button type="button" class="project-tag">WinForms</button>
+                                <button type="button" class="project-tag">Docker</button>
+                                <button type="button" class="project-tag">BCrypt</button>
+                                <button type="button" class="project-tag">xUnit</button>
+                                <button type="button" class="project-tag">Testcontainers</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Store-Management-System" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="mobile">
+                <details id="asset-manager">
+                    <summary>
+                        <span class="row-name">AssetManager</span>
+                        <span class="row-kind">mobile</span>
+                        <span class="row-stack">flutter · sqlite · openstreetmap</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/asset_manager/preview.webp"
+                                alt="AssetManager: home, asset details and workers list in the light theme" loading="lazy" width="1600" height="1000"></div>
+                        <div class="row-text">
+                            <p>Android app for tracking company assets — furniture, electronics, office supplies — <strong>who has them and where they are</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Full CRUD, with barcodes typed in or scanned with the camera</li>
+                                <li>OpenStreetMap view: city pins that list the assets at each location</li>
+                                <li>Inventory lists that record changes of employee and location</li>
+                                <li>Riverpod + SQLite · English / Serbian · light and dark theme</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Flutter</button>
+                                <button type="button" class="project-tag">Dart</button>
+                                <button type="button" class="project-tag">SQLite</button>
+                                <button type="button" class="project-tag">Riverpod</button>
+                                <button type="button" class="project-tag">OpenStreetMap</button>
+                                <button type="button" class="project-tag">Android</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/AssetManager" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="devkit">
+                    <summary>
+                        <span class="row-name">DevKit</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">react · vite · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/devkit/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/devkit.webp" alt=""
+                                loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>30 developer tools in 7 groups, in one tab. <strong>No backend, no tracking, no ads</strong> — everything runs in the browser and responds as you type.</p>
+                            <ul class="row-facts">
+                                <li>Data: JSON, YAML, Base64, JWT decode &amp; sign, hashes, Protobuf generator</li>
+                                <li>Text &amp; generators: regex, diff, SQL formatter, UUID v4/v7, passwords, TOTP, QR codes</li>
+                                <li>Web &amp; project: HTTP client, URL builder, IP/CIDR calculator, cron parser</li>
+                                <li>Ctrl+K palette with fuzzy search over tools and saved snippets; a #/tool link per tool</li>
+                                <li>Installable offline PWA, one lazy chunk per tool · 19 unit + 7 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">React</button>
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">Vite</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/devkit" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/devkit/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="catan-map-generator">
+                    <summary>
+                        <span class="row-name">Catan Map Generator</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">javascript · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/catan-map-generator/"
+                            target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img
+                                src="assets/live/catan-map-generator.webp" alt="" loading="lazy" width="800"
+                                height="500"></a>
+                        <div class="row-text">
+                            <p>Random, balanced Catan boards generated with <strong>constraint-solving backtracking</strong> instead of blind retries.</p>
+                            <ul class="row-facts">
+                                <li>Standard (19 tiles), Cities &amp; Knights with a barbarian track, Extended 5–6 player (30 tiles)</li>
+                                <li>Places resources, then numbers densest-first; scores up to 8 candidates in ~2.5 s</li>
+                                <li>Share links carry the finished map in the URL hash (21 bytes for a standard board)</li>
+                                <li>Fairness overlay with pips per spot · PNG export · 54 unit + 14 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">HTML/CSS</button>
+                                <button type="button" class="project-tag">SVG</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/catan-map-generator" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/catan-map-generator/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="web">
+                <details id="minimal-blog">
+                    <summary>
+                        <span class="row-name">Minimal Blog</span>
+                        <span class="row-kind">web</span>
+                        <span class="row-stack">python · django · postgresql</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/minimal_blog/preview.webp"
+                                alt="Minimal Blog: a post with approved comments and edit controls" loading="lazy"
+                                width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>A small Django blog: write posts in a rich-text editor, keep them as drafts, publish, and moderate visitors' comments. <strong>90 tests at 99% coverage</strong>, run on both SQLite and PostgreSQL.</p>
+                            <ul class="row-facts">
+                                <li>A draft is a post without a publish date; comments stay hidden until approved</li>
+                                <li>Data-changing actions are POST-only with CSRF tokens; comment text always escaped</li>
+                                <li>Docker Compose with PostgreSQL 16, or SQLite for local development</li>
+                                <li>CI: Ruff, missing-migration check, tests on 2 databases, Docker smoke test</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Python</button>
+                                <button type="button" class="project-tag">Django</button>
+                                <button type="button" class="project-tag">PostgreSQL</button>
+                                <button type="button" class="project-tag">Bootstrap</button>
+                                <button type="button" class="project-tag">Docker</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Minimal-blog" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="countdown">
+                    <summary>
+                        <span class="row-name">Countdown</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">javascript · web audio · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/countdown/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/countdown.webp"
+                                alt="" loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>As many timers as you like, to a duration or a date. Remaining time is <strong>never stored or decremented</strong>: each timer keeps an absolute target and the display is always target − now, so it survives refreshes, sleep and offline periods.</p>
+                            <ul class="row-facts">
+                                <li>Repaint loop pauses in hidden tabs and recalculates the moment you return</li>
+                                <li>Share links carry the timer in the URL hash — the same moment in every timezone</li>
+                                <li>Recurring timers with month-end clamping: Jan 31 → Feb 28 → Mar 31</li>
+                                <li>Tags, .ics calendar export with RRULE, JSON backup · 5 synthesised alert sounds</li>
+                                <li>Installable PWA · zero dependencies · 57 unit + 10 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">Web Audio</button>
+                                <button type="button" class="project-tag">Canvas</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/countdown" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/countdown/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="dev-timeline">
+                    <summary>
+                        <span class="row-name">Dev Timeline</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">react · github api · vite</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/dev-timeline/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/dev-timeline.webp"
+                                alt="" loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>Reads any public GitHub profile and turns language usage and repo topics into a <strong>skill timeline</strong> — which languages were used, and when.</p>
+                            <ul class="row-facts">
+                                <li>Skills map: language and tooling bars plus a language-by-year heatmap</li>
+                                <li>Timeline view: repos grouped by creation year, with tags and links</li>
+                                <li>Default profile loads from a deploy-time snapshot, so no token ever reaches the browser</li>
+                                <li>Contribution calendar for the last year · live scans cached in localStorage for an hour</li>
+                                <li>React 19 + Vite, no UI or state libraries · 25 unit + 5 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">React</button>
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">GitHub API</button>
+                                <button type="button" class="project-tag">Vite</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/dev-timeline" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/dev-timeline/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="brick-breaker">
+                    <summary>
+                        <span class="row-name">Brick Breaker</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">godot 4 · gdscript · web export</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/brick-breaker/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/brick-breaker.webp"
+                                alt="" loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>Retro arcade game in the style of DX-Ball 2 and Arkanoid, with <strong>100 levels, 30
+                                    power-ups and a built-in level editor</strong>. A bot has played every built-in
+                                level to the end to prove it can be cleared.</p>
+                            <ul class="row-facts">
+                                <li>Hand-rolled ball physics with substeps, so the ball never tunnels through bricks</li>
+                                <li>11 kinds of bricks; levels are plain JSON and level sets can be shared</li>
+                                <li>Everything drawn in code; most music and sound effects generated · English / Serbian</li>
+                                <li>190 GUT tests in 18 scripts · builds for the web, Windows and Android</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Godot</button>
+                                <button type="button" class="project-tag">GDScript</button>
+                                <button type="button" class="project-tag">GUT</button>
+                                <button type="button" class="project-tag">WebAssembly</button>
+                                <button type="button" class="project-tag">Android</button>
+                                <button type="button" class="project-tag">Game</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/brick-breaker" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/brick-breaker/" target="_blank"
+                    rel="noopener">play <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="snake">
+                    <summary>
+                        <span class="row-name">Snake (Blavor)</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">c# · wpf · .net 10</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/snake/preview.webp"
+                                alt="Snake: the snake on a 17×23 grid with score, best and speed" loading="lazy"
+                                width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>Classic Snake for the Windows desktop with a second player, wrap-around walls, rising speed and remappable keys. In demo mode a bot <strong>takes the shortest path to the mouse unless that would trap it</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Rules live in a UI-free core library; WPF only draws, keeps time and handles input</li>
+                                <li>Two snakes move at once: every target cell is worked out before anyone moves</li>
+                                <li>Sound effects synthesised to WAV in memory; maps from 15×15 to 25×25</li>
+                                <li>136 tests, including 5 UI automation tests that drive the real game</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">WPF</button>
+                                <button type="button" class="project-tag">xUnit</button>
+                                <button type="button" class="project-tag">UI Automation</button>
+                                <button type="button" class="project-tag">Game</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Snake" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="arcane-keep">
                     <summary>
                         <span class="row-name">Arcane Keep</span>
                         <span class="row-kind"><span class="live-dot"></span>live</span>
@@ -425,426 +946,77 @@
             </div>
 
             <div class="index-row" data-kind="live">
-                <details id="devkit">
+                <details id="monte-carlo-pi-py">
                     <summary>
-                        <span class="row-name">DevKit</span>
+                        <span class="row-name">Monte Carlo π · Python</span>
                         <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">react · javascript · vite</span>
+                        <span class="row-stack">python · numpy · pyodide · jupyter</span>
                     </summary>
                     <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/devkit/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/devkit.webp" alt=""
-                                loading="lazy" width="800" height="500"></a>
-                        <div class="row-text">
-                            <p>30 developer tools in 7 groups, in one tab. <strong>No backend, no tracking, no ads</strong> — everything runs in the browser and responds as you type.</p>
-                            <ul class="row-facts">
-                                <li>Data: JSON, YAML, Base64, JWT decode &amp; sign, hashes, Protobuf generator</li>
-                                <li>Text &amp; generators: regex, diff, SQL formatter, UUID v4/v7, passwords, TOTP, QR codes</li>
-                                <li>Web &amp; project: HTTP client, URL builder, IP/CIDR calculator, cron parser</li>
-                                <li>Web Crypto for signing and hashing · snippets saved locally · one folder per tool</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">React</button>
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">Vite</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/devkit" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/devkit/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="github-dashboard">
-                    <summary>
-                        <span class="row-name">GitHub Dashboard</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">react · d3 · github api</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/github-dashboard/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img
-                                src="assets/live/github-dashboard.webp" alt="" loading="lazy" width="800"
-                                height="500"></a>
-                        <div class="row-text">
-                            <p>Terminal-style analytics for any GitHub user, fetched straight from GitHub's public APIs in the browser — <strong>no backend and no token needed</strong>.</p>
-                            <ul class="row-facts">
-                                <li>Profile, top 8 languages and a D3 chart of repos created per year</li>
-                                <li>Pinned repos via GraphQL, then ranked by stars, forks and originality</li>
-                                <li>Paginated REST fetches, with a CORS proxy fallback when requests are blocked</li>
-                                <li>Exports a self-contained HTML snapshot of the dashboard</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">React</button>
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">D3</button>
-                                <button type="button" class="project-tag">GitHub API</button>
-                                <button type="button" class="project-tag">Vite</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/github-dashboard" target="_blank"
-                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/github-dashboard/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="dev-timeline">
-                    <summary>
-                        <span class="row-name">Dev Timeline</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">react · github api · vite</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/dev-timeline/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/dev-timeline.webp"
-                                alt="" loading="lazy" width="800" height="500"></a>
-                        <div class="row-text">
-                            <p>Reads any public GitHub profile and turns language usage and repo topics into a <strong>skill timeline</strong> — which languages were used, and when.</p>
-                            <ul class="row-facts">
-                                <li>Skills map: language and tooling bars plus a language-by-year heatmap</li>
-                                <li>Timeline view: repos grouped by creation year, with tags and links</li>
-                                <li>Results cached in localStorage for an hour; optional token raises the limit to 5,000 req/h</li>
-                                <li>React 19 + Vite, with no UI, CSS or state-management libraries</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">React</button>
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">GitHub API</button>
-                                <button type="button" class="project-tag">Vite</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/dev-timeline" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/dev-timeline/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="countdown">
-                    <summary>
-                        <span class="row-name">Countdown</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">javascript · web audio · pwa</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/countdown/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/countdown.webp"
-                                alt="" loading="lazy" width="800" height="500"></a>
-                        <div class="row-text">
-                            <p>As many timers as you like, to a duration or a date. Remaining time is <strong>never stored or decremented</strong>: each timer keeps an absolute target and the display is always target − now, so it survives refreshes, sleep and offline periods.</p>
-                            <ul class="row-facts">
-                                <li>Repaint loop pauses in hidden tabs and recalculates the moment you return</li>
-                                <li>Share links carry the timer in the URL hash — the same moment in every timezone</li>
-                                <li>5 synthesised alert sounds, browser notifications, optional confetti</li>
-                                <li>Installable PWA · zero dependencies · keyboard accessible with focus-trapped dialogs</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">Web Audio</button>
-                                <button type="button" class="project-tag">Canvas</button>
-                                <button type="button" class="project-tag">PWA</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/countdown" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/countdown/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="catan-map-generator">
-                    <summary>
-                        <span class="row-name">Catan Map Generator</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">javascript · pwa</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/catan-map-generator/"
+                        <a class="row-thumb" href="https://pero-grubac.github.io/Monte-Carlo-based-Pi-Calculator-py/"
                             target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img
-                                src="assets/live/catan-map-generator.webp" alt="" loading="lazy" width="800"
-                                height="500"></a>
+                                src="assets/live/Monte-Carlo-based-Pi-Calculator-py.webp" alt="" loading="lazy"
+                                width="800" height="500"></a>
                         <div class="row-text">
-                            <p>Random, balanced Catan boards generated with <strong>constraint-solving backtracking</strong> instead of blind retries.</p>
+                            <p>One NumPy package that estimates π three ways: in the browser, in a Jupyter notebook and
+                                on the command line. The web version runs <strong>real Python and NumPy locally through
+                                    Pyodide</strong>, with no server.</p>
                             <ul class="row-facts">
-                                <li>Standard (19 tiles), Cities &amp; Knights, and Extended 5–6 player boards (30 tiles)</li>
-                                <li>Toggleable rules: no adjacent 6/8, no adjacent 2/12, no touching resources</li>
-                                <li>Places resources, then numbers densest-first; scores up to 8 candidates in ~2.5 s</li>
-                                <li>No dependencies, no build step · works offline as a PWA</li>
+                                <li>About 45 million points per second on one core, about 28 million in the browser</li>
+                                <li>Blocks instead of loops: close to 200 times faster than the first version</li>
+                                <li>Stops exactly on a decimal match: per-block cumulative sum plus a PCG64 rewind</li>
+                                <li>32 tests · pytest + ruff on Python 3.11 and 3.13 · notebook executed in CI</li>
                             </ul>
                             <div class="project-tags">
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">HTML/CSS</button>
-                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Python</button>
+                                <button type="button" class="project-tag">NumPy</button>
+                                <button type="button" class="project-tag">Pyodide</button>
+                                <button type="button" class="project-tag">WebAssembly</button>
+                                <button type="button" class="project-tag">Jupyter</button>
+                                <button type="button" class="project-tag">pytest</button>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/pero-grubac/catan-map-generator" target="_blank"
+                                <a href="https://github.com/pero-grubac/Monte-Carlo-based-Pi-Calculator-py"
+                                    target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i>
+                                    GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/Monte-Carlo-based-Pi-Calculator-py/"
+                    target="_blank" rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="anova">
+                    <summary>
+                        <span class="row-name">ANOVA</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">c# · wpf · mvvm · math.net</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/anova/preview.webp"
+                                alt="ANOVA: measurements table, F-test result and the effects of each alternative"
+                                loading="lazy" width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>One-factor analysis of variance on the desktop. The F-test, the effects and a contrast between any two alternatives <strong>update as you type</strong>, with critical values from exact inverse CDFs.</p>
+                            <ul class="row-facts">
+                                <li>2–12 alternatives × 2–200 measurements; paste from Excel or open a CSV</li>
+                                <li>Separate confidence levels for the F-test and the contrast (e.g. 97.5%)</li>
+                                <li>SSA computed directly from the effects, not as SST − SSE, to keep precision</li>
+                                <li>37 tests · CI builds a self-contained single-file .exe on every push</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">WPF</button>
+                                <button type="button" class="project-tag">MVVM</button>
+                                <button type="button" class="project-tag">Math.NET</button>
+                                <button type="button" class="project-tag">xUnit</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/ANOVA-Application" target="_blank"
                                     rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/catan-map-generator/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="excuse-exe">
-                    <summary>
-                        <span class="row-name">excuse.exe</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">javascript · pwa</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/excuse-generator/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img
-                                src="assets/live/excuse-generator.webp" alt="" loading="lazy" width="800"
-                                height="500"></a>
-                        <div class="row-text">
-                            <p>One button, one excuse — from <strong>1000+ in English and 600+ in Serbian</strong>, with no repeats until the whole list has been used.</p>
-                            <ul class="row-facts">
-                                <li>Favourites saved per language; copy or share with the native share sheet</li>
-                                <li>Space or Enter to generate; every 10th excuse gets a confetti burst</li>
-                                <li>Offline PWA with a cache-first service worker (bypassed on localhost for development)</li>
-                                <li>Zero dependencies, self-hosted fonts</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">HTML/CSS</button>
-                                <button type="button" class="project-tag">PWA</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/excuse-generator" target="_blank"
-                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/excuse-generator/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="sedmica">
-                    <summary>
-                        <span class="row-name">Sedmica</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">javascript · pwa</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/sedmica/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/sedmica.webp" alt=""
-                                loading="lazy" width="800" height="500"></a>
-                        <div class="row-text">
-                            <p>Digital scorecard for the card game Sedmica, for 2–4 players — the player with the <strong>most points at the end loses</strong>.</p>
-                            <ul class="row-facts">
-                                <li>Validates every round: the points must add up to 8 or 9</li>
-                                <li>Šuster rule: mark a round's loser to reset their total to 0</li>
-                                <li>Running totals and a round-by-round history table</li>
-                                <li>Offline PWA · vanilla JS · self-hosted fonts</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">HTML/CSS</button>
-                                <button type="button" class="project-tag">PWA</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/sedmica" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/sedmica/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="lora-score-table">
-                    <summary>
-                        <span class="row-name">Lora Score Table</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">javascript · pwa</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/lora-score-table/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img
-                                src="assets/live/lora-score-table.webp" alt="" loading="lazy" width="800"
-                                height="500"></a>
-                        <div class="row-text">
-                            <p>Scorecard for Lora, a four-player card game played across <strong>seven contracts</strong> — lowest score wins.</p>
-                            <ul class="row-facts">
-                                <li>All seven games, from Plus and Minus to Dame, K srca and Lora</li>
-                                <li>Turn-based game selection with score entry right under the active player</li>
-                                <li>Per-round history with running totals; any round can be deleted</li>
-                                <li>Offline PWA · vanilla JS · works on phones with horizontal scrolling</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">HTML/CSS</button>
-                                <button type="button" class="project-tag">PWA</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/lora-score-table" target="_blank"
-                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/lora-score-table/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="live">
-                <details id="yamb-table">
-                    <summary>
-                        <span class="row-name">Yamb Table</span>
-                        <span class="row-kind"><span class="live-dot"></span>live</span>
-                        <span class="row-stack">react · vite · localstorage</span>
-                    </summary>
-                    <div class="row-body">
-                        <a class="row-thumb" href="https://pero-grubac.github.io/yamb-table/" target="_blank"
-                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/yamb-table.webp"
-                                alt="" loading="lazy" width="800" height="500"></a>
-                        <div class="row-text">
-                            <p>Multiplayer scoresheet for <strong>Yamb, Yahtzee and Yatzy</strong> with a retro CRT look. Pass the phone around: each player fills in their own sheet while the others can peek, read-only.</p>
-                            <ul class="row-facts">
-                                <li>Yamb's four columns with fill-order rules: down, up, free and announce</li>
-                                <li>Mode-specific scoring: upper bonus, straights, full house, poker, Yamb bonus</li>
-                                <li>Optional dice roller that suggests categories</li>
-                                <li>Autosaves to localStorage, so a refresh never loses a game</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">React</button>
-                                <button type="button" class="project-tag">JavaScript</button>
-                                <button type="button" class="project-tag">Vite</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/yamb-table" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-                <a class="row-launch" href="https://pero-grubac.github.io/yamb-table/" target="_blank"
-                    rel="noopener">open <span aria-hidden="true">↗</span></a>
-            </div>
-
-            <div class="index-row" data-kind="mobile">
-                <details id="fitforge">
-                    <summary>
-                        <span class="row-name">FitForge</span>
-                        <span class="row-kind">mobile</span>
-                        <span class="row-stack">flutter · dart · sqlite</span>
-                    </summary>
-                    <div class="row-body">
-                        <div class="row-thumb"><img src="assets/fitforge/preview.webp" alt="FitForge: home, workout logging and progress screens" loading="lazy" width="1600" height="1000">
-                        </div>
-                        <div class="row-text">
-                            <p>Plan weekly workouts, log sets as you train, and <strong>watch strength grow</strong> over time.</p>
-                            <ul class="row-facts">
-                                <li>Plans per weekday, exercises by muscle group, auto-fill from the last session</li>
-                                <li>Progression calculator suggests the next weight increase</li>
-                                <li>Charts for max weight and weekly volume, plus personal-record cards</li>
-                                <li>Riverpod + GoRouter, SQLite · English, Serbian Latin and Cyrillic</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">Flutter</button>
-                                <button type="button" class="project-tag">Dart</button>
-                                <button type="button" class="project-tag">SQLite</button>
-                                <button type="button" class="project-tag">Riverpod</button>
-                                <button type="button" class="project-tag">Android</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/fit_forge" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-            </div>
-
-            <div class="index-row" data-kind="mobile">
-                <details id="asset-manager">
-                    <summary>
-                        <span class="row-name">AssetManager</span>
-                        <span class="row-kind">mobile</span>
-                        <span class="row-stack">flutter · sqlite · google maps</span>
-                    </summary>
-                    <div class="row-body">
-                        <div class="row-thumb"><img src="assets/asset_manager/preview.webp"
-                                alt="AssetManager: home, asset details and workers list in the light theme" loading="lazy" width="1600" height="1000"></div>
-                        <div class="row-text">
-                            <p>Android app for tracking company assets — furniture, electronics, office supplies — <strong>who has them and where they are</strong>.</p>
-                            <ul class="row-facts">
-                                <li>Full CRUD, with barcodes typed in or scanned with the camera</li>
-                                <li>Google Maps view: city pins that list the assets at each location</li>
-                                <li>Inventory lists that record changes of employee and location</li>
-                                <li>Riverpod + SQLite · English / Serbian · light and dark theme</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">Flutter</button>
-                                <button type="button" class="project-tag">Dart</button>
-                                <button type="button" class="project-tag">SQLite</button>
-                                <button type="button" class="project-tag">Riverpod</button>
-                                <button type="button" class="project-tag">Google Maps</button>
-                                <button type="button" class="project-tag">Android</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/AssetManager" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-            </div>
-
-            <div class="index-row" data-kind="mobile">
-                <details id="etf-oglasi">
-                    <summary>
-                        <span class="row-name">ETF Oglasi</span>
-                        <span class="row-kind">mobile</span>
-                        <span class="row-stack">flutter · sqlite · workmanager</span>
-                    </summary>
-                    <div class="row-body">
-                        <div class="row-thumb"><img src="assets/etf_oglasi/preview.webp"
-                                alt="ETF Oglasi: categories, announcements and class schedule" loading="lazy" width="1600" height="1000"></div>
-                        <div class="row-text">
-                            <p>University announcements and class schedules with <strong>full offline support</strong> — my graduation thesis.</p>
-                            <ul class="row-facts">
-                                <li>Categorised announcements with attachment downloads</li>
-                                <li>Weekly and daily schedules, filtered by professor, room, programme or year</li>
-                                <li>Fetches from the API and falls back to SQLite; WorkManager background sync</li>
-                                <li>Scheduled push notifications · Serbian / English · light and dark theme</li>
-                            </ul>
-                            <div class="project-tags">
-                                <button type="button" class="project-tag">Flutter</button>
-                                <button type="button" class="project-tag">Dart</button>
-                                <button type="button" class="project-tag">SQLite</button>
-                                <button type="button" class="project-tag">Riverpod</button>
-                                <button type="button" class="project-tag">WorkManager</button>
-                                <button type="button" class="project-tag">Android</button>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://github.com/pero-grubac/ETFOglasi" target="_blank" rel="noopener"
-                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
                             </div>
                         </div>
                     </div>
@@ -852,33 +1024,142 @@
             </div>
 
             <div class="index-row" data-kind="desktop">
-                <details id="store-management">
+                <details id="monte-carlo-pi">
                     <summary>
-                        <span class="row-name">Store Management</span>
+                        <span class="row-name">Monte Carlo π</span>
                         <span class="row-kind">desktop</span>
-                        <span class="row-stack">c# · .net · mysql · docker</span>
+                        <span class="row-stack">c# · wpf · parallel</span>
                     </summary>
                     <div class="row-body">
-                        <div class="row-thumb"><img src="assets/store_management/preview.webp"
-                                alt="Store Management: admin purchasing view over the cashier view" loading="lazy" width="1600" height="1000"></div>
+                        <div class="row-thumb"><img src="assets/monte_carlo/preview.webp"
+                                alt="Monte Carlo π: millions of points in the circle, the estimate and the convergence chart"
+                                loading="lazy" width="960" height="600"></div>
                         <div class="row-text">
-                            <p>Desktop app for running a retail store, with separate <strong>administrator and cashier roles</strong>.</p>
+                            <p>Estimates π by throwing random points at a square and shows them land live, turning correct digits green. Runs at <strong>about a billion points per second</strong> on 12 cores.</p>
                             <ul class="row-facts">
-                                <li>Admins manage users, inventory, suppliers and purchases, and read the audit log</li>
-                                <li>Cashiers search products, process sales and generate receipts</li>
-                                <li>BCrypt password hashing and role-based access control</li>
-                                <li>MySQL in Docker with automatic schema setup · repository and DAO layers</li>
+                                <li>Own xoshiro256** generator with SplitMix64 streams: reproducible however work is split</li>
+                                <li>Parallel.For over chunks of 2²⁰ points; a WriteableBitmap keeps millions on screen</li>
+                                <li>Convergence chart with the theoretical 95% band</li>
+                                <li>28 tests · "until decimals match" mode with reproducible seeds</li>
                             </ul>
                             <div class="project-tags">
                                 <button type="button" class="project-tag">C#</button>
                                 <button type="button" class="project-tag">.NET</button>
-                                <button type="button" class="project-tag">MySQL</button>
-                                <button type="button" class="project-tag">WinForms</button>
-                                <button type="button" class="project-tag">Docker</button>
-                                <button type="button" class="project-tag">BCrypt</button>
+                                <button type="button" class="project-tag">WPF</button>
+                                <button type="button" class="project-tag">MVVM</button>
+                                <button type="button" class="project-tag">Parallel</button>
+                                <button type="button" class="project-tag">xUnit</button>
                             </div>
                             <div class="project-links">
-                                <a href="https://github.com/pero-grubac/Store-Management-System" target="_blank"
+                                <a href="https://github.com/pero-grubac/Monte-Carlo-based-Pi-Calculator"
+                                    target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i>
+                                    GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="echo-player">
+                    <summary>
+                        <span class="row-name">Echo Player</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">c# · wpf · naudio</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/echo_player/preview.webp"
+                                alt="Echo Player: original and echoed waveforms with the echo controls" loading="lazy"
+                                width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>Adds a feedback echo to WAV recordings, with a live preview while you shape it and every repeat drawn in the waveform. Preview and output share one NAudio provider, so <strong>what you hear is exactly what gets saved</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Delay 20–2000 ms, feedback 0–90%, mix; 5 presets from Slapback to Canyon</li>
+                                <li>The whole tail is kept until the repeats fade to −60 dB (at most 30 s)</li>
+                                <li>Batch processing in parallel, with progress and cancellation; bit depth preserved</li>
+                                <li>36 tests · the core has no audio-hardware dependency</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">WPF</button>
+                                <button type="button" class="project-tag">MVVM</button>
+                                <button type="button" class="project-tag">NAudio</button>
+                                <button type="button" class="project-tag">xUnit</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Echo-player" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="tool">
+                <details id="secure-repository">
+                    <summary>
+                        <span class="row-name">Secure Repository</span>
+                        <span class="row-kind">tool</span>
+                        <span class="row-stack">c# · .net 10 · openssl</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/secure_repository/preview.webp"
+                                alt="Secure Repository: signing in with a certificate and downloading a verified document"
+                                loading="lazy" width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>A document vault on a private OpenSSL certificate authority. Every document gets its own key, is signed, split into parts, and each part is encrypted and signed on its own, so <strong>a tampered part is named before anything is decrypted</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Private CA (4096-bit RSA); X.509 user certificates valid 180 days, revoked through a CRL</li>
+                                <li>Per-document AES-256 key wrapped with RSA-OAEP; 4–9 parts, each encrypted then signed</li>
+                                <li>Two-factor sign-in: password (PBKDF2, 600,000 iterations) plus certificate</li>
+                                <li>144 tests, including integration tests against real OpenSSL · CI on Windows and Linux</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">C#</button>
+                                <button type="button" class="project-tag">.NET</button>
+                                <button type="button" class="project-tag">OpenSSL</button>
+                                <button type="button" class="project-tag">PKI</button>
+                                <button type="button" class="project-tag">Cryptography</button>
+                                <button type="button" class="project-tag">xUnit</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/Secure-Repository" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="index-row" data-kind="desktop">
+                <details id="emobility-rental">
+                    <summary>
+                        <span class="row-name">e-Mobility Rental</span>
+                        <span class="row-kind">desktop</span>
+                        <span class="row-stack">java 21 · swing · multithreading</span>
+                    </summary>
+                    <div class="row-body">
+                        <div class="row-thumb"><img src="assets/emobility_rental/preview.webp"
+                                alt="e-Mobility Rental: vehicles moving across the city map, with active rentals and invoices"
+                                loading="lazy" width="960" height="600"></div>
+                        <div class="row-text">
+                            <p>Multithreaded simulation of an electric car, bike and scooter rental company. <strong>Every rental runs in its own thread</strong> on a shared 20×20 city map, for exactly as many seconds as it lasts.</p>
+                            <ul class="row-facts">
+                                <li>Rentals in a time slot run in parallel and are joined before the next slot starts</li>
+                                <li>Invoices per ride, daily and summary reports, a binary file per vehicle</li>
+                                <li>Nothing hard-coded: prices, map size and formats in app.properties; BigDecimal money</li>
+                                <li>123 JUnit 5 tests, including a headless simulation run · CI builds the JAR and Javadoc</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">Java</button>
+                                <button type="button" class="project-tag">Swing</button>
+                                <button type="button" class="project-tag">Multithreading</button>
+                                <button type="button" class="project-tag">Maven</button>
+                                <button type="button" class="project-tag">JUnit</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/e-Mobility-Rental-System" target="_blank"
                                     rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
                             </div>
                         </div>
@@ -907,8 +1188,9 @@
                                 <li><code>/add</code><span>create an issue</span></li>
                                 <li><code>/done</code><span>close an issue</span></li>
                                 <li><code>/list</code><span>open issues across repos</span></li>
+                                <li><code>/today</code><span>issues created today</span></li>
+                                <li><code>/stale</code><span>open issues older than 14 days</span></li>
                                 <li><code>/streak</code><span>commit streak</span></li>
-                                <li><code>/heatmap</code><span>last 15 weeks of commits</span></li>
                                 <li><code>/stats</code><span>commits &amp; issues by period</span></li>
                                 <li><code>/top-repo</code><span>most active repo this month</span></li>
                             </ul>
@@ -916,9 +1198,10 @@
                         <div class="row-text">
                             <p>A bot that bridges GitHub and Discord for solo work: manage issues, track activity and get reports <strong>without leaving chat</strong>.</p>
                             <ul class="row-facts">
-                                <li>GitHub webhook posts to Discord when an issue is closed</li>
-                                <li>Monthly report posted automatically to a dedicated channel</li>
-                                <li>discord.py + Flask webhooks · Supabase PostgreSQL · on Render</li>
+                                <li>Open issues with /add or a form, close them with one click; labels detected from the title</li>
+                                <li>HMAC-signed webhook posts issues, PRs, failed CI runs and releases to Discord</li>
+                                <li>Monthly report on the 1st and a Monday reminder of stale issues</li>
+                                <li>discord.py + Flask · Supabase PostgreSQL · Render, deployed after CI · 232 tests, 99% coverage</li>
                             </ul>
                             <div class="project-tags">
                                 <button type="button" class="project-tag">Python</button>
@@ -927,6 +1210,8 @@
                                 <button type="button" class="project-tag">Discord API</button>
                                 <button type="button" class="project-tag">GitHub API</button>
                                 <button type="button" class="project-tag">Webhooks</button>
+                                <button type="button" class="project-tag">Supabase</button>
+                                <button type="button" class="project-tag">pytest</button>
                             </div>
                             <div class="project-links">
                                 <a href="https://github.com/pero-grubac/git-discord-bot" target="_blank"
@@ -935,6 +1220,192 @@
                         </div>
                     </div>
                 </details>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="github-dashboard">
+                    <summary>
+                        <span class="row-name">GitHub Dashboard</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">react · github api · vite</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/github-dashboard/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img
+                                src="assets/live/github-dashboard.webp" alt="" loading="lazy" width="800"
+                                height="500"></a>
+                        <div class="row-text">
+                            <p>Terminal-style analytics for any GitHub user, with <strong>no backend and no token in the browser</strong>. The default profile ships as a JSON snapshot built at deploy time; any other username loads live.</p>
+                            <ul class="row-facts">
+                                <li>Profile, top languages, repositories by year and a GitHub-style contribution heatmap</li>
+                                <li>Pinned repos first, the rest ranked by stars, forks and description; a "vs" comparison</li>
+                                <li>Paginated REST fetches, with a CORS proxy fallback when requests are blocked</li>
+                                <li>Exports to HTML, PNG or PDF · 19 unit + 10 Playwright e2e tests with the API mocked</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">React</button>
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">GitHub API</button>
+                                <button type="button" class="project-tag">Vite</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/github-dashboard" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/github-dashboard/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="yamb-table">
+                    <summary>
+                        <span class="row-name">Yamb Table</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">react · vite · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/yamb-table/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/yamb-table.webp"
+                                alt="" loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>Multiplayer scoresheet for <strong>Yamb, Yahtzee and Yatzy</strong> with a retro CRT look. Pass the phone around: each player fills in their own sheet while the others can peek, read-only.</p>
+                            <ul class="row-facts">
+                                <li>Yamb's four columns with fill-order rules: down, up, free and announce</li>
+                                <li>Mode-specific scoring: upper bonus, straights, full house, poker, Yamb bonus</li>
+                                <li>Dice roller with up to eight ranked suggestions, filled in with one click</li>
+                                <li>2–12 players · undo up to 10 moves, even after a reload</li>
+                                <li>Installable offline PWA · 21 unit + 5 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">React</button>
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">Vite</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/yamb-table" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/yamb-table/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="sedmica">
+                    <summary>
+                        <span class="row-name">Sedmica</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">javascript · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/sedmica/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/live/sedmica.webp" alt=""
+                                loading="lazy" width="800" height="500"></a>
+                        <div class="row-text">
+                            <p>Digital scorecard for the card game Sedmica, for 2–4 players — the first player whose total <strong>reaches the limit (51 by default) loses</strong>.</p>
+                            <ul class="row-facts">
+                                <li>Validates every round live: the points must add up to 8 or 9</li>
+                                <li>Šuster rule: mark a round's loser to reset their total to 0 · undo the last round</li>
+                                <li>History of the last 50 games with losses and average total per player</li>
+                                <li>Offline PWA · vanilla JS · 31 unit + 8 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">HTML/CSS</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/sedmica" target="_blank" rel="noopener"
+                                    class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/sedmica/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="lora-score-table">
+                    <summary>
+                        <span class="row-name">Lora Score Table</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">javascript · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/lora-score-table/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img
+                                src="assets/live/lora-score-table.webp" alt="" loading="lazy" width="800"
+                                height="500"></a>
+                        <div class="row-text">
+                            <p>Scorecard for Lora, a four-player card game played across <strong>seven contracts</strong> — lowest score wins.</p>
+                            <ul class="row-facts">
+                                <li>All seven games, from Plus and Minus to Dame, K srca and Lora</li>
+                                <li>Round totals checked (e.g. must add up to 8), with house rules per game</li>
+                                <li>Winner after all 28 rounds; share the result or save the final table as a PNG</li>
+                                <li>Offline PWA · vanilla JS · 27 unit + 6 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">HTML/CSS</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/lora-score-table" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/lora-score-table/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div class="index-row" data-kind="live">
+                <details id="excuse-exe">
+                    <summary>
+                        <span class="row-name">excuse.exe</span>
+                        <span class="row-kind"><span class="live-dot"></span>live</span>
+                        <span class="row-stack">javascript · pwa</span>
+                    </summary>
+                    <div class="row-body">
+                        <a class="row-thumb" href="https://pero-grubac.github.io/excuse-generator/" target="_blank"
+                            rel="noopener" tabindex="-1" aria-hidden="true"><img
+                                src="assets/live/excuse-generator.webp" alt="" loading="lazy" width="800"
+                                height="500"></a>
+                        <div class="row-text">
+                            <p>One button, one excuse — from <strong>1,600+ in English and 1,250+ in Serbian</strong>, with no repeats until the whole list has been used.</p>
+                            <ul class="row-facts">
+                                <li>Seven categories as filter chips, from Work and Tech to Absurd; an excuse of the day</li>
+                                <li>Every excuse has its own link (#en-0042); favourites saved per language</li>
+                                <li>Offline PWA: network-first pages, cached files refreshed in the background</li>
+                                <li>Zero dependencies, self-hosted fonts · 27 unit + 12 Playwright e2e tests</li>
+                            </ul>
+                            <div class="project-tags">
+                                <button type="button" class="project-tag">JavaScript</button>
+                                <button type="button" class="project-tag">HTML/CSS</button>
+                                <button type="button" class="project-tag">PWA</button>
+                                <button type="button" class="project-tag">Playwright</button>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/pero-grubac/excuse-generator" target="_blank"
+                                    rel="noopener" class="project-link"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a class="row-launch" href="https://pero-grubac.github.io/excuse-generator/" target="_blank"
+                    rel="noopener">open <span aria-hidden="true">↗</span></a>
             </div>
 
         </div>

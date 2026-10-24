@@ -613,7 +613,7 @@ function initHeroTerminal() {
     { type: "cmd", text: "cat focus.txt" },
     { type: "out", text: "distributed systems · REST APIs · microservices" },
     { type: "cmd", text: "ls ~/live" },
-    { type: "out", text: "arcane-keep  countdown  devkit  +7 more" },
+    { type: "out", text: "repo-health  devkit  github-dashboard  +10 more" },
   ];
 
   const reduceMotion = window.matchMedia(
