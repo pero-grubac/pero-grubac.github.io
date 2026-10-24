@@ -1,0 +1,52 @@
+---
+// One component of a diagram: its name in Newsreader and a short note in
+// Instrument Sans. Coordinates are SVG units of the enclosing <Diagram>.
+//   box       an application or service
+//   store     a database (drawn as a cylinder)
+//   queue     a message broker (a double rule, like a section opener)
+//   file      a file on disk (a folded corner)
+//   external  something outside the system (a dashed outline)
+interface Props {
+  x: number;
+  y: number;
+  w: number;
+  h?: number;
+  name: string;
+  note?: string;
+  kind?: "box" | "store" | "queue" | "file" | "external";
+}
+
+const { x, y, w, h = 56, name, note, kind = "box" } = Astro.props;
+const cx = x + w / 2;
+const ry = 7; // cylinder lid
+const lift = kind === "store" ? ry / 2 : 0;
+const nameY = (note ? y + h / 2 - 3 : y + h / 2 + 5) + lift;
+const fold = 12;
+---
+
+<g class={`node ${kind}`}>
+  {
+    kind === "store" ? (
+      <Fragment>
+        <path
+          class="shape"
+          d={`M${x},${y + ry} v${h - 2 * ry} a${w / 2},${ry} 0 0 0 ${w},0 v${-(h - 2 * ry)} a${w / 2},${ry} 0 0 0 ${-w},0 z`}
+        />
+        <path class="shape" d={`M${x},${y + ry} a${w / 2},${ry} 0 0 0 ${w},0`} />
+      </Fragment>
+    ) : kind === "file" ? (
+      <path class="shape" d={`M${x},${y} h${w - fold} l${fold},${fold} v${h - fold} h${-w} z M${x + w - fold},${y} v${fold} h${fold}`} />
+    ) : (
+      <rect class="shape" x={x} y={y} width={w} height={h} />
+    )
+  }
+  {kind === "queue" && <rect class="shape" x={x + 3} y={y + 3} width={w - 6} height={h - 6} />}
+  <text class="name" x={cx} y={nameY} text-anchor="middle">{name}</text>
+  {
+    note && (
+      <text class="note" x={cx} y={nameY + 16} text-anchor="middle">
+        {note}
+      </text>
+    )
+  }
+</g>

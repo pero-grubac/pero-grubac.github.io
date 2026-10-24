@@ -101,7 +101,9 @@ pero-grubac.github.io/
 │   ├── pages/                 Routes: index, apps, projects/[slug] (case studies), 404
 │   ├── layouts/Base.astro     Head, fonts, masthead, main, footer, toast
 │   ├── components/            Masthead, Footer, FontFaces and shared pieces (links, demo figure, …)
-│   │   └── home/              The home page sections: hero, about, systems, index, apps, contact
+│   │   ├── home/              The home page sections: hero, about, systems, index, apps, contact
+│   │   ├── diagram/           Shapes for architecture diagrams (Diagram, Node, Edge, Actor, Group)
+│   │   └── diagrams/          One architecture diagram per system, named after its slug
 │   ├── lib/                   Project helpers (counts, search matching) and the owner's contact facts
 │   ├── scripts/               Browser scripts: the projects index, the toast
 │   └── styles/                tokens.css (design tokens), global.css
@@ -150,6 +152,11 @@ Add one file, `src/content/projects/<slug>.md`, with the fields described
 in section 5 of `REDESIGN.md` (copy an existing project of the same kind),
 and put its screenshot under `src/assets/`. `npm run build` tells you
 exactly which field is wrong if something doesn't fit.
+
+A system (`caseStudy: true`) also gets a page at `/projects/<slug>/`. Its
+case study is the Markdown body of the same file, and its architecture
+diagram, if it has one, is `src/components/diagrams/<slug>.astro`; see
+sections 6.8 and 8.2 of `REDESIGN.md`.
 
 ### Tests
 

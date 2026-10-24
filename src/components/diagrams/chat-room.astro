@@ -1,0 +1,49 @@
+---
+// Chat Room, from the Chat-room README (architecture, life of a request,
+// Certificate Controller), its docker-compose.yml and nginx.conf. Every
+// step of the filter chain reports to the SIEM; one dotted line stands
+// for all of them, and the caption says so.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+---
+
+<Diagram
+  width={1000}
+  height={540}
+  label="Architecture of Chat Room"
+  caption="The browser only talks to Nginx, and every hop after it is TLS with the other side's certificate checked. In Spring Boot a request passes the rate limit, the JWT filter, the WAF and the permission check, in that order; every step reports security events to the SIEM. Dotted lines are those events and the certificates from the internal CA."
+>
+  <Group x={500} y={40} w={310} h={400} name="Spring Boot · :8443" />
+
+  <Edge points={[[190, 118], [250, 118]]} label="HTTPS" at={[220, 110]} />
+  <Edge points={[[420, 118], [462, 118], [462, 92], [530, 92]]} label={"HTTPS,\ncert + CRL"} at={[460, 140]} />
+  <Edge points={[[650, 114], [650, 128]]} />
+  <Edge points={[[650, 172], [650, 186]]} />
+  <Edge points={[[650, 230], [650, 244]]} />
+  <Edge points={[[650, 288], [650, 302]]} />
+  <Edge points={[[650, 346], [650, 376]]} kind="side" label="events" at={[658, 366]} anchor="start" />
+  <Edge points={[[810, 150], [860, 150]]} label="OAuth2" at={[835, 142]} />
+  <Edge points={[[770, 324], [860, 324]]} label="TLS, verified" at={[815, 316]} />
+  <Edge points={[[530, 324], [335, 324], [335, 380]]} label="login codes" at={[432, 316]} />
+  <Edge points={[[770, 398], [925, 398], [925, 355]]} label="logger table" at={[848, 390]} />
+  <Edge points={[[650, 420], [650, 462]]} />
+  <Edge points={[[110, 470], [110, 200], [300, 200], [300, 146]]} kind="side" />
+  <Edge points={[[200, 500], [560, 500], [560, 440]]} kind="side" label="certificates" at={[380, 492]} />
+  <Edge points={[[200, 516], [975, 516], [975, 353]]} kind="side" />
+
+  <Node x={20} y={90} w={170} name="Browser" note="React SPA · httpOnly cookie" />
+  <Node x={250} y={90} w={170} name="Nginx · :443" note="TLS · SPA · /api proxy" />
+  <Node x={530} y={70} w={240} h={44} name="Rate limit" note="sign-in, registration" />
+  <Node x={530} y={128} w={240} h={44} name="JWT filter" note="cookie or Bearer, stored token" />
+  <Node x={530} y={186} w={240} h={44} name="WAF" note="request bodies" />
+  <Node x={530} y={244} w={240} h={44} name="@PreAuthorize" note="role, permission" />
+  <Node x={530} y={302} w={240} h={44} name="Controllers, services" note="room checks" />
+  <Node x={530} y={376} w={240} h={44} name="SIEM" note="security events" />
+  <Node x={860} y={122} w={130} kind="external" name="Google" note="token check" />
+  <Node x={860} y={293} w={130} h={62} kind="store" name="MySQL 8" note="TLS only · Flyway" />
+  <Node x={250} y={380} w={170} kind="external" name="Mail server" note="Mailpit or Gmail" />
+  <Node x={590} y={462} w={120} h={42} kind="file" name="security.log" />
+  <Node x={20} y={470} w={180} name="Certificate Controller" note="OpenSSL CA · CRL" />
+</Diagram>

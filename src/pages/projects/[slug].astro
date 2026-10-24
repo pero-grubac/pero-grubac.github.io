@@ -1,8 +1,10 @@
 ---
 // Case study (REDESIGN.md 6.8, 8.2), one page per project with
 // caseStudy: true: breadcrumb, title, summary and repos, the architecture
-// line, the demo figure, the Markdown body (or, while it's empty, the
-// description and a note), then the previous and next system.
+// line and diagram, the demo figure, the Markdown body (or, while it's
+// empty, the description and a note), then the previous and next system.
+// A project's diagram is components/diagrams/<slug>.astro, if there is one.
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import Flow from "../../components/Flow.astro";
@@ -10,6 +12,8 @@ import BuiltWith from "../../components/BuiltWith.astro";
 import ProjectLinks from "../../components/ProjectLinks.astro";
 import DemoFigure from "../../components/DemoFigure.astro";
 import type { Project } from "../../lib/projects";
+
+const diagrams = import.meta.glob<{ default: AstroComponentFactory }>("../../components/diagrams/*.astro", { eager: true });
 
 export async function getStaticPaths() {
   const entries = (await getCollection("projects", (e) => e.data.caseStudy)).sort((a, b) => a.data.order - b.data.order);
@@ -29,6 +33,7 @@ const { entry, prev, next } = Astro.props;
 const p = entry.data;
 const { Content } = await render(entry);
 const written = Boolean(entry.body?.trim());
+const Diagram = diagrams[`../../components/diagrams/${p.slug}.astro`]?.default;
 const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. Architecture: ${p.flow}.`;
 ---
 
@@ -48,7 +53,6 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     </header>
 
     <div class="facts">
-      {/* TODO(owner): a proper architecture diagram to go with (or replace) the flow line */}
       <Flow flow={p.flow!} />
       <div>
         <BuiltWith stack={p.stack} />
@@ -56,7 +60,15 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
       </div>
     </div>
 
-    <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} priority />
+    {
+      Diagram && (
+        <div class="architecture">
+          <Diagram />
+        </div>
+      )
+    }
+
+    <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} priority={!Diagram} />
 
     <div class="body">
       {
@@ -165,21 +177,26 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
   }
 
   @media (min-width: 900px) {
-    .facts,
-    .body {
+    .facts {
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     }
   }
 
-  /* ---------- body ---------- */
-  .body {
-    display: grid;
-    margin-top: clamp(32px, 5vw, 56px);
+  .architecture {
+    margin-bottom: clamp(36px, 5vw, 56px);
   }
 
-  .body > :global(*) {
-    grid-column: -2;
-    max-width: 65ch;
+  /* ---------- body: the reading column, aligned with the title ---------- */
+  .body {
+    max-width: 68ch;
+    margin-top: clamp(36px, 5vw, 56px);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .body > :global(:first-child) {
+    margin-top: 0;
   }
 
   .body :global(p),
@@ -211,8 +228,32 @@ const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. 
     font: 0.9em var(--mono);
   }
 
+  /* links read as ink; the accent only marks the hover (6.1) */
   .body :global(a) {
+    color: var(--ink);
+    text-decoration-color: var(--rule);
+  }
+
+  .body :global(a:hover) {
     color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .body :global(strong) {
+    font-weight: 600;
+  }
+
+  .body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  /* en dashes, as in the index details, in --muted rather than accent */
+  .body :global(ul) {
+    list-style: "– ";
+  }
+
+  .body :global(ul > li::marker) {
+    color: var(--muted);
   }
 
   .note {

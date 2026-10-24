@@ -1,0 +1,23 @@
+---
+// People who use the system: an italic name and a note, no box, centred
+// on (x, y), the baseline of the name.
+interface Props {
+  x: number;
+  y: number;
+  name: string;
+  note?: string;
+}
+
+const { x, y, name, note } = Astro.props;
+---
+
+<g class="actor">
+  <text class="name" x={x} y={y} text-anchor="middle">{name}</text>
+  {
+    note && (
+      <text class="note" x={x} y={y + 15} text-anchor="middle">
+        {note}
+      </text>
+    )
+  }
+</g>

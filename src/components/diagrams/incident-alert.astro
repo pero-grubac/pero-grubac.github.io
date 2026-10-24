@@ -1,0 +1,39 @@
+---
+// Incident Alert, from the IncidentAlert README (architecture and life of a
+// report) and its docker-compose.yml. Left out on purpose: the apps' calls
+// to OpenStreetMap, Nominatim and Google (map tiles, search, sign-in,
+// translation).
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+---
+
+<Diagram
+  width={1000}
+  height={520}
+  label="Architecture of Incident Alert"
+  caption="Two React apps and four ASP.NET Core services. Solid lines are HTTP calls, dashed lines are MassTransit messages through RabbitMQ. The public API and Management each own a PostgreSQL database; ML and Statistics keep no data and read the public API."
+>
+  <Edge points={[[360, 86], [360, 190]]} label="read, report" at={[368, 143]} anchor="start" />
+  <Edge points={[[180, 178], [225, 178], [225, 206], [270, 206]]} label="GET" at={[202, 171]} />
+  <Edge points={[[180, 278], [225, 278], [225, 230], [270, 230]]} label="GET" at={[202, 294]} />
+  <Edge points={[[450, 205], [550, 205]]} kind="message" label="new report" at={[500, 197]} />
+  <Edge points={[[670, 205], [770, 205]]} kind="message" />
+  <Edge points={[[770, 231], [670, 231]]} kind="message" label={"approval,\ncategories"} at={[720, 249]} />
+  <Edge points={[[550, 231], [450, 231]]} kind="message" />
+  <Edge points={[[360, 246], [360, 330]]} />
+  <Edge points={[[865, 246], [865, 330]]} />
+  <Edge points={[[620, 478], [985, 478], [985, 218], [960, 218]]} label="JWT" at={[800, 471]} />
+  <Edge points={[[400, 478], [110, 478], [110, 306]]} label="JWT" at={[255, 471]} />
+  <Edge points={[[400, 492], [20, 492], [20, 178], [40, 178]]} />
+
+  <Node x={270} y={30} w={180} name="Public app" note="React · citizens" />
+  <Node x={40} y={150} w={140} name="ML" note="k-means groups · :5004" />
+  <Node x={40} y={250} w={140} name="Statistics" note="per period · :5006" />
+  <Node x={270} y={190} w={180} name="IncidentAlert" note="public API · :5000" />
+  <Node x={550} y={190} w={120} kind="queue" name="RabbitMQ" note="MassTransit" />
+  <Node x={770} y={190} w={190} name="Management" note="moderation API · :5002" />
+  <Node x={285} y={330} w={150} h={62} kind="store" name="PostgreSQL" note="incident_alert" />
+  <Node x={760} y={330} w={210} h={62} kind="store" name="PostgreSQL" note="incident_alert_management" />
+  <Node x={400} y={450} w={220} name="Moderation app" note="React · moderators, admins" />
+</Diagram>

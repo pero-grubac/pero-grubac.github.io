@@ -1,0 +1,147 @@
+---
+// An architecture diagram as a printed illustration (REDESIGN.md 6.8):
+// ink lines on paper, Newsreader names, Instrument Sans notes, and accent
+// only on the arrowheads, as in the flow line. The drawing is inline SVG so
+// it uses the page's fonts. Below its natural width it keeps a readable
+// size and scrolls sideways in its own frame.
+//   solid line   a request (HTTP, JDBC, TCP, RMI …)
+//   dashed line  a message through a queue
+//   dotted line  certificates, chat, or another side channel
+interface Props {
+  /** Width and height of the drawing in SVG units (1 unit = 1 px at full size) */
+  width: number;
+  height: number;
+  /** Short name for screen readers, e.g. "Architecture of Incident Alert" */
+  label: string;
+  caption: string;
+}
+
+const { width, height, label, caption } = Astro.props;
+---
+
+<figure class="diagram" style={`--dg-width: ${width}px`}>
+  <div class="frame" tabindex="0" data-diagram-frame>
+    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} role="img" aria-label={label}>
+      <defs>
+        <marker
+          id="dg-arrow"
+          viewBox="0 0 10 10"
+          refX="9.5"
+          refY="5"
+          markerWidth="8"
+          markerHeight="8"
+          orient="auto-start-reverse"
+        >
+          <path class="arrowhead" d="M0,1.2 L10,5 L0,8.8 z"></path>
+        </marker>
+      </defs>
+      <slot />
+    </svg>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+  .diagram {
+    margin: 0;
+  }
+
+  .frame {
+    overflow-x: auto;
+    padding-bottom: var(--s-1);
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    min-width: min(var(--dg-width), 860px);
+    max-width: var(--dg-width);
+    height: auto;
+  }
+
+  figcaption {
+    max-width: 68ch;
+    margin-top: 10px;
+    padding-top: var(--s-2);
+    border-top: var(--hairline);
+    font: 500 var(--fs-caption) / 1.5 var(--sans);
+    color: var(--muted);
+  }
+
+  /* ---------- the drawing (shapes come from Node, Edge, Actor, Group) ---------- */
+  svg :global(.shape) {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+
+  svg :global(.external .shape) {
+    stroke-dasharray: 4 3;
+  }
+
+  svg :global(.group > .shape) {
+    fill: none;
+    stroke: var(--rule);
+  }
+
+  svg :global(.name) {
+    font: 500 15px var(--serif);
+    fill: var(--ink);
+  }
+
+  svg :global(.actor .name) {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  svg :global(.group-name) {
+    font: 600 12px var(--sans);
+    fill: var(--muted);
+  }
+
+  svg :global(.note) {
+    font: 400 11.5px var(--sans);
+    fill: var(--muted);
+  }
+
+  svg :global(.edge) {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+
+  svg :global(.edge.message) {
+    stroke-dasharray: 6 4;
+  }
+
+  svg :global(.edge.side) {
+    stroke-dasharray: 1.5 3.5;
+    stroke-linecap: round;
+  }
+
+  svg :global(.arrowhead) {
+    fill: var(--accent);
+  }
+
+  /* edge labels sit on a paper halo, so a line behind them never cuts the text */
+  svg :global(.label) {
+    font: 500 11.5px var(--sans);
+    fill: var(--ink-soft);
+    paint-order: stroke;
+    stroke: var(--paper);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+</style>
+
+<script>
+  // The frame only needs to be a keyboard stop while it actually scrolls
+  for (const frame of document.querySelectorAll<HTMLElement>("[data-diagram-frame]")) {
+    const update = () => {
+      if (frame.scrollWidth > frame.clientWidth + 1) frame.tabIndex = 0;
+      else frame.removeAttribute("tabindex");
+    };
+    new ResizeObserver(update).observe(frame);
+  }
+</script>

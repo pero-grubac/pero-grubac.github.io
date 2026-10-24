@@ -1,0 +1,31 @@
+---
+// A connection: a polyline through `points`, with an accent arrowhead at
+// the end (and at the start too when `both`), and an optional label.
+// A "\n" in the label starts a new line.
+interface Props {
+  points: [number, number][];
+  /** call: a request · message: through a queue · side: certificates, chat … */
+  kind?: "call" | "message" | "side";
+  both?: boolean;
+  label?: string;
+  /** Where the label's first line sits */
+  at?: [number, number];
+  anchor?: "start" | "middle" | "end";
+}
+
+const { points, kind = "call", both = false, label, at, anchor = "middle" } = Astro.props;
+const d = "M" + points.map(([x, y]) => `${x},${y}`).join(" L");
+const lines = label?.split("\n") ?? [];
+---
+
+<g class="link">
+  <path class={`edge ${kind}`} d={d} marker-end="url(#dg-arrow)" marker-start={both ? "url(#dg-arrow)" : undefined} />
+  {
+    at &&
+      lines.map((line, i) => (
+        <text class="label" x={at[0]} y={at[1] + i * 14} text-anchor={anchor}>
+          {line}
+        </text>
+      ))
+  }
+</g>

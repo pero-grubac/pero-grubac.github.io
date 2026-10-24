@@ -528,8 +528,28 @@ value.
   with …", "Open" and "Source" or "Private repo"); the same "Find"
   search on top.
 - **Case study**: an article: sans breadcrumb, h1 title, italic dek
-  (summary), "Architecture" flow line with `TODO(owner)` for a diagram,
-  full-width figure, body at 65ch, then "Previous system / Next system".
+  (summary), "Architecture" flow line, the architecture diagram, the demo
+  figure, the body, then "Previous system / Next system". The body is the
+  main reading column: aligned with the title, at most 68ch, body size
+  (1.125rem) in ink, h2 sections, en-dash lists. Accent is never used for
+  body text; links in it are ink and turn accent on hover (phase 4
+  review).
+- **Architecture diagrams** (one per system, phase 4 review): an inline
+  SVG figure drawn like an illustration in a printed magazine, with a
+  short sans caption. Ink lines on paper, component names in Newsreader,
+  notes and line labels in Instrument Sans, no colour fills; the accent
+  only marks the arrowheads, as in the flow line. Solid lines are
+  requests (HTTP, JDBC, TCP, RMI), dashed lines messages through a queue,
+  dotted lines side channels (certificates, chat, events). Boxes are
+  applications, cylinders databases, a double rule a message broker, a
+  folded corner a file, a dashed outline something outside the system.
+  Each diagram is drawn from the repo's README and compose files; a
+  connection that isn't clear from them is left out with a
+  `TODO(owner)` in the diagram's file. They live in
+  `src/components/diagrams/<slug>.astro`, built from the shapes in
+  `src/components/diagram/`, and a case study shows the one named after
+  its slug. Below 860px a diagram keeps that width and scrolls sideways
+  in its frame, which is then a keyboard stop.
 - **404**: display serif "This page doesn't exist.", one italic line,
   links to Home and Browser apps.
 - **OG images** (1200×630): flat paper background, name in small sans at
@@ -655,18 +675,26 @@ Generated only for `caseStudy: true`:
 
 1. Breadcrumb back to the projects.
 2. Title, summary, repo links.
-3. Architecture: render the `flow` string; leave `TODO(owner)` for a proper
-   diagram later.
+3. Architecture: render the `flow` string and the system's diagram (6.8).
 4. Screenshot.
-5. Markdown body. If empty, show the `description`, any highlights, and a
-   note "Case study in progress." (no lorem ipsum).
+5. Markdown body. The four systems have one since the phase 4 review,
+   written in first person from each repo's README for a client or an
+   employer: What it does, Architecture, Decisions and why (only reasons
+   the README gives), Security, Testing and deployment. No installation
+   steps, commands or configuration. Each ends with a hidden
+   `TODO(owner)` (a Markdown comment, `[//]: # "…"`) for a short "What I
+   learned" section in the owner's words. If the body is empty, show the
+   `description`, any highlights, and a note "Case study in progress."
+   (no lorem ipsum).
 6. Prev/next links to the other systems.
 
 ### 8.3 Command palette
 
 Port the existing `Ctrl K` palette:
 - Opens with `⌘K` / `Ctrl K`, closes with `Esc`, focus trapped, native
-  `<dialog>`.
+  `<dialog>`. The shortcut handler calls `preventDefault()`, so the
+  browser's own search or address-bar shortcut never opens (owner's
+  request, phase 4 review).
 - Lists sections, `/apps/`, every project (opens live URL, case study, or
   its detail view), "Toggle theme", "Copy email".
 - `↑ ↓` to move, `Enter` to run, fuzzy match on title and stack.

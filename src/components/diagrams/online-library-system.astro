@@ -1,0 +1,47 @@
+---
+// Online Library System, from the Online-Library-System README (components
+// and protocols, the From → To table) and its docker-compose.yml. The
+// shared Common module (model, JSON format, REST client) is a library in
+// every application, not a running part, so it isn't drawn.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+---
+
+<Diagram
+  width={1000}
+  height={490}
+  label="Architecture of the Online Library System"
+  caption="Seven Java applications and the protocol on each connection. An order goes from the Library through a durable RabbitMQ queue to a supplier; the books and the invoice come back over TCP. Dotted lines are the members' chats: private over TLS, group over UDP multicast."
+>
+  <Edge points={[[120, 96], [120, 250]]} label="REST" at={[128, 176]} anchor="start" />
+  <Edge points={[[330, 278], [210, 278]]} label="REST" at={[270, 270]} />
+  <Edge points={[[65, 306], [65, 410]]} />
+  <Edge points={[[170, 306], [170, 414]]} />
+  <Edge points={[[210, 296], [282, 296], [282, 410]]} />
+  <Edge points={[[210, 68], [330, 68]]} label="register, list" at={[270, 60]} />
+  <Edge points={[[420, 250], [420, 96]]} label="list suppliers" at={[428, 128]} anchor="start" />
+  <Edge points={[[760, 250], [760, 52], [510, 52]]} label="register, heartbeat" at={[635, 44]} />
+  <Edge points={[[480, 250], [480, 178], [560, 178]]} kind="message" label="order" at={[520, 170]} />
+  <Edge points={[[650, 206], [650, 250]]} kind="message" />
+  <Edge points={[[510, 268], [620, 268]]} label="offer · TCP" at={[565, 260]} />
+  <Edge points={[[620, 290], [510, 290]]} label="books, invoice" at={[565, 304]} />
+  <Edge points={[[705, 306], [705, 410]]} label="RMI" at={[713, 362]} anchor="start" />
+  <Edge points={[[790, 278], [850, 278]]} label="TCP" at={[820, 270]} />
+  <Edge points={[[920, 306], [920, 410]]} label="HTTPS" at={[928, 362]} anchor="start" />
+  <Edge points={[[60, 40], [60, 20], [100, 20], [100, 40]]} kind="side" both label="private chat · TLS, peer to peer" at={[108, 24]} anchor="start" />
+  <Edge points={[[190, 96], [190, 200], [350, 200], [350, 250]]} kind="side" both label={"group chat, proposals\nUDP multicast"} at={[270, 178]} />
+
+  <Node x={30} y={40} w={180} name="User ×N" note="Swing · members" />
+  <Node x={330} y={40} w={180} name="DiscoveryServer" note="TCP :8888 · heartbeats" />
+  <Node x={30} y={250} w={180} name="LibraryServer" note="REST on Tomcat · JWT" />
+  <Node x={330} y={250} w={180} name="Library" note="Swing · staff" />
+  <Node x={560} y={150} w={140} kind="queue" name="RabbitMQ" note="queue per supplier" />
+  <Node x={620} y={250} w={170} name="Supplier ×N" note="Swing · suppliers" />
+  <Node x={850} y={250} w={140} name="SupplierServer" note="TCP :9000" />
+  <Node x={620} y={410} w={170} name="AccountingServer" note="RMI :1099 · 17% VAT" />
+  <Node x={850} y={410} w={140} kind="external" name="Project Gutenberg" />
+  <Node x={20} y={410} w={90} h={62} kind="store" name="Redis" note="catalogue" />
+  <Node x={125} y={414} w={90} h={52} kind="file" name="users.xml" note="members" />
+  <Node x={235} y={410} w={95} kind="external" name="SMTP" note="books as ZIP" />
+</Diagram>

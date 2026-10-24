@@ -1,0 +1,39 @@
+---
+// eMobilityHub, from the e-Mobility-Hub README (architecture), its
+// docker-compose.yml and the employee app's nginx.conf. Left out on
+// purpose: OpenStreetMap tiles for the operators' map, and the client
+// app's own volume for avatars.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Actor from "../diagram/Actor.astro";
+---
+
+<Diagram
+  width={1000}
+  height={500}
+  label="Architecture of eMobilityHub"
+  caption="Three front ends and the RSS feeds on one Spring Boot API, and a client web shop that reads MySQL directly over JDBC, as the assignment required. The API owns the schema: Flyway migrates it on start."
+>
+  <Edge points={[[160, 58], [160, 100]]} />
+  <Edge points={[[440, 58], [440, 100]]} />
+  <Edge points={[[860, 58], [860, 100]]} />
+  <Edge points={[[600, 58], [600, 260]]} label="/rss" at={[608, 214]} anchor="start" />
+  <Edge points={[[160, 160], [160, 260]]} label="cookie + CSRF token" at={[168, 214]} anchor="start" />
+  <Edge points={[[440, 160], [440, 260]]} label="Bearer JWT" at={[448, 214]} anchor="start" />
+  <Edge points={[[430, 320], [430, 410]]} label="JPA · Flyway" at={[438, 370]} anchor="start" />
+  <Edge points={[[620, 290], [670, 290]]} />
+  <Edge points={[[860, 160], [860, 441], [530, 441]]} label="JDBC" at={[868, 300]} anchor="start" />
+
+  <Actor x={160} y={30} name="Employees" note="admin · operator · manager" />
+  <Actor x={440} y={30} name="Managers" note="promotions, announcements" />
+  <Actor x={600} y={30} name="RSS readers" note="public feeds" />
+  <Actor x={860} y={30} name="Clients" note="rent, ride, pay" />
+
+  <Node x={40} y={100} w={240} h={60} name="Employee app" note="Angular · Nginx :80, proxies /api" />
+  <Node x={340} y={100} w={200} h={60} name="Promotions app" note="JSP · Tomcat :8082" />
+  <Node x={760} y={100} w={200} h={60} name="Client app" note="JSP · Tomcat :8081" />
+  <Node x={40} y={260} w={580} h={60} name="Spring Boot API · :8080" note="JWT filter · CSRF · role rules → controllers → services → JPA" />
+  <Node x={670} y={264} w={120} h={52} kind="file" name="uploads" note="vehicle images" />
+  <Node x={330} y={410} w={200} h={62} kind="store" name="MySQL 8" note="schema by Flyway" />
+</Diagram>

@@ -50,6 +50,10 @@ for (const file of pages) {
     if (!existsSync(target)) broken.push(`${page} → ${href}`);
   }
   ok(!/github\.com\/pero-grubac\/[^"]*repo(sitory)?-?health/i.test(html), `${page}: no link to the RepoHealth repo`);
+  if (page.startsWith("/projects/")) {
+    const sections = (html.match(/<h2[\s>]/g) ?? []).length;
+    ok(html.includes("data-diagram-frame") && sections === 5 && !html.includes("Case study in progress") && !html.includes("TODO(owner)"), `${page}: diagram, five body sections, no in-progress note or TODO (${sections} h2)`);
+  }
 }
 ok(pages.length === 7, `seven pages built (${pages.length})`);
 ok(broken.length === 0, "every internal link resolves" + (broken.length ? ": " + broken.slice(0, 8).join(" ; ") : ""));
@@ -173,8 +177,21 @@ async function tabThrough(page) {
   ok((await page.textContent(".dek")) === "Citizens report incidents on a map; moderators approve them first.", "case: the summary as the dek");
   ok(/React apps → ASP\.NET services ⇄ RabbitMQ \+ PostgreSQL/.test(await page.textContent(".flow")), "case: the flow line");
   ok((await page.getByRole("link", { name: "Source code for Incident Alert : Backend" }).count()) === 1, "case: the repo links");
-  ok((await page.getAttribute(".media img", "fetchpriority")) === "high", "case: the figure loads first");
-  ok((await page.textContent(".body")).includes("Four ASP.NET Core 10 services") && (await page.textContent(".body .note")) === "Case study in progress.", "case: description and the in-progress note while the body is empty");
+  // the written case study is the main reading column
+  const h2s = await page.$$eval(".body h2", (hs) => hs.map((h) => h.textContent));
+  ok(h2s.join(" | ") === "What it does | Architecture | Decisions and why | Security | Testing and deployment", "case: the body's sections: " + h2s.join(" | "));
+  ok((await page.locator("text=Case study in progress.").count()) === 0 && !(await page.content()).includes("TODO(owner)"), "case: no in-progress note and no TODO on the page once the body is written");
+  const column = await page.evaluate(() => {
+    const body = document.querySelector(".body");
+    const p = body.querySelector("p");
+    const cs = getComputedStyle(p);
+    return { left: body.getBoundingClientRect().left, h1: document.querySelector("h1").getBoundingClientRect().left, max: getComputedStyle(body).maxWidth, size: cs.fontSize, color: cs.color };
+  });
+  ok(Math.abs(column.left - column.h1) < 2 && Math.abs(parseFloat(column.max) - 68 * 9.9) < 15 && column.size === "18px" && column.color === "rgb(28, 26, 22)", "case: body text aligned with the title, 68ch, 18px, ink: " + JSON.stringify(column));
+  // the architecture diagram, its caption, and the figure loading first
+  ok((await page.getAttribute(".architecture svg", "aria-label")) === "Architecture of Incident Alert" && (await page.locator(".architecture figcaption").count()) === 1, "case: the architecture diagram with a caption");
+  ok((await page.getAttribute(".architecture [data-diagram-frame]", "tabindex")) === null, "case 1440: the diagram fits, so its frame is no Tab stop");
+  ok((await page.getAttribute(".media img", "fetchpriority")) === null && (await page.getAttribute(".media img", "loading")) === "lazy", "case: below the diagram, the demo still loads lazily");
   ok((await page.locator(".pager .prev").count()) === 0 && (await page.getAttribute(".pager .next", "href")) === "/projects/e-mobility-hub/", "case: first system has only Next → eMobilityHub");
   ok((await page.getByRole("link", { name: "Next system eMobilityHub" }).count()) === 1, 'case: pager link name "Next system eMobilityHub"');
   ok(!(await footer(page)).includes("/ to"), "case: no / hint in the footer (no find field)");
@@ -236,7 +253,8 @@ async function tabThrough(page) {
   for (const path of ["/apps/", "/projects/incident-alert/", "/projects/online-library-system/", "/no-such-page/"]) {
     await mp.goto(base + path, { waitUntil: "networkidle" });
     const o = await mp.evaluate(() => document.documentElement.scrollWidth - 360);
-    const wide = await mp.$$eval("body *", (els) => els.filter((e) => e.getBoundingClientRect().right > 360.5 && getComputedStyle(e).position !== "fixed").map((e) => e.className || e.tagName).slice(0, 4));
+    // the diagram is allowed past the edge: it scrolls inside its own frame
+    const wide = await mp.$$eval("body *", (els) => els.filter((e) => e.getBoundingClientRect().right > 360.5 && getComputedStyle(e).position !== "fixed" && !e.closest("[data-diagram-frame]")).map((e) => e.className || e.tagName).slice(0, 4));
     ok(o <= 0 && wide.length === 0, `360 ${path}: no horizontal scroll` + (wide.length ? " " + wide.join(",") : ""));
     await shot(mp, `360${path.replace(/\//g, "-")}top`);
   }
@@ -246,6 +264,9 @@ async function tabThrough(page) {
   ok(cols === 1, `360: apps in one column (${cols})`);
   await mp.goto(base + "/projects/incident-alert/", { waitUntil: "networkidle" });
   await shot(mp, "360-case-full", { fullPage: true });
+  ok((await mp.getAttribute("[data-diagram-frame]", "tabindex")) === "0", "360: the diagram scrolls sideways, and its frame is a Tab stop");
+  const svgWidth = await mp.$eval("[data-diagram-frame] svg", (svg) => svg.getBoundingClientRect().width);
+  ok(svgWidth >= 859, `360: the diagram keeps a readable size (${Math.round(svgWidth)} px wide)`);
   await m.close();
 }
 
