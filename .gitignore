@@ -3,6 +3,10 @@ plan.md
 unused-assets/
 demo
 
+# Astro build output and generated types
+dist/
+.astro/
+
 # Dependencies and test output
 node_modules/
 test-results/

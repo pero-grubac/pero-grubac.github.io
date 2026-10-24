@@ -1,0 +1,102 @@
+---
+// Sticky masthead (REDESIGN.md 6.6): wordmark, section links, and the
+// "Search ⌘K" pill that opens the command palette (wired up in phase 5).
+const links = [
+  { href: "/#about", label: "About" },
+  { href: "/#systems", label: "Systems" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/apps/", label: "Apps" },
+  { href: "/#contact", label: "Contact" },
+];
+---
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="wordmark" href="/">Pero Grubač</a>
+    <nav aria-label="Sections">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <button type="button" class="find" data-palette aria-haspopup="dialog" aria-label="Search, opens the command palette">
+      Search <kbd><span data-mod>Ctrl</span> K</kbd>
+    </button>
+  </div>
+</header>
+
+<style>
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: var(--hairline);
+  }
+
+  .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px var(--s-5);
+    min-height: 60px;
+    padding-top: var(--s-2);
+    padding-bottom: var(--s-2);
+  }
+
+  .wordmark {
+    font: italic 500 1.2rem var(--serif);
+    text-decoration: none;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) 22px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font: 500 var(--fs-label) var(--sans);
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--ink-soft);
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .find {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: var(--hairline);
+    border-radius: var(--radius-pill);
+    padding: 5px 8px 5px 14px;
+    font: 500 0.85rem var(--sans);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .find:hover {
+    border-color: var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    nav {
+      order: 3;
+      width: 100%;
+      padding-bottom: var(--s-1);
+    }
+
+    ul {
+      gap: var(--s-1) 18px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
