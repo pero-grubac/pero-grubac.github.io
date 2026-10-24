@@ -51,7 +51,7 @@ export default function render(ctx) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<link rel="icon" href="../../assets/favicon.ico">
+<link rel="icon" href="../../public/assets/favicon.ico">
 <title>Direction A · Console | Pero Grubač</title>
 <script>try{var t=localStorage.getItem("proto-a-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">

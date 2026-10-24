@@ -68,11 +68,11 @@ export const projects = raw.map((p, i) => {
       apk: apk?.url,
       privateRepo: (p.muted || []).some((m) => /private/i.test(m)) || undefined,
     },
-    image: p.image ? "../../" + p.image : undefined,
+    image: p.image ? "../../public/" + p.image : undefined,
     // Live thumbnails have alt="" on the current site; a neutral alt for the prototypes.
     imageAlt: p.imageAlt || (p.image ? `Screenshot of ${p.title}` : undefined),
     altFromSite: Boolean(p.imageAlt),
-    video: p.video ? "../../" + p.video : undefined,
+    video: p.video ? "../../public/" + p.video : undefined,
     commands: p.commands?.length ? p.commands : undefined,
     featured: p.kind === "system",
     caseStudy: p.kind === "system",
@@ -103,7 +103,7 @@ export const site = {
   email: "pero.grubac00@gmail.com",
   github: "https://github.com/pero-grubac",
   linkedin: "https://www.linkedin.com/in/perogrubac/",
-  avatar: "../../assets/avatar.jpeg",
+  avatar: "../../public/assets/avatar.jpeg",
   about: [
     "I'm a Software Engineering graduate from Trebinje, now based in Banja Luka, with a focus on backend systems. I build reliable, scalable applications, from microservices to mobile apps.",
     "My work spans distributed systems with RabbitMQ and Docker, real-time platforms, REST APIs and full-stack web applications. I'm comfortable across several ecosystems and like picking the right tool for the job.",

@@ -3,17 +3,17 @@
 Three throwaway prototypes of the home page, built from the real content of
 the current site. **The owner picked direction B (Journal)**; its design
 system is written up in section 6 of `REDESIGN.md`. A and C stay here for
-reference. None of this is deployed: the deploy workflow only copies
-`index.html`, `css`, `js` and `assets`, and every prototype has
+reference. None of this is deployed: the Astro build only outputs
+`src/pages` and `public/`, and every prototype has
 `<meta name="robots" content="noindex">`.
 
 ## How to open
 
-The prototypes load images and videos from `/assets/` with `../../assets/`,
-so serve the **repo root**, not this folder:
+The prototypes load images and videos from `public/assets/` with
+`../../public/assets/`, so serve the **repo root**, not this folder:
 
 ```sh
-npm start            # serves the repo on http://127.0.0.1:8080/
+node design-explorations/_scripts/serve.mjs   # http://127.0.0.1:8080/
 ```
 
 Then open:
@@ -77,7 +77,7 @@ labels.
 
 ## What all three share
 
-- Same content and order, taken from the current `index.html`. Every
+- Same content and order, taken from the old site (`legacy/index.html`). Every
   count (filters, apps teaser, contents box) is computed from the data.
 - Search (`/` to focus) over title, summary and stack; filter by kind with
   live counts. The state is kept in the URL hash
@@ -109,7 +109,7 @@ The pages are generated; don't edit the HTML by hand. The scripts live in
 for the checks):
 
 ```sh
-node design-explorations/_scripts/extract.mjs   # current index.html → projects.raw.json
+node design-explorations/_scripts/extract.mjs   # legacy/index.html → projects.raw.json
 node design-explorations/_scripts/build.mjs     # projects.raw.json + templates → direction-*/index.html
 node design-explorations/_scripts/check.mjs     # browser checks at 360 and 1440 px (all three, or: b)
 ```

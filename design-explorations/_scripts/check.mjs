@@ -18,7 +18,7 @@ if (shots) mkdirSync(shots, { recursive: true });
 const shot = (page, name, opts = {}) => shots && page.screenshot({ path: `${shots}/${name}.png`, ...opts });
 const only = process.argv[2];
 
-const server = spawn(process.execPath, ["tests/e2e/server.mjs", String(port)], { cwd: repo });
+const server = spawn(process.execPath, [fileURLToPath(new URL("./serve.mjs", import.meta.url)), String(port)]);
 await new Promise((resolve) => server.stdout.once("data", resolve));
 
 const channel = process.env.PW_CHANNEL ?? (process.platform === "win32" ? "msedge" : undefined);

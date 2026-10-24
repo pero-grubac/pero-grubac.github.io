@@ -1,9 +1,9 @@
-// Pulls every project out of the current site's index.html into projects.raw.json.
+// Pulls every project out of the old site (legacy/index.html) into projects.raw.json.
 // usage: node design-explorations/_scripts/extract.mjs [path/to/index.html]
-// (defaults to the repo's index.html; after phase 1 that is legacy/index.html)
+// (defaults to legacy/index.html, where phase 1 moved the old site)
 import { readFileSync, writeFileSync } from "node:fs";
 
-const html = readFileSync(process.argv[2] || new URL("../../index.html", import.meta.url), "utf8");
+const html = readFileSync(process.argv[2] || new URL("../../legacy/index.html", import.meta.url), "utf8");
 const out = new URL("./projects.raw.json", import.meta.url);
 
 const decode = (s) =>

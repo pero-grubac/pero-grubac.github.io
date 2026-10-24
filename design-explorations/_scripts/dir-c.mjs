@@ -61,7 +61,7 @@ export default function render(ctx) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<link rel="icon" href="../../assets/favicon.ico">
+<link rel="icon" href="../../public/assets/favicon.ico">
 <title>Direction C · Blueprint | Pero Grubač</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
