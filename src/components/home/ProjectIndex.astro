@@ -9,7 +9,7 @@ import SectionHead from "../SectionHead.astro";
 import BuiltWith from "../BuiltWith.astro";
 import ProjectLinks from "../ProjectLinks.astro";
 import Commands from "../Commands.astro";
-import { KIND_NOUNS, countOf, haystack, kindCounts, listOf, type Project } from "../../lib/projects";
+import { KIND_NOUNS, countOf, haystack, kindCounts, listOf, stackKey, type Project } from "../../lib/projects";
 
 interface Props {
   systems: Project[];
@@ -62,7 +62,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
         {
           /* Systems join the list only while a search is active (7.4) */
           systems.map((p) => (
-            <li class="entry entry-system" data-item data-kind="system" data-hay={haystack(p)} hidden>
+            <li class="entry entry-system" data-item data-kind="system" data-hay={haystack(p)} data-stack={stackKey(p)} hidden>
               <p class="title">
                 <a href={`#${p.slug}`}>{p.title}</a>
               </p>
@@ -77,7 +77,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
         }
         {
           projects.map((p) => (
-            <li class="entry" id={`p-${p.slug}`} data-item data-slug={p.slug} data-kind={p.kind} data-hay={haystack(p)}>
+            <li class="entry" id={`p-${p.slug}`} data-item data-slug={p.slug} data-kind={p.kind} data-hay={haystack(p)} data-stack={stackKey(p)}>
               <h3 class="title">
                 <button type="button" aria-expanded="false" aria-controls={`d-${p.slug}`} data-toggle>
                   {p.title}

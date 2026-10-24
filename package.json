@@ -10,6 +10,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "check:links": "node scripts/check-links.mjs",
+    "check:home": "node tests/check-home.mjs",
     "astro": "astro"
   },
   "engines": {

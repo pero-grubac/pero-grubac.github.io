@@ -1,11 +1,11 @@
 ---
 // About (6.6, 7.2): two columns of text, the portrait, and the stack.
-// A stack term searches the projects index; a term no project matches
-// (same matching as the search) is plain text.
+// A stack term shows the projects built with it (an exact stack match,
+// so "Java" isn't JavaScript); a term no project uses is plain text.
 import { Picture } from "astro:assets";
 import SectionHead from "../SectionHead.astro";
 import avatar from "../../assets/avatar.jpeg";
-import { matches, type Project } from "../../lib/projects";
+import { builtWith, type Project } from "../../lib/projects";
 import { site } from "../../lib/site";
 
 interface Props {
@@ -21,7 +21,7 @@ const STACK = {
 const { projects } = Astro.props;
 const groups = Object.entries(STACK).map(([group, terms]) => ({
   group,
-  terms: terms.map((term) => ({ term, found: projects.some((p) => matches(p, term)) })),
+  terms: terms.map((term) => ({ term, found: projects.some((p) => builtWith(p, term)) })),
 }));
 ---
 
@@ -204,13 +204,13 @@ const groups = Object.entries(STACK).map(([group, terms]) => ({
 </style>
 
 <script>
-  import { setSearch } from "../../scripts/project-index";
+  import { findTech } from "../../scripts/project-index";
 
   for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-term]")) {
     btn.addEventListener("click", (e) => {
       // Take keyboard and mouse users to the search box; on touch, focusing
       // it would open the on-screen keyboard over the results
-      setSearch(btn.dataset.term!, { scroll: true, focus: (e as PointerEvent).pointerType !== "touch" });
+      findTech(btn.dataset.term!, { scroll: true, focus: (e as PointerEvent).pointerType !== "touch" });
     });
   }
 </script>

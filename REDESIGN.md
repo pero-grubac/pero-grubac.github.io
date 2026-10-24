@@ -565,10 +565,15 @@ Engineering graduate from Trebinje, based in Banja Luka, distributed
 systems with RabbitMQ and Docker, open to freelance). Photo
 `/assets/avatar.jpeg`.
 
-Stack (Languages / Frameworks / Infrastructure). Clicking an item sets the
-project search to that term and scrolls to the projects. An item that no
-project matches (computed at build time with the same matching as the
-search; today FastAPI and GCP) is plain, non-clickable text.
+Stack (Languages / Frameworks / Infrastructure). Clicking an item puts
+that term in the project search and scrolls to the projects. It matches
+the technology name exactly: the projects whose `stack` has it
+(case-insensitive), so "Java" finds the Java projects and not the
+JavaScript ones (owner's call, phase 3 review). The hash records it as
+`#projects?tech=Java`; editing the search box turns it back into a typed
+query (7.4). An item that no project matches (computed at build time with
+the same exact matching; today FastAPI and GCP) is plain, non-clickable
+text.
 
 ### 7.3 Systems
 
@@ -586,14 +591,17 @@ the crowding.
   `Live {n}`, `Web {n}`, `Mobile {n}`, `Desktop {n}`, `Tool {n}`. A kind
   with no projects gets no button. Never type a count by hand.
 - Search input focused by `/`, matching title, summary and stack,
-  case-insensitive. Search covers **all** projects, including the
+  case-insensitive, on any part of a word: typing "java" also finds
+  JavaScript (a technology picked in About matches exactly, see 7.2).
+  Search covers **all** projects, including the
   systems: while a query is active, matching systems join the list,
   listed first, marked `system` and linking to their entry in the systems
   section (they are not in the list when the search is empty). `All {n}`
   counts them; the kind filters don't. There is no separate "matching
   systems" line.
 - Filter and search state mirrored in the URL hash (e.g.
-  `#projects?kind=live&q=react`) and restored on load.
+  `#projects?kind=live&q=react`, or `tech=Java` for a technology picked
+  in About) and restored on load.
 - Collapsed item shows at most: title, one-line summary, kind, optionally
   a thumbnail, and for live apps a one-click "Open" link (new tab,
   accessible name "Open {title}"), so a visitor can launch an app without

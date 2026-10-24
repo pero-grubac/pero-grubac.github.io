@@ -58,9 +58,18 @@ export function haystack(p: Project): string {
   return [p.title, p.summary, ...p.stack].join("\n").toLowerCase();
 }
 
-/** The same test the browser runs on `data-hay` (scripts/project-index.ts). */
-export function matches(p: Project, query: string): boolean {
-  return haystack(p).includes(query.trim().toLowerCase());
+/**
+ * A technology picked from a list (the stack in About) matches exactly:
+ * only projects whose stack has it, so "Java" doesn't find JavaScript.
+ * Typed searches match any part of the haystack instead.
+ */
+export function stackKey(p: Project): string {
+  return p.stack.join("\n").toLowerCase();
+}
+
+/** The same test the browser runs on `data-stack` (scripts/project-index.ts). */
+export function builtWith(p: Project, tech: string): boolean {
+  return stackKey(p).split("\n").includes(tech.toLowerCase());
 }
 
 /** "A, B and C" */

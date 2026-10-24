@@ -1,6 +1,8 @@
 // The projects index on the home page (REDESIGN.md 7.4): search, kind
 // filters with live counts, the state mirrored in the URL hash
 // (#projects?kind=live&q=react), and one entry open at a time.
+// A typed query matches any part of a title, summary or technology; a
+// technology picked in About (#projects?tech=Java) matches the stack exactly.
 // The markup is in components/home/ProjectIndex.astro.
 
 const section = document.getElementById("projects")!;
@@ -11,7 +13,7 @@ const filters = [...root.querySelectorAll<HTMLButtonElement>("[data-filter]")];
 const empty = root.querySelector<HTMLElement>("[data-empty]")!;
 const status = root.querySelector<HTMLElement>("[data-status]")!;
 
-const state = { kind: "", q: "" };
+const state = { kind: "", q: "", tech: "" };
 let open: HTMLElement | null = null;
 
 /* ---------- details on demand ---------- */
@@ -62,13 +64,15 @@ for (const item of items) {
 
 function apply(announce = false) {
   const needle = state.q.trim().toLowerCase();
+  const tech = state.tech.toLowerCase();
   const counts = new Map<string, number>();
   let total = 0;
   let shown = 0;
   for (const item of items) {
     const kind = item.dataset.kind!;
+    const matched = tech ? item.dataset.stack!.split("\n").includes(tech) : item.dataset.hay!.includes(needle);
     // Systems join the list only while searching, and only under "All"
-    const hit = (kind !== "system" || needle !== "") && item.dataset.hay!.includes(needle);
+    const hit = (kind !== "system" || needle !== "" || tech !== "") && matched;
     if (hit) {
       counts.set(kind, (counts.get(kind) ?? 0) + 1);
       total++;
@@ -87,21 +91,27 @@ function apply(announce = false) {
   }
   if (open?.hidden) setOpen(null);
 
-  const query = state.q.trim();
+  const query = state.tech || state.q.trim();
   empty.hidden = shown > 0;
   empty.querySelector("[data-empty-noun]")!.textContent = active.dataset.one!;
   empty.querySelector("[data-empty-q]")!.textContent = query;
 
   if (announce) {
     const noun = shown === 1 ? active.dataset.one : active.dataset.many;
-    status.textContent = `${shown} ${noun}` + (query ? ` ${shown === 1 ? "matches" : "match"} “${query}”` : "");
+    const match = state.tech
+      ? ` built with ${state.tech}`
+      : query
+        ? ` ${shown === 1 ? "matches" : "match"} “${query}”`
+        : "";
+    status.textContent = `${shown} ${noun}${match}`;
   }
 }
 
 function writeHash() {
   const params = new URLSearchParams();
   if (state.kind) params.set("kind", state.kind);
-  if (state.q.trim()) params.set("q", state.q.trim());
+  if (state.tech) params.set("tech", state.tech);
+  else if (state.q.trim()) params.set("q", state.q.trim());
   const query = params.toString();
   history.replaceState(history.state, "", "#projects" + (query ? "?" + query : ""));
 }
@@ -114,23 +124,27 @@ function readHash(): boolean {
   const params = new URLSearchParams(at < 0 ? "" : hash.slice(at + 1));
   const kind = params.get("kind") ?? "";
   state.kind = filters.some((b) => b.dataset.filter === kind) ? kind : "";
-  state.q = input.value = params.get("q") ?? "";
+  state.tech = params.get("tech") ?? "";
+  state.q = state.tech ? "" : (params.get("q") ?? "");
+  input.value = state.tech || state.q;
   apply();
   return true;
 }
 
-/** Sets the search (and resets the kind filter), as the stack terms in About do. */
-export function setSearch(term: string, { scroll = false, focus = false } = {}) {
-  state.q = input.value = term;
-  state.kind = "";
+/** Shows the projects built with `tech` (and resets the kind filter), as the stack terms in About do. */
+export function findTech(tech: string, { scroll = false, focus = false } = {}) {
+  state.tech = input.value = tech;
+  state.q = state.kind = "";
   apply(true);
   writeHash();
   if (scroll) section.scrollIntoView();
   if (focus) input.focus({ preventScroll: true });
 }
 
+// Editing the box turns a picked technology back into a typed query
 input.addEventListener("input", () => {
   state.q = input.value;
+  state.tech = "";
   apply(true);
   writeHash();
 });
@@ -144,7 +158,7 @@ for (const button of filters) {
 }
 
 empty.querySelector("[data-clear]")!.addEventListener("click", () => {
-  state.q = input.value = "";
+  state.q = state.tech = input.value = "";
   apply(true);
   writeHash();
   input.focus();

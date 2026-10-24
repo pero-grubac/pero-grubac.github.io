@@ -107,6 +107,7 @@ pero-grubac.github.io/
 │   └── styles/                tokens.css (design tokens), global.css
 ├── public/assets/             Demo videos, avatar, og-card.png, favicons, served at /assets/
 ├── scripts/check-links.mjs    Checks every live, repo and APK link in the content
+├── tests/check-home.mjs       Browser checks of the built home page (Playwright)
 ├── astro.config.mjs           Static output, trailingSlash "always"
 ├── design-explorations/       Phase 0 prototypes (direction B is the reference)
 ├── legacy/                    The old hand-written site, until launch
@@ -138,6 +139,7 @@ npm run check      # TypeScript and Astro diagnostics
 npm run build      # static site in dist/
 npm run preview    # serves dist/
 npm run check:links  # every live, repo and APK link in the content must return 200
+npm run check:home   # browser checks of the built home page (run npm run build first)
 ```
 
 ### Adding a project
@@ -149,9 +151,14 @@ exactly which field is wrong if something doesn't fit.
 
 ### Tests
 
-Browser tests and Lighthouse checks for the new site come in phase 5 of
-`REDESIGN.md`. The old site's tests are kept in `legacy/tests/` and no
-longer run.
+`npm run check:home` drives the built home page in a real browser
+(Playwright; Edge on Windows, `PW_CHANNEL` to change, `SHOTS=<dir>` for
+screenshots): counts, search and hash, details, the demo video, Copy,
+keyboard only, reduced motion, and no horizontal scroll at 360 and 1440 px.
+It starts its own `astro preview` on port 4399 beside any you have open.
+It doesn't run in CI yet; phase 5 of `REDESIGN.md` turns it into real
+tests and adds Lighthouse. The old site's tests are kept in
+`legacy/tests/` and no longer run.
 
 ---
 
