@@ -68,7 +68,7 @@ export const projects = raw.map((p, i) => {
       apk: apk?.url,
       privateRepo: (p.muted || []).some((m) => /private/i.test(m)) || undefined,
     },
-    image: p.image ? "../../public/" + p.image : undefined,
+    image: p.image ? "../../src/" + p.image : undefined, // project screenshots live in src/assets/ since phase 2
     // Live thumbnails have alt="" on the current site; a neutral alt for the prototypes.
     imageAlt: p.imageAlt || (p.image ? `Screenshot of ${p.title}` : undefined),
     altFromSite: Boolean(p.imageAlt),

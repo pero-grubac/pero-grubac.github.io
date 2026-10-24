@@ -9,8 +9,9 @@ reference. None of this is deployed: the Astro build only outputs
 
 ## How to open
 
-The prototypes load images and videos from `public/assets/` with
-`../../public/assets/`, so serve the **repo root**, not this folder:
+The prototypes load project screenshots from `src/assets/` and the demo
+videos and photo from `public/assets/` (relative `../../` paths), so serve
+the **repo root**, not this folder:
 
 ```sh
 node design-explorations/_scripts/serve.mjs   # http://127.0.0.1:8080/
