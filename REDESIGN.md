@@ -740,6 +740,19 @@ list, from the current site:
 | `/stats` | commits & issues by period |
 | `/top-repo` | most active repo this month |
 
+**Pending, waiting on the owner (since the phase 4 review, round 2).** The
+bot's public README (`master`, the only branch) describes an older version
+than this site. The index entry's highlights (a form, one-click close and
+label detection; an HMAC-signed webhook for PRs, CI runs and releases; a
+stale-issue reminder; 232 tests at 99% coverage) and the `/stale` command
+aren't in it, and the README's `/repos`, `/register`, `/sync-repos`,
+`/repo-info` and `/heatmap` aren't in the list above. The owner will update
+the README in the bot's repo. Until he says it is updated, keep the case
+study and the diagram as they are (written from the current README). When
+he does: rewrite the case study from the new README with the rules in 8.2,
+redraw the diagram if the parts changed, and align the index entry's
+`summary`, `description`, `highlights`, `stack` and `commands` with it.
+
 ### 8.5 404
 
 "This page doesn't exist." plus links to Home and Apps, in the chosen
