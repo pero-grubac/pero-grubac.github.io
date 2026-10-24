@@ -86,8 +86,9 @@ the long run of small browser apps, games and side projects.
   needs it.
 - Fonts self-hosted via `@fontsource` packages (no runtime request to
   Google Fonts). Which fonts: decided in phase 0.
-- Icons: `astro-icon` with the Tabler set unless the chosen direction
-  calls for something else.
+- Icons: no icon library and no `astro-icon`. The chosen direction
+  (Journal) uses text glyphs for arrows: ↗ external, → onward, ↑ to a
+  section above, ▶ play (see 6.4).
 - Deploy: GitHub Actions with the official `withastro/action`, Pages
   source set to "GitHub Actions".
 - `@astrojs/sitemap` for the sitemap.
@@ -243,8 +244,8 @@ Notes:
 ## 6. Design system
 
 **Direction: B, "Journal"** (picked by the owner on 2026-10-24).
-**Status: draft, waiting for the owner's OK and his choice of contact
-variant (6.7).** Phase 1 starts only after that. The prototype
+**Status: approved by the owner on 2026-10-24**, with the colophon
+contact (6.7). The prototype
 `design-explorations/direction-b/` is the visual reference; where the two
 disagree, this section wins. The decisions are in 6.1–6.9, after the
 exploration brief.
@@ -403,8 +404,7 @@ oldstyle-nums`).
   their own ratio with a 1px `--rule` border. Videos follow the video
   rule (section 2): no frame.
 - Icons: no icon library. Arrows are text glyphs: ↗ external, → onward,
-  ↑ to a section above, ▶ play. This replaces `astro-icon`/Tabler from
-  section 3.
+  ↑ to a section above, ▶ play.
 
 ### 6.5 Motion
 
@@ -446,18 +446,24 @@ oldstyle-nums`).
 - **Focus**: 2px solid accent outline with 3px offset; list rows show it
   around the whole row.
 
-### 6.7 Contact (owner to pick one)
+### 6.7 Contact: colophon
 
-Both are quiet: the email is a normal-size link with a small "Copy" pill
-next to it, plus GitHub and LinkedIn. Compare them in the prototype with
-the dashed "Prototype only" switch, or `?contact=colophon`.
+A quiet magazine colophon instead of a big call to action. No double
+rule: the block sits between two 1px ink rules. On the left (5/12) the
+h2 "Let's work together" (serif 400, `clamp(1.8rem, 3.4vw, 2.4rem)`) and
+the freelance line in italic. On the right (7/12) a label/value list
+(`dl`), sans labels in `--muted`, serif values at 1.05rem, hairlines
+between rows:
 
-1. **Letter**: the usual section heading, then a short letter in body
-   size: italic lead line, "Write to me at {email} [Copy]", "or find me
-   on GitHub and LinkedIn.", signed "— Pero Grubač" in italic.
-2. **Colophon**: no double rule; between two ink hairlines, the heading
-   and lead line on the left and a label/value list on the right (Email
-   [Copy], GitHub, LinkedIn, Based in), like a magazine colophon.
+| label | value |
+|---|---|
+| Email | the address as a normal-size link, then a small "Copy" pill (shows "Copied" for 2s) |
+| GitHub | `github.com/pero-grubac` (link) |
+| LinkedIn | `linkedin.com/in/perogrubac` (link) |
+| Based in | Banja Luka, Bosnia and Herzegovina |
+
+Below 900px the two halves stack; below 480px each label sits above its
+value.
 
 ### 6.8 Other pages
 
@@ -751,7 +757,9 @@ Upwork profile.
 - No exclamation marks.
 - Never show a count next to a technology ("2× PostgreSQL"), and list
   each technology once wherever technologies are listed (flow strings,
-  stack lists).
+  stack lists). This applies only to those lists and architecture lines:
+  counts inside sentences stay ("Four ASP.NET Core 10 services",
+  "14 Playwright e2e tests").
 - English only on the site.
 
 ---

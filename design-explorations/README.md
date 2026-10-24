@@ -52,10 +52,9 @@ the screenshot full width underneath. Projects are an "Index of projects"
 with dotted leaders (title …… kind); on wide screens the selected entry
 opens in a sticky reader pane beside the index, and on phones it expands
 inline. Live apps have a one-click "Open" link in the index; while you
-search, matching systems join the index at the top. The contact section
-has two variants to choose from, a letter closing and a magazine
-colophon: switch with the dashed "Prototype only" control above it, or
-open `?contact=colophon`. Light only: paper `#f4f0e6`, ink `#1c1a16`, muted `#6a6457`, one
+search, matching systems join the index at the top. Contact is a quiet
+magazine colophon (the owner picked it over a letter-closing variant).
+Light only: paper `#f4f0e6`, ink `#1c1a16`, muted `#6a6457`, one
 accent, oxblood `#a4321f`, for links, flow arrows and the selected entry.
 Fonts: **Newsreader** (display and text serif, optical sizes) and
 **Instrument Sans** for labels, navigation and buttons.

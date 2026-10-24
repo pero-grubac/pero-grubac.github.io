@@ -207,19 +207,7 @@ a.lnk[target="_blank"]::after { content: " ↗"; }
 .copy { border: 1px solid var(--rule); background: var(--card); border-radius: 999px; padding: 2px 10px; margin-left: 6px; font: 600 .75rem/1.5 var(--sans); color: var(--ink-soft); cursor: pointer; vertical-align: 2px; }
 .copy:hover { border-color: var(--ink); color: var(--ink); }
 .copy[data-copied] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
-.proto-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 36px; padding: 8px 12px; border: 1px dashed var(--muted); font: 500 .8rem var(--sans); color: var(--muted); width: fit-content; max-width: 100%; }
-.proto-switch button { border: 1px solid var(--rule); background: none; border-radius: 3px; padding: 3px 10px; font: inherit; color: var(--ink-soft); cursor: pointer; }
-.proto-switch button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-
-/* variant 1: the closing of a letter */
-.letter { max-width: 40rem; }
-.letter p { margin: 0 0 .5em; font-size: 1.2rem; line-height: 1.6; }
-.letter .letter-lead { font-style: italic; color: var(--ink-soft); margin-bottom: 1.2em; }
-.letter .lnk { font-weight: 500; overflow-wrap: anywhere; }
-.signoff { margin-top: 1.6em !important; font-style: italic; font-size: 1.6rem !important; font-weight: 400; }
-.signoff::before { content: "— "; color: var(--muted); }
-
-/* variant 2: a magazine colophon */
+/* a magazine colophon */
 .colophon { display: grid; gap: 28px 56px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 26px 0; }
 @media (min-width: 900px) { .colophon { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
 .col-lead h2 { font-weight: 400; font-size: clamp(1.8rem, 3.4vw, 2.4rem); line-height: 1.05; margin: 0 0 10px; letter-spacing: -.01em; }
@@ -865,38 +853,18 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
     </div>
   </section>
 
-  <section id="contact" class="contact">
-    <div class="proto-switch" role="group" aria-label="Prototype only: contact variant">
-      <span>Prototype only · contact variant</span>
-      <button type="button" data-variant="letter" aria-pressed="true">1 · Letter</button>
-      <button type="button" data-variant="colophon" aria-pressed="false">2 · Colophon</button>
-    </div>
-
-    <!-- Variant 1: the closing of a letter -->
-    <div class="cv" data-variant-panel="letter">
-      <div class="sec-head"><h2>Let's work together</h2></div>
-      <div class="letter">
-        <p class="letter-lead">Open to freelance projects, collaborations and interesting opportunities.</p>
-        <p>Write to me at <a class="lnk" href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a> <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button></p>
-        <p>or find me on <a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">GitHub</a> and <a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">LinkedIn</a>.</p>
-        <p class="signoff">Pero Grubač</p>
+  <section id="contact" class="contact" aria-labelledby="contact-h">
+    <div class="colophon">
+      <div class="col-lead">
+        <h2 id="contact-h">Let's work together</h2>
+        <p>Open to freelance projects, collaborations and interesting opportunities.</p>
       </div>
-    </div>
-
-    <!-- Variant 2: a magazine colophon -->
-    <div class="cv" data-variant-panel="colophon" hidden>
-      <div class="colophon">
-        <div class="col-lead">
-          <h2>Let's work together</h2>
-          <p>Open to freelance projects, collaborations and interesting opportunities.</p>
-        </div>
-        <dl class="col-list">
-          <div><dt>Email</dt><dd><a class="lnk" href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a> <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button></dd></div>
-          <div><dt>GitHub</dt><dd><a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">github.com/pero-grubac</a></dd></div>
-          <div><dt>LinkedIn</dt><dd><a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">linkedin.com/in/perogrubac</a></dd></div>
-          <div><dt>Based in</dt><dd>Banja Luka, Bosnia and Herzegovina</dd></div>
-        </dl>
-      </div>
+      <dl class="col-list">
+        <div><dt>Email</dt><dd><a class="lnk" href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a> <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button></dd></div>
+        <div><dt>GitHub</dt><dd><a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">github.com/pero-grubac</a></dd></div>
+        <div><dt>LinkedIn</dt><dd><a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">linkedin.com/in/perogrubac</a></dd></div>
+        <div><dt>Based in</dt><dd>Banja Luka, Bosnia and Herzegovina</dd></div>
+      </dl>
     </div>
   </section>
 </main>
@@ -935,21 +903,6 @@ window.ProtoConfig = (() => {
     afterOpen(item, panel) { cur = [item, panel]; place(); },
     beforeClose(item, panel) { item.append(panel); document.getElementById("reader-empty").hidden = false; cur = null; },
   };
-})();
-
-// Prototype only: switch between the two contact variants (?contact=colophon)
-(() => {
-  const buttons = [...document.querySelectorAll("[data-variant]")];
-  const panels = [...document.querySelectorAll("[data-variant-panel]")];
-  const set = (v) => {
-    panels.forEach((p) => (p.hidden = p.dataset.variantPanel !== v));
-    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.variant === v)));
-  };
-  set(new URLSearchParams(location.search).get("contact") === "colophon" ? "colophon" : "letter");
-  buttons.forEach((b) => b.addEventListener("click", () => {
-    set(b.dataset.variant);
-    history.replaceState(null, "", "?contact=" + b.dataset.variant + location.hash);
-  }));
 })();</script>
 <script>/* Shared prototype behaviour: filter, search, URL hash, counts, details,
    copy email, on-demand demo video, command palette, keyboard shortcuts.

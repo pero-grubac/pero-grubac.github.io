@@ -142,12 +142,9 @@ for (const dir of ["direction-a", "direction-b", "direction-c"].filter((d) => !o
   ok(clip === "pero.grubac00@gmail.com", "clipboard has email: " + clip);
 
   if (isB) {
-    await page.click('[data-variant="colophon"]');
-    ok((await page.isVisible('[data-variant-panel="colophon"]')) && !(await page.isVisible('[data-variant-panel="letter"]')) && (await page.evaluate(() => location.search)) === "?contact=colophon", "contact variant switch");
+    ok((await page.locator("#contact [data-copy]").count()) === 1 && (await page.locator("[data-variant], .proto-switch").count()) === 0, "one contact section (colophon), no prototype switch");
     await page.locator("#contact").scrollIntoViewIfNeeded();
-    await shot(page, `${dir}-1440-contact-colophon`);
-    await page.click('[data-variant="letter"]');
-    await shot(page, `${dir}-1440-contact-letter`);
+    await shot(page, `${dir}-1440-contact`);
   }
 
   // stack term
@@ -161,29 +158,22 @@ for (const dir of ["direction-a", "direction-b", "direction-c"].filter((d) => !o
     await page.keyboard.press("t");
   }
 
-  // mobile, and for B both contact variants
+  // mobile
   const m = await browser.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   const mp = await m.newPage();
   mp.on("pageerror", (e) => errors.push("mobile " + String(e)));
-  for (const query of isB ? ["", "?contact=colophon"] : [""]) {
-    await mp.goto(base + dir + "/" + query, { waitUntil: "networkidle" });
-    const iw = await mp.evaluate(() => innerWidth);
-    const mo = await mp.evaluate(() => document.documentElement.scrollWidth - 360);
-    ok(iw === 360 && mo <= 0, `no horizontal scroll at 360${query} (layout ${iw}px, overflow ${mo})`);
-    if (query) {
-      await mp.locator("#contact").scrollIntoViewIfNeeded();
-      await shot(mp, `${dir}-360-contact-colophon`);
-    }
-  }
+  await mp.goto(base + dir + "/", { waitUntil: "networkidle" });
+  const iw = await mp.evaluate(() => innerWidth);
+  const mo = await mp.evaluate(() => document.documentElement.scrollWidth - 360);
+  ok(iw === 360 && mo <= 0, `no horizontal scroll at 360 (layout ${iw}px, overflow ${mo})`);
   await shot(mp, `${dir}-360-top`);
+  if (isB) {
+    await mp.locator("#contact").scrollIntoViewIfNeeded();
+    await shot(mp, `${dir}-360-contact`);
+  }
   await mp.tap(opener);
   await mp.waitForTimeout(300);
   await shot(mp, `${dir}-360-detail`);
-  if (isB) {
-    await mp.goto(base + dir + "/", { waitUntil: "networkidle" });
-    await mp.locator("#contact").scrollIntoViewIfNeeded();
-    await shot(mp, `${dir}-360-contact-letter`);
-  }
   await m.close();
 
   ok(errors.length === 0, "no console/page/network errors" + (errors.length ? ": " + errors.slice(0, 6).join(" ; ") : ""));
