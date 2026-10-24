@@ -13,7 +13,7 @@
 
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-pero--grubac.github.io-4C8AF5?style=for-the-badge)](https://pero-grubac.github.io)
 
-<img src="readme_assets/home.webp" alt="The home page: the name Pero Grubač in a large serif, the line Backend developer in Banja Luka. I build services that talk to each other over queues, sockets and REST, links to the systems, GitHub and LinkedIn, and an In this portfolio list of the four systems, the index of projects and the browser apps" width="800">
+<img src="readme_assets/demo.gif" alt="Portfolio demo: the home page, the Incident Alert demo video playing on hover, searching the index for react and filtering to live apps, opening DevKit in the reader pane, the Ctrl+K command palette opening the Chat Room case study with its architecture diagram, and finding the score tables among the browser apps" width="800">
 
 </div>
 
