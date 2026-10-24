@@ -242,10 +242,12 @@ Notes:
 
 ## 6. Design system
 
-**To be filled in after phase 0.** Once the owner picks a direction, write
-the decisions here (color tokens for each theme, typefaces and type scale,
-spacing scale, radius, motion rules, and 3–5 principles that make the
-direction what it is). Get the owner's OK on this section before phase 1.
+**Direction: B, "Journal"** (picked by the owner on 2026-10-24).
+**Status: draft, waiting for the owner's OK and his choice of contact
+variant (6.7).** Phase 1 starts only after that. The prototype
+`design-explorations/direction-b/` is the visual reference; where the two
+disagree, this section wins. The decisions are in 6.1–6.9, after the
+exploration brief.
 
 ### 6.0 Design exploration brief (phase 0)
 
@@ -305,6 +307,180 @@ When done: list the three directions in two sentences each, tell the owner
 how to open them (`npx serve design-explorations` or similar), and **stop**.
 The owner may pick one, or combine parts ("layout from A, colors from C").
 Then fill in section 6 and wait for approval.
+
+### 6.1 Principles
+
+1. **Set like a printed page.** Paper, ink, rules and type carry the
+   design: no cards with shadows, no gradients, no icons where a word
+   works. Lines are the structure: a double rule opens a section,
+   hairlines separate, dotted leaders join a name to its kind.
+2. **Serif speaks, sans labels.** Everything a visitor reads (names,
+   headings, prose, project titles) is Newsreader. Instrument Sans is only
+   for small labels, navigation, buttons, captions and metadata.
+3. **Backend first, then the index.** Systems are magazine features
+   (headline, dek, architecture line, text, full-width figure).
+   Everything else is a one-line index entry that opens on demand.
+4. **One accent, used for meaning.** Oxblood marks what you can act on or
+   what is selected (links in lists, the open entry, flow arrows,
+   "Available"), never decoration.
+5. **Nothing moves on its own.** Motion only follows a user action
+   (opening an entry, playing a video, a toast).
+
+### 6.2 Colour
+
+One light theme: `color-scheme: light`, a single `theme-color`
+`#f4f0e6`, no theme toggle. So navigation has no toggle, the palette has
+no "Toggle theme" entry, and the footer has no `t` hint (sections 4, 7.7
+and 8.3 apply "if there is a toggle").
+
+| token | value | use | contrast on paper |
+|---|---|---|---|
+| `--paper` | `#f4f0e6` | page background (with grain) | — |
+| `--paper-deep` | `#ebe5d6` | media placeholders, hover fill, selected palette row | — |
+| `--card` | `#faf7f0` | reader pane, palette, system entries in the index, Copy button | — |
+| `--ink` | `#1c1a16` | text, headings, double rules, pressed filter | 15.3 : 1 |
+| `--ink-soft` | `#3d3a33` | standfirst, deks, summaries, secondary text | 10.0 : 1 |
+| `--muted` | `#6a6457` | labels, captions, kinds, footer | 5.2 : 1 (4.7 on `--paper-deep`, the lowest allowed) |
+| `--accent` | `#a4321f` | links in lists, selected entry, flow arrows, status | 6.0 : 1 |
+| `--rule` | `#cdc4b0` | hairlines, borders (never text) | — |
+| `--rule-soft` | `#ddd5c3` | row separators (never text) | — |
+
+Text on `--ink` or `--accent` fills is `--paper` (15.3 : 1 and 6.0 : 1).
+Grain: an inline SVG `feTurbulence` noise as a data URI (~9% alpha,
+240px tile) on `body`, under everything, so the page keeps texture below
+the hero. It must never lower text contrast.
+
+### 6.3 Typography
+
+- **Newsreader Variable** (`@fontsource-variable/newsreader`, `opsz.css`
+  and `opsz-italic.css`: optical size 6–72 and weight axes). Family
+  name in CSS: `"Newsreader Variable"`.
+- **Instrument Sans Variable** (`@fontsource-variable/instrument-sans`,
+  weight 400–700). Family name: `"Instrument Sans Variable"`.
+- Subsets: latin + latin-ext only. Preload only the Newsreader roman
+  latin file (h1 and body text). `font-display: swap`.
+- Stacks: `--serif: "Newsreader Variable", Georgia, "Times New Roman",
+  serif`; `--sans: "Instrument Sans Variable", "Segoe UI", system-ui,
+  sans-serif`. No web mono font: the Discord command block uses
+  `ui-monospace, Consolas, monospace`.
+
+| role | font | size | line height | weight / style |
+|---|---|---|---|---|
+| Display (h1) | serif, opsz 72 | `clamp(3.4rem, 12vw, 9.4rem)` | 0.92 | 400, tracking −0.03em |
+| Section (h2) | serif, opsz 72 | `clamp(2.2rem, 5vw, 3.6rem)` | 1.0 | 400, −0.02em |
+| Feature title (h3, systems) | serif, opsz 60 | `clamp(2rem, 4vw, 2.9rem)` | 1.02 | 500, −0.015em |
+| Standfirst (hero) | serif | `clamp(1.3rem, 2.6vw, 1.85rem)` | 1.35 | 300 italic |
+| Dek / section intro | serif | 1.2–1.25rem | 1.4 | 400 italic |
+| Index entry title (h3) | serif | 1.3rem | 1.25 | 500 |
+| Body | serif | 1.125rem (18px) | 1.6 | 400, max 65ch |
+| Small prose (summaries, highlights) | serif | 1rem | 1.6 | 400 |
+| Label, nav, button | sans | 0.85–0.95rem | 1.4 | 500–600 |
+| Caption, meta | sans | 0.8rem | 1.5 | 400–500 |
+
+Counts in filters use old-style figures (`font-variant-numeric:
+oldstyle-nums`).
+
+### 6.4 Space, layout, radius, lines
+
+- Spacing scale: `--s-1` 4px, `--s-2` 8, `--s-3` 12, `--s-4` 16,
+  `--s-5` 24, `--s-6` 32, `--s-7` 48, `--s-8` 64, `--s-9` 96.
+- Page: max width 1280px, side gutter `clamp(16px, 4vw, 48px)`, section
+  padding `clamp(48px, 8vw, 96px)` top and bottom.
+- Grid (12 columns): hero 8/4, about 8/4, system features 5/7 with a
+  full-width figure, index 7/5 (list / reader), apps teaser 4/8,
+  colophon 5/7.
+- Breakpoints: 720px (masthead links wrap to a second row), 760 (about
+  text in two columns), 900 (features split), 980 (reader pane appears),
+  1000 (hero and about split).
+- Radius: 0 for images, panels, reader and palette; 3px for `kbd` and
+  filter buttons; 999px only for pill buttons (Search, Copy, Play demo).
+- Lines: `3px double var(--ink)` opens a section; 1px `--rule`
+  hairlines; 1px `--rule-soft` row separators; 1px dotted `--muted`
+  leaders. The only shadow is the palette's print offset
+  `8px 8px 0 var(--rule)`.
+- Images: system figures 16:9 (`object-fit: cover`, top aligned),
+  portrait 4:5 (`sepia(.12)`), apps teaser 4:3, reader thumbnails at
+  their own ratio with a 1px `--rule` border. Videos follow the video
+  rule (section 2): no frame.
+- Icons: no icon library. Arrows are text glyphs: ↗ external, → onward,
+  ↑ to a section above, ▶ play. This replaces `astro-icon`/Tabler from
+  section 3.
+
+### 6.5 Motion
+
+- Nothing animates on scroll or on load, and nothing autoplays.
+- Allowed: the video fades in (0.25s) when the user plays it; the toast
+  fades and slides (0.2s); in-page links scroll smoothly.
+- `prefers-reduced-motion`: no transitions or animations, instant
+  scrolling, and hovering does not start a video (click or tap still
+  does).
+
+### 6.6 Components
+
+- **Masthead**: sticky, paper at 94% with a light blur, 1px bottom rule.
+  Italic serif wordmark, sans section links, a "Search ⌘K" pill that
+  opens the command palette.
+- **Hero**: sans dateline (place and languages) → h1 → italic standfirst
+  → byline links ("Available for freelance projects" in accent with a
+  dot, systems, GitHub, LinkedIn). Right column: "In this portfolio", a
+  contents list with dotted leaders and computed counts.
+- **About**: text in two columns with a column rule, no drop cap; 4:5
+  portrait with a caption. Stack as three label/value rows of underlined
+  serif terms; terms no project matches are plain text (7.2).
+- **System feature**: h3, italic dek, "Architecture" flow line (arrows
+  in accent) | description, "Built with …" line, links ("Read the case
+  study →" in accent, then Source links); full-width figure underneath
+  with a "▶ Play demo" pill.
+- **Index**: "Find in the index" input with a 2px ink underline; "Show"
+  filter buttons (pressed = ink fill); entries `title …… kind [Open ↗]`
+  with the summary below. While searching, matching systems sit on top
+  on `--card` with an ↑. The open entry gets a 3px accent bar; its
+  details show in the sticky reader pane from 980px, inline below that.
+- **Apps teaser**: double rules above and below, a large light numeral
+  (computed count), three captioned screenshots, "Browse the apps →".
+- **Footer**: a colophon line, "© {year} Pero Grubač. Set in Newsreader
+  and Instrument Sans.", plus `/` and `⌘K` hints.
+- **Palette**: `--card` panel, italic serif input over a 2px ink rule,
+  selected row on `--paper-deep` with the label in accent.
+- **Toast**: ink pill with paper text, bottom centre.
+- **Focus**: 2px solid accent outline with 3px offset; list rows show it
+  around the whole row.
+
+### 6.7 Contact (owner to pick one)
+
+Both are quiet: the email is a normal-size link with a small "Copy" pill
+next to it, plus GitHub and LinkedIn. Compare them in the prototype with
+the dashed "Prototype only" switch, or `?contact=colophon`.
+
+1. **Letter**: the usual section heading, then a short letter in body
+   size: italic lead line, "Write to me at {email} [Copy]", "or find me
+   on GitHub and LinkedIn.", signed "— Pero Grubač" in italic.
+2. **Colophon**: no double rule; between two ink hairlines, the heading
+   and lead line on the left and a label/value list on the right (Email
+   [Copy], GitHub, LinkedIn, Based in), like a magazine colophon.
+
+### 6.8 Other pages
+
+- **/apps/**: same masthead and footer; h1 "Browser apps" and an italic
+  intro; a grid of figures (4:3 screenshot, serif title, summary, "Built
+  with …", "Open" and "Source" or "Private repo"); the same "Find"
+  search on top.
+- **Case study**: an article: sans breadcrumb, h1 title, italic dek
+  (summary), "Architecture" flow line with `TODO(owner)` for a diagram,
+  full-width figure, body at 65ch, then "Previous system / Next system".
+- **404**: display serif "This page doesn't exist.", one italic line,
+  links to Home and Browser apps.
+- **OG images** (1200×630): flat paper background, name in small sans at
+  the top, the title in Newsreader display, the flow line or summary in
+  italic below, a double rule.
+- **Favicon**: an italic Newsreader "pg" in ink on paper.
+
+### 6.9 Budget and tooling
+
+Plain CSS with custom properties (no Tailwind) and small vanilla scripts
+(no framework island). The prototype's page script (search, filters,
+hash, details, palette, copy, video) is about 4.5 kB gzipped, well under
+the 15 kB budget.
 
 ---
 
