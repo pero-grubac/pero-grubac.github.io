@@ -87,39 +87,38 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 
 ## 📁 Project Structure
 
+> **Redesign in progress on the `redesign` branch** (see `REDESIGN.md`).
+> The site is being rebuilt with Astro. Project Structure, Installation,
+> Usage, Tests and CI/CD describe the new setup; the rest of this README
+> still describes the live site and is rewritten at launch.
+
 ```
 pero-grubac.github.io/
-├── index.html                 The whole page
-├── css/styles.css             Tokens, light/dark theme, layout, components
-├── js/scripts.js              Search, filters, command menu, keyboard, theme, videos
-├── assets/
-│   ├── avatar.jpeg, favicon.ico, apple-touch-icon.png
-│   ├── og-card.png            Link-preview image
-│   ├── live/                  Live app screenshots (800×500 WebP)
-│   ├── incident_alert/ …      Featured systems: demo.mp4 + poster
-│   └── fitforge/, snake/ …    Mobile, desktop and tool previews (16:10 WebP)
-├── tests/
-│   ├── site.test.js           Links, assets, anchors, unique ids, thumbnails, meta tags
-│   └── e2e/                   Playwright smoke tests and a tiny static server
-├── readme_assets/demo.gif
-├── playwright.config.js
-├── lighthouserc.json
-├── package.json               Test scripts only; the site has no dependencies
+├── src/
+│   ├── pages/                 Routes (index.astro so far)
+│   ├── layouts/Base.astro     Head, fonts, masthead, main, footer
+│   ├── components/            Masthead, Footer, FontFaces
+│   └── styles/                tokens.css (design tokens), global.css
+├── public/assets/             Images, videos, og-card.png, served at /assets/
+├── astro.config.mjs           Static output, trailingSlash "always"
+├── design-explorations/       Phase 0 prototypes (direction B is the reference)
+├── legacy/                    The old hand-written site, until launch
+├── REDESIGN.md                The redesign spec
 └── .github/workflows/
-    ├── ci.yml                 Static checks, e2e, Lighthouse on pull requests and branches
-    └── deploy.yml             Checks, then deploy to GitHub Pages
+    ├── ci.yml                 astro check + build on every push and pull request
+    └── deploy.yml             After CI passes on main: withastro/action → GitHub Pages
 ```
 
 ---
 
 ## 📦 Installation
 
-You need [Git](https://git-scm.com/) and, for the tests only, [Node.js](https://nodejs.org/) 20 or newer.
+You need [Git](https://git-scm.com/) and [Node.js](https://nodejs.org/) 22.12 or newer.
 
 ```bash
 git clone https://github.com/pero-grubac/pero-grubac.github.io.git
 cd pero-grubac.github.io
-npm install        # test tools only
+npm install
 ```
 
 ---
@@ -127,19 +126,17 @@ npm install        # test tools only
 ## ▶️ Usage
 
 ```bash
-npm start          # http://localhost:8080
+npm run dev        # http://localhost:4321, reloads on change
+npm run check      # TypeScript and Astro diagnostics
+npm run build      # static site in dist/
+npm run preview    # serves dist/
 ```
-
-Any static server works too (`python -m http.server`, VS Code Live Server).
 
 ### Tests
 
-```bash
-npm test           # static checks
-npm run test:e2e   # browser smoke tests (desktop + phone)
-```
-
-The static checks fail if any local file the page points to is missing, an in-page `#anchor` has no target, an id is duplicated, a live app has no thumbnail, or a `target="_blank"` link lacks `rel="noopener"`. The e2e tests load the page, search, filter, open a deep link, use the command menu, switch the theme and make sure nothing is wider than a phone screen; any JavaScript error fails them.
+Browser tests and Lighthouse checks for the new site come in phase 5 of
+`REDESIGN.md`. The old site's tests are kept in `legacy/tests/` and no
+longer run.
 
 ---
 
@@ -180,12 +177,12 @@ sequenceDiagram
 
 | Workflow | Runs on | What it does |
 |----------|---------|--------------|
-| `ci.yml` | Every push (including `main`) and pull request | Static checks, Playwright e2e (desktop + phone), Lighthouse report |
-| `deploy.yml` | After **CI passes on `main`**, or a manual run | Publishes the site's files to GitHub Pages; the tests already ran in CI |
+| `ci.yml` | Every push (including `main`) and pull request | `npm ci`, `astro check`, `astro build` |
+| `deploy.yml` | After **CI passes on `main`**, or a manual run | `withastro/action` builds `dist/` and uploads it; `actions/deploy-pages` publishes it |
 
-Deploy is chained to CI (`workflow_run`): a push to `main` is tested once, and only a green run is published, from exactly the commit that was tested. Documentation-only commits start neither.
+Deploy is chained to CI (`workflow_run`): a push to `main` is tested once, and only a green run is published, from exactly the commit that was tested. Documentation-only commits start neither. Nothing deploys from other branches, so the redesign goes live only when `redesign` is merged into `main`.
 
-CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the site's files are deployed (`index.html`, `css/`, `js/`, `assets/`). Lighthouse scores are warnings, so a low score is visible in the report without blocking a change.
+CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the build output (`dist/`) is deployed; `legacy/` and `design-explorations/` never are.
 
 **One-time setup:** **Settings → Pages → Build and deployment → Source** → **GitHub Actions**. Until then GitHub keeps publishing `main` directly and the checks don't gate the deploy.
 

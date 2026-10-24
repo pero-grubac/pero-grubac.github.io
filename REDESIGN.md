@@ -75,7 +75,10 @@ the long run of small browser apps, games and side projects.
 ## 3. Tech stack
 
 - **Astro** (current stable; check with `npm view astro version`), static
-  output, TypeScript strict.
+  output, TypeScript strict. Pinned to **7.3.8** on 2026-10-24 (owner's
+  call): 7.4 needs Node ≥ 22.23.4 and the owner's machine runs 22.18.0.
+  Move to the latest 7.x once Node is updated. TypeScript stays on 6.x
+  until `@astrojs/check` supports 7.
 - **Content collections** with a Zod schema for projects (section 5).
   One Markdown file per project in `src/content/projects/`.
 - Styling: plain CSS with custom properties by default. If the chosen
@@ -219,6 +222,12 @@ existed.
 
 All repos and APK links are under `https://github.com/pero-grubac/`.
 Verify every link returns 200 before finishing phase 2.
+
+Since phase 1 the files live in `public/assets/`, served unchanged at
+`/assets/...`. Astro's `<Image>` only optimizes images imported from
+`src/`, so phase 2 decides how project images reach `<Image>` (10.6)
+while `/assets/og-card.png`, `/assets/avatar.jpeg` and the videos keep
+their URLs.
 
 Notes:
 
@@ -808,8 +817,15 @@ at the top). **Stop after every phase and wait for the owner.**
   with an OG preview tool or by opening the image URLs).
 
 **Phase 6: Launch**
-- Give the owner step-by-step instructions to switch the Pages source to
-  GitHub Actions in the repo settings (he does it and pushes himself).
+- `deploy.yml` on `redesign` is already the Astro deploy (phase 1), and it
+  only runs from `main`. So launching means merging `redesign` into
+  `main`. Before that, have the owner check **Settings → Pages → Build and
+  deployment → Source**: it must be "GitHub Actions". The old
+  `deploy.yml` used `actions/deploy-pages`, so it most likely is, but the
+  old README called the switch a one-time step. If it is still "Deploy from
+  a branch", a merge would publish the repo root, which has no
+  `index.html` any more. Give him step-by-step instructions to switch it
+  if needed, then to merge and push (he does both himself).
 - After he deploys, verify the live site, that every app subpath listed in
   section 2 (`/arcane-keep/` etc.) still loads, and that the RepoHealth
   link still opens.
