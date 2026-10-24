@@ -49,6 +49,26 @@ export function countOf(n: number, kind: Kind): string {
   return `${n} ${n === 1 ? one : many}`;
 }
 
+/** "Live app", "System": the kind as a label */
+export function kindLabel(kind: Kind): string {
+  const [one] = KIND_NOUNS[kind];
+  return one[0]!.toUpperCase() + one.slice(1);
+}
+
+/** Where a case study's breadcrumb leads back to (8.2): the systems, the apps gallery, or the index filtered to its kind */
+export function parentOf(p: Project): { href: string; label: string } {
+  if (p.kind === "system") return { href: "/#systems", label: "Systems" };
+  if (p.kind === "live") return { href: "/apps/", label: "Browser apps" };
+  return { href: `/#projects?kind=${p.kind}`, label: "Projects" };
+}
+
+/** Stack entries that are programming languages, for structured data (10.3) */
+const LANGUAGES = new Set(["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart", "Kotlin", "GDScript"]);
+
+export function languagesOf(p: Project): string[] {
+  return p.stack.filter((s) => LANGUAGES.has(s));
+}
+
 /**
  * What the index search matches against: title, summary and stack,
  * lower-cased. Fields are joined with a newline, which a search box can't

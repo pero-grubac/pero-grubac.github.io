@@ -3,8 +3,10 @@ order: 27
 slug: yamb-table
 title: "Yamb Table"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Multiplayer scoresheet for Yamb, Yahtzee and Yatzy."
+metaDescription: "Yamb Table, a multiplayer scoresheet for Yamb, Yahtzee and Yatzy with a retro CRT look, a dice roller with suggestions, and undo even after a reload."
 description: "Multiplayer scoresheet for Yamb, Yahtzee and Yatzy with a retro CRT look. Pass the phone around: each player fills in their own sheet while the others can peek, read-only."
 highlights:
   - "Yamb's four columns with fill-order rules: down, up, free and announce"

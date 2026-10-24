@@ -5,6 +5,7 @@ title: "FitForge"
 kind: mobile
 year: 2026
 summary: "Plan weekly workouts, log sets and watch strength grow over time."
+metaDescription: "FitForge, a Flutter workout tracker for Android: weekly plans from 230+ exercises, automatic progression, a rest timer and charts of your estimated 1RM."
 description: "Plan weekly workouts, log sets as you train, and watch strength grow over time."
 repeatsSummary: true
 highlights:

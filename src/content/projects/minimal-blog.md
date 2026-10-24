@@ -5,6 +5,7 @@ title: "Minimal Blog"
 kind: web
 year: 2024
 summary: "Django blog with drafts, publishing and moderated comments."
+metaDescription: "Minimal Blog, a small Django blog: rich-text posts, drafts, publishing and moderated comments, with 90 tests at 99% coverage on SQLite and PostgreSQL."
 description: "A small Django blog: write posts in a rich-text editor, keep them as drafts, publish, and moderate visitors' comments. 90 tests at 99% coverage, run on both SQLite and PostgreSQL."
 highlights:
   - "A draft is a post without a publish date; comments stay hidden until approved"

@@ -3,8 +3,10 @@ order: 14
 slug: countdown
 title: "Countdown"
 kind: live
+applicationCategory: UtilitiesApplication
 year: 2026
 summary: "Timers to a duration or a date that survive refreshes and sleep."
+metaDescription: "Countdown: as many timers as you like, to a duration or a date. Each keeps an absolute target, so it survives refreshes, sleep and offline periods."
 description: "As many timers as you like, to a duration or a date. Remaining time is never stored or decremented: each timer keeps an absolute target and the display is always target − now, so it survives refreshes, sleep and offline periods."
 highlights:
   - "Repaint loop pauses in hidden tabs and recalculates the moment you return"

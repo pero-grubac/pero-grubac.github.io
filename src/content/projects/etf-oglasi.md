@@ -5,6 +5,7 @@ title: "ETF Oglasi"
 kind: mobile
 year: 2025
 summary: "University announcements and class schedules, offline; my thesis."
+metaDescription: "ETF Oglasi, my graduation thesis: a Flutter app for university announcements and class schedules that works offline, with notifications and home screen widgets."
 description: "University announcements and class schedules with full offline support — my graduation thesis."
 repeatsSummary: true
 highlights:

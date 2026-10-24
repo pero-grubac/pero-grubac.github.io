@@ -28,11 +28,18 @@ jobs:
         with:
           # The commit CI just tested (workflow_run), otherwise the current one.
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # The whole history: the sitemap's lastmod is each page's last commit
+          fetch-depth: 0
       # Installs dependencies, runs `npm run build` and uploads dist/ as the
       # Pages artifact.
       - uses: withastro/action@v6
         with:
           node-version: 22
+        env:
+          # Optional: the content of Google Search Console's verification
+          # meta tag, as a repository variable (Settings → Secrets and
+          # variables → Actions → Variables). Unset, no tag is rendered.
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
 
   deploy:
     needs: build

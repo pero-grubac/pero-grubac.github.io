@@ -21,10 +21,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Three jobs side by side, each building the site itself: the type check and
+# build, the browser tests, and Lighthouse. The old site's tests are in
+# legacy/ and no longer run.
 jobs:
-  # Type-check and build the Astro site. Lighthouse and browser tests for the
-  # new site come back in phase 5 (REDESIGN.md); the old site's tests are in
-  # legacy/ and no longer run.
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -37,3 +37,47 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+
+  # Playwright: the pages at 360 and 1440 px, keyboard only, reduced motion,
+  # the command palette, axe, and the SEO output of the build.
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm test
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
+
+  # Lighthouse on mobile for home, /apps/ and a case study: performance at
+  # least 95, accessibility, best practices and SEO 100 (REDESIGN.md
+  # section 2). Settings in lighthouserc.json.
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lighthouse
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 7

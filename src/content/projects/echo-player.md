@@ -5,6 +5,7 @@ title: "Echo Player"
 kind: desktop
 year: 2023
 summary: "Adds a feedback echo to WAV recordings, with a live preview."
+metaDescription: "Echo Player, a C# desktop app that adds a feedback echo to WAV recordings, with a live preview, every repeat drawn in the waveform, and batch processing."
 description: "Adds a feedback echo to WAV recordings, with a live preview while you shape it and every repeat drawn in the waveform. Preview and output share one NAudio provider, so what you hear is exactly what gets saved."
 highlights:
   - "Delay 20–2000 ms, feedback 0–90%, mix; 5 presets from Slapback to Canyon"

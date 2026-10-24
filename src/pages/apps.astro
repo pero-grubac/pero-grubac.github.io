@@ -10,20 +10,26 @@ import NoMatch from "../components/NoMatch.astro";
 import BuiltWith from "../components/BuiltWith.astro";
 import ProjectLinks from "../components/ProjectLinks.astro";
 import { getProjects, haystack, listOf } from "../lib/projects";
+import { appsJsonLd } from "../lib/seo";
 
 const apps = (await getProjects()).filter((p) => p.kind === "live");
 const named = apps.slice(0, 3).map((p) => p.title);
 const description = `Browser apps by Pero Grubač that you can open right now: ${listOf([...named, `${apps.length - named.length} more`])}, from developer tools to games and score tables.`;
+const intro = `${apps.length} apps that run in your browser: developer tools, games, score tables and a few small utilities.`;
 ---
 
-<Base title={`${apps.length} browser apps you can open right now | Pero Grubač`} description={description} findHint="find an app">
+<Base
+  title="Apps | Pero Grubač"
+  description={description}
+  image="/apps/og.png"
+  imageAlt={`Browser apps by Pero Grubač. ${intro}`}
+  jsonLd={appsJsonLd(apps)}
+  findHint="find an app"
+>
   <section class="wrap page" aria-labelledby="apps-h">
     <div class="head">
       <h1 id="apps-h" class="page-title">Browser apps</h1>
-      <p class="intro">
-        {apps.length} apps that run in your browser: developer tools, games, score tables and a few small utilities. Each
-        one opens in a new tab.
-      </p>
+      <p class="intro">{intro} Each one opens in a new tab.</p>
     </div>
 
     <div class="find" role="search">

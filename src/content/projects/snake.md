@@ -5,6 +5,7 @@ title: "Snake (Blavor)"
 kind: desktop
 year: 2023
 summary: "Classic Snake for Windows with a second player and a demo bot."
+metaDescription: "Snake (Blavor), classic Snake for the Windows desktop in C# and WPF, with a second player, wrap-around walls and a demo bot that avoids trapping itself."
 description: "Classic Snake for the Windows desktop with a second player, wrap-around walls, rising speed and remappable keys. In demo mode a bot takes the shortest path to the mouse unless that would trap it."
 highlights:
   - "Rules live in a UI-free core library; WPF only draws, keeps time and handles input"

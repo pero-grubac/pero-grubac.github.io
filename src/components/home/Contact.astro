@@ -131,20 +131,13 @@ import { site } from "../../lib/site";
 </style>
 
 <script>
-  import { toast } from "../../scripts/toast";
+  import { copyEmail } from "../../scripts/clipboard";
 
   for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
     const label = button.querySelector("[data-copy-label]")!;
     let timer: number | undefined;
     button.addEventListener("click", async () => {
-      const email = button.dataset.copy!;
-      try {
-        await navigator.clipboard.writeText(email);
-      } catch {
-        toast(`Couldn't copy. The address is ${email}`);
-        return;
-      }
-      toast("Email copied");
+      if (!(await copyEmail(button.dataset.copy!))) return;
       label.textContent = "Copied";
       button.dataset.copied = "";
       clearTimeout(timer);

@@ -5,6 +5,7 @@ title: "Secure Repository"
 kind: tool
 year: 2023
 summary: "A document vault on a private OpenSSL certificate authority."
+metaDescription: "Secure Repository: a document vault on a private OpenSSL CA. Every document gets its own key and is split into parts, each encrypted and signed on its own."
 description: "A document vault on a private OpenSSL certificate authority. Every document gets its own key, is signed, split into parts, and each part is encrypted and signed on its own, so a tampered part is named before anything is decrypted."
 highlights:
   - "Private CA (4096-bit RSA); X.509 user certificates valid 180 days, revoked through a CRL"

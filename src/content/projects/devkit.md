@@ -3,8 +3,10 @@ order: 11
 slug: devkit
 title: "DevKit"
 kind: live
+applicationCategory: DeveloperApplication
 year: 2026
 summary: "30 developer tools in one tab; everything runs in the browser."
+metaDescription: "DevKit: 30 developer tools in one browser tab, from a JSON formatter and JWT signing to regex, diff and cron. An installable offline PWA built with React."
 description: "30 developer tools in 7 groups, in one tab. No backend, no tracking, no ads — everything runs in the browser and responds as you type."
 highlights:
   - "Data: JSON, YAML, Base64, JWT decode & sign, hashes, Protobuf generator"

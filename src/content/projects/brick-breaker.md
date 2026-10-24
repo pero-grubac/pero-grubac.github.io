@@ -3,8 +3,10 @@ order: 16
 slug: brick-breaker
 title: "Brick Breaker"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Retro arcade game with 100 levels, 30 power-ups and a level editor."
+metaDescription: "Brick Breaker, a retro arcade game in Godot: 100 levels, 30 power-ups and a level editor, with hand-rolled ball physics. Builds for web, Windows and Android."
 description: "Retro arcade game in the style of DX-Ball 2 and Arkanoid, with 100 levels, 30 power-ups and a built-in level editor. A bot has played every built-in level to the end to prove it can be cleared."
 highlights:
   - "Hand-rolled ball physics with substeps, so the ball never tunnels through bricks"

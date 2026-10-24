@@ -5,6 +5,7 @@ title: "GitHub Discord Bot"
 kind: tool
 year: 2026
 summary: "Manage GitHub issues and get activity reports from Discord."
+metaDescription: "GitHub Discord Bot, a Python bot that bridges GitHub and Discord for solo work: manage issues, track activity and get reports without leaving the chat."
 description: "A bot that bridges GitHub and Discord for solo work: manage issues, track activity and get reports without leaving chat."
 highlights:
   - "Open issues with /add or a form, close them with one click; labels detected from the title"

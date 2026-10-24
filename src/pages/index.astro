@@ -9,6 +9,7 @@ import ProjectIndex from "../components/home/ProjectIndex.astro";
 import AppsTeaser from "../components/home/AppsTeaser.astro";
 import Contact from "../components/home/Contact.astro";
 import { getProjects } from "../lib/projects";
+import { homeJsonLd } from "../lib/seo";
 
 const projects = await getProjects();
 const systems = projects.filter((p) => p.featured);
@@ -19,6 +20,7 @@ const apps = projects.filter((p) => p.kind === "live");
 <Base
   title="Pero Grubač | Backend Developer"
   description="Pero Grubač — backend developer building distributed systems, REST APIs and microservices with Java, C# and Python. Spring Boot, ASP.NET and FastAPI project portfolio."
+  jsonLd={homeJsonLd(systems)}
 >
   <div class="wrap home">
     <Hero systems={systems} indexCount={others.length} liveCount={apps.length} />

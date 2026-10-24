@@ -5,6 +5,7 @@ title: "ANOVA"
 kind: desktop
 year: 2023
 summary: "One-factor analysis of variance that updates as you type."
+metaDescription: "ANOVA, a C# desktop app for one-factor analysis of variance: the F-test, the effects and a contrast between any two alternatives update as you type."
 description: "One-factor analysis of variance on the desktop. The F-test, the effects and a contrast between any two alternatives update as you type, with critical values from exact inverse CDFs."
 highlights:
   - "2–12 alternatives × 2–200 measurements; paste from Excel or open a CSV"

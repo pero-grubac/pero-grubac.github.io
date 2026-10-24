@@ -75,7 +75,9 @@ the long run of small browser apps, games and side projects.
   load. No window frame or other chrome around videos.
 - Keep the email, GitHub and LinkedIn links exactly as they are now.
 - Lighthouse targets on the home page (mobile): Performance ≥ 95,
-  Accessibility 100, Best Practices 100, SEO 100.
+  Accessibility 100, Best Practices 100, SEO 100. Since phase 5 CI
+  checks them on home, `/apps/` and a case study (`lighthouserc.json`,
+  the median of three runs).
 - Keep shipped JS on the home page small (target under 15 kB gzipped,
   unless the chosen direction needs more and the owner agrees).
 
@@ -135,6 +137,8 @@ kind:        'system' | 'live' | 'web' | 'mobile' | 'desktop' | 'tool'
 title:       string
 slug:        string                 // kebab-case, unique
 summary:     string                 // one sentence, max ~70 chars
+metaDescription?: string            // the case study's meta description (10.1),
+                                    // 140–160 chars; required with caseStudy
 description?: string                // one paragraph (the current site's text);
                                     // required for systems, shown in the
                                     // expanded view for everything else
@@ -161,6 +165,8 @@ video?:      string                 // public URL, e.g. /assets/chatroom/demo.mp
                                     // (a file in public/assets/), systems
                                     // only; follows the video rule in section 2
 commands?:   { cmd: string; text: string }[]  // slash commands (8.4)
+applicationCategory?: string        // live apps only: schema.org category for
+                                    // /apps/ JSON-LD (10.3), e.g. GameApplication
 featured:    boolean                // true only for kind 'system'
 caseStudy:   boolean                // generates /projects/<slug>/
 order:       number                 // position in the "All" list; every
@@ -186,10 +192,14 @@ on, so **`astro build` fails on an invalid project file**:
 - `image` and `imageAlt` come together, and the image file must exist.
   Without an image, `commands` is required (8.4). A `video` file must
   exist under `public/`.
+- A project with `caseStudy: true` needs a `metaDescription` of 140–160
+  characters; `applicationCategory` is present exactly for `live` (one of
+  Developer, Educational, Entertainment, Game or UtilitiesApplication).
+  Both since phase 5.
 - `flow` and `stack`: no counts next to a technology, each technology
   once (section 11). Repo and APK URLs are under
   `github.com/pero-grubac/`.
-- Across files: every `order` is used once.
+- Across files: every `order` and every `metaDescription` is used once.
 
 `npm run check:links` fetches every `live`, repo and `apk` URL (root-relative
 app paths on `https://pero-grubac.github.io`), follows redirects and fails
@@ -419,6 +429,15 @@ the hero. It must never lower text contrast.
   weight 400–700). Family name: `"Instrument Sans Variable"`.
 - Subsets: latin + latin-ext only. Preload only the Newsreader roman
   latin file (h1 and body text). `font-display: swap`.
+- Since phase 5 the build cuts each file down further
+  (`src/integrations/subset-fonts.mjs`, a Vite plugin; dev serves the
+  originals): only printable ASCII, the Serbian letters, typographic
+  punctuation and every other character found in `src/`, and only the
+  axis ranges the CSS uses: Newsreader weight 300–600 and optical size
+  16–72, Instrument Sans weight 400–600, both still variable. The fonts
+  went from 502 kB to 198 kB, which took the home page's mobile
+  Lighthouse performance from 77 to 95. `tests/build.spec.ts` fails if a
+  subset lacks a glyph that a page shows and the original font has.
 - Stacks: `--serif: "Newsreader Variable", Georgia, "Times New Roman",
   serif`; `--sans: "Instrument Sans Variable", "Segoe UI", system-ui,
   sans-serif`. No web mono font: the Discord command block uses
@@ -576,7 +595,8 @@ value.
 Plain CSS with custom properties (no Tailwind) and small vanilla scripts
 (no framework island). The prototype's page script (search, filters,
 hash, details, palette, copy, video) is about 4.5 kB gzipped, well under
-the 15 kB budget.
+the 15 kB budget. Since phase 5 the site ships 3.2 kB gzipped on the home
+page and 1.7–1.9 kB on the others, the palette included.
 
 ---
 
@@ -723,6 +743,16 @@ Port the existing `Ctrl K` palette:
   its detail view), "Toggle theme", "Copy email".
 - `↑ ↓` to move, `Enter` to run, fuzzy match on title and stack.
 
+Since phase 5 (`components/Palette.astro`, `scripts/palette.ts`), on every
+page: Home, the four home sections and Browser apps; every project by its
+title, opening its case study, or for RepoHealth (no case study) its entry
+in the index (`/#p-repohealth`; any `#p-<slug>` opens that entry); an
+"Open {title}" row per live app that opens it in a new tab; "Copy email".
+No "Toggle theme": Journal has one theme. Rows are links where they can
+be, so a middle click works too. Picking a section of the current page
+leaves the focus there, so Tab goes on from that section; anything else
+gives the focus back to what opened the palette. Typing "pi" finds π.
+
 ### 8.4 Discord bot (no screenshot)
 
 `git-discord-bot` has no image. Wherever an image would appear, render its
@@ -773,7 +803,17 @@ direction's style.
   phase 2 where it didn't).
 - Text contrast meets WCAG AA in every theme.
 - `prefers-reduced-motion` respected everywhere.
-- Keyboard shortcuts don't fire while typing in an input.
+- Keyboard shortcuts don't fire while typing in an input. (`⌘K` / `Ctrl K`
+  is the exception: it types nothing, and it opens the palette from a
+  search field too.)
+
+Since phase 5, `npm test` (Playwright, also in CI) checks this: axe
+(WCAG 2.1 A and AA) on every kind of page at 360 and 1440 px, also with
+an entry open, a search with no match and the palette open; a focus ring
+on every Tab stop; keyboard-only use; reduced motion. axe found one
+issue, now fixed: the masthead's Search pill had an `aria-label` that
+didn't contain its visible text; its name is now "Search", with
+`aria-keyshortcuts`.
 
 ---
 
@@ -786,13 +826,20 @@ Build one reusable `<Seo>` component used by every page. It takes
 ### 10.1 Meta tags (every page)
 
 - `<html lang="en">`, `<meta charset>`, viewport, `theme-color` (one per
-  theme with `media="(prefers-color-scheme: …)"`).
-- `<title>`: 50–60 characters, unique per page, pattern
-  "{Page} | Pero Grubač". Home keeps the current title
+  theme with `media="(prefers-color-scheme: …)"`; Journal has one theme,
+  so a single `theme-color`, 6.2).
+- `<title>`: short, unique per page, the page's own name first, pattern
+  "{Page} | Pero Grubač": "{Project} | Pero Grubač" for a case study,
+  "Apps | Pero Grubač", "Page not found | Pero Grubač". Don't add "case
+  study" or other words to the title. 50–60 characters is a maximum, not
+  a target; the detail goes in the meta description instead (owner's
+  rule, phase 5). Home keeps the current title
   "Pero Grubač | Backend Developer".
 - `<meta name="description">`: 140–160 characters, unique per page,
   written for humans (what the visitor will find), not stuffed with
-  keywords. Home keeps the current description.
+  keywords. Home keeps the current description (167 characters). A case
+  study's is its project file's `metaDescription` (section 5); the
+  schema holds it to 140–160 and the loader to one per project.
 - `<link rel="canonical">` with the absolute URL, trailing slash style
   consistent with Astro's `trailingSlash` setting (pick `always` and use it
   everywhere: internal links, sitemap, canonical).
@@ -804,7 +851,13 @@ Build one reusable `<Seo>` component used by every page. It takes
 - Twitter: `summary_large_image` card with title, description, image,
   image alt.
 - Optional `google-site-verification` meta, read from an env variable;
-  leave a `TODO(owner)` if not set.
+  leave a `TODO(owner)` if not set. Since phase 5: `GOOGLE_SITE_VERIFICATION`,
+  which `deploy.yml` takes from a repository variable of that name;
+  unset, no tag is rendered (`TODO(owner)` in `Seo.astro`).
+- Since phase 5 this is `src/components/Seo.astro`, rendered by
+  `layouts/Base.astro` from the page's props. The 404 (`noindex`) has no
+  canonical URL and no `og:url`, since GitHub Pages serves it at any
+  missing path.
 
 ### 10.2 Social images
 
@@ -814,6 +867,17 @@ Build one reusable `<Seo>` component used by every page. It takes
   current Astro-recommended approach) using the chosen design: project
   title, flow string or summary, name. Fall back to `og-card.png` if
   generation fails.
+- Since phase 5: endpoints `/apps/og.png` and `/projects/<slug>/og.png`
+  (`src/lib/og.ts`), drawn as in 6.8 with the kind ("Live app", "13
+  apps") opposite the name. Satori renders a variable font only at its
+  default instance, which would lose Newsreader's display optical size,
+  so `src/lib/glyphs.ts` sets the text as SVG paths with fontkit from
+  the site's own @fontsource files (opsz 72 for the title, as the h1)
+  and `sharp` turns the SVG into a PNG. The site's fonts have no π or
+  arrows, so it falls back per character, as a browser does, to Noto
+  Serif (Greek) and Noto Sans Math, both build-time only. Long titles
+  shrink to fit two balanced lines. If anything fails, the endpoint
+  serves `og-card.png` and the build logs a warning.
 
 ### 10.3 Structured data (JSON-LD)
 
@@ -829,6 +893,12 @@ Build one reusable `<Seo>` component used by every page. It takes
 - Case studies: `SoftwareSourceCode` (name, description,
   codeRepository, programmingLanguage, author) and `BreadcrumbList`.
 - Validate every page with the Schema.org validator before phase 5 is done.
+- Since phase 5 (`src/lib/seo.ts`): the Person has an `@id` and the other
+  pages refer to it as the author. `applicationCategory` comes from each
+  live app's file (section 5); `programmingLanguage` is the stack's
+  languages; the breadcrumb is the one the page shows. All 32 pages
+  passed validator.schema.org with no errors or warnings on 2026-10-24,
+  and `tests/build.spec.ts` checks the shape of each type.
 
 ### 10.4 Crawling and indexing
 
@@ -840,6 +910,11 @@ Build one reusable `<Seo>` component used by every page. It takes
   them from the build output; if any of it ends up public, add `noindex`.
 - No orphan pages: every case study is linked from the home page, from the
   command palette, and from prev/next links.
+- Since phase 5: `lastmod` is the date of the last commit to the page's
+  project file or diagram; home and `/apps/` take the newest commit
+  under `src/`. `deploy.yml` checks out the whole history for this. The
+  sitemap holds only pages (the image and manifest endpoints are left
+  out). `public/robots.txt` names `sitemap-index.xml`.
 
 ### 10.5 Content and markup
 
@@ -873,6 +948,11 @@ Build one reusable `<Seo>` component used by every page. It takes
 - `favicon.svg`, `favicon.ico` (32×32), `apple-touch-icon.png` (180×180),
   `site.webmanifest` with name, short_name, theme and background color.
 - Generate them from a simple monogram in the chosen design if none exist.
+- Since phase 5: the italic "pg" of 6.8, made at build time by endpoints
+  at the site root (`src/lib/icons.ts`, with the OG images' typesetter;
+  Newsreader's text cut, opsz 18, so it holds up at 16 px). The old
+  site's `/assets/favicon.ico` and `/assets/apple-touch-icon.png` stay
+  (section 2) but no page links them any more.
 
 ### 10.8 After launch (tell the owner, don't do it yourself)
 
@@ -942,6 +1022,9 @@ at the top). **Stop after every phase and wait for the owner.**
   one case study; every page has a unique title and description; JSON-LD
   validates; sitemap and robots.txt are correct; OG images render (check
   with an OG preview tool or by opening the image URLs).
+- Also (README, phase 3 and 4 notes): the phase 3 and 4 check scripts
+  became Playwright tests (`npm test`: `tests/*.spec.ts`), and CI runs
+  them and Lighthouse beside the build.
 
 **Phase 6: Launch**
 - `deploy.yml` on `redesign` is already the Astro deploy (phase 1), and it

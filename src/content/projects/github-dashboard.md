@@ -3,8 +3,10 @@ order: 26
 slug: github-dashboard
 title: "GitHub Dashboard"
 kind: live
+applicationCategory: DeveloperApplication
 year: 2026
 summary: "Terminal-style analytics for any GitHub user, with no backend."
+metaDescription: "GitHub Dashboard: terminal-style analytics for any GitHub user, with no backend and no token in the browser: profile, top languages, repos by year, a heatmap."
 description: "Terminal-style analytics for any GitHub user, with no backend and no token in the browser. The default profile ships as a JSON snapshot built at deploy time; any other username loads live."
 highlights:
   - "Profile, top languages, repositories by year and a GitHub-style contribution heatmap"

@@ -12,14 +12,8 @@ interface Props {
   projects: Project[];
 }
 
-const STACK = {
-  Languages: ["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart"],
-  Frameworks: ["Spring Boot", "ASP.NET", "FastAPI", "Flutter", "React", "Angular", "Django", "WPF", "SvelteKit", "Godot"],
-  Infrastructure: ["Docker", "RabbitMQ", "PostgreSQL", "MySQL", "Redis", "Nginx", "Canvas", "PWA", "GCP", "Vite", "OpenSSL", "Testcontainers", "Playwright"],
-};
-
 const { projects } = Astro.props;
-const groups = Object.entries(STACK).map(([group, terms]) => ({
+const groups = Object.entries(site.stack).map(([group, terms]) => ({
   group,
   terms: terms.map((term) => ({ term, found: projects.some((p) => builtWith(p, term)) })),
 }));

@@ -1,0 +1,195 @@
+---
+// The command palette (REDESIGN.md 6.6, 8.3), on every page: ⌘K / Ctrl K
+// or the masthead's Search pill opens it. It lists the sections and
+// pages, every project (its case study, or its entry in the index when it
+// has none), "Open …" for every live app, and "Copy email". One theme, so
+// no "Toggle theme". Each row is a real link where it can be, so a middle
+// click or "Open in new tab" works too. Behaviour: scripts/palette.ts.
+import { getProjects, KIND_NOUNS } from "../lib/projects";
+import { site } from "../lib/site";
+
+interface Row {
+  label: string;
+  hint: string;
+  /** What fuzzy matching looks at besides the label (8.3: title and stack) */
+  keywords?: string;
+  href?: string;
+  /** Opens in a new tab (live apps) */
+  external?: boolean;
+  copy?: string;
+}
+
+const projects = await getProjects();
+
+const rows: Row[] = [
+  { label: "Home", hint: "page", href: "/", keywords: "top start" },
+  { label: "About", hint: "section", href: "/#about", keywords: "stack photo" },
+  { label: "Systems", hint: "section", href: "/#systems", keywords: "backend architecture" },
+  { label: "Index of projects", hint: "section", href: "/#projects", keywords: "all projects search" },
+  { label: "Browser apps", hint: "page", href: "/apps/", keywords: "apps gallery live" },
+  { label: "Contact", hint: "section", href: "/#contact", keywords: "email hire freelance" },
+  ...projects.flatMap((p): Row[] => {
+    const [kind] = KIND_NOUNS[p.kind];
+    const own: Row = p.caseStudy
+      ? { label: p.title, hint: `${kind} · case study`, href: `/projects/${p.slug}/`, keywords: p.stack.join(" ") }
+      : { label: p.title, hint: `${kind} · details`, href: `/#p-${p.slug}`, keywords: p.stack.join(" ") };
+    return p.links.live ? [own, { label: `Open ${p.title}`, hint: "new tab ↗", href: p.links.live, external: true }] : [own];
+  }),
+  { label: "Copy email", hint: site.email, copy: site.email },
+];
+
+// π has no spelling on a keyboard
+const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(/π/g, "π pi");
+---
+
+<dialog class="palette" id="palette" aria-label="Command palette">
+  <div class="bar">
+    <input
+      type="text"
+      role="combobox"
+      aria-expanded="true"
+      aria-controls="pal-list"
+      aria-autocomplete="list"
+      aria-label="Go to a section, page or project"
+      placeholder="Go to a section or project…"
+      autocomplete="off"
+      spellcheck="false"
+      autofocus
+      data-pal-q
+    />
+    <kbd aria-hidden="true">esc</kbd>
+  </div>
+  <div class="list" id="pal-list" role="listbox" aria-label="Commands" data-pal-list>
+    {
+      rows.map((r, i) =>
+        r.href ? (
+          <a
+            role="option"
+            id={`pal-${i}`}
+            href={r.href}
+            target={r.external ? "_blank" : undefined}
+            rel={r.external ? "noopener" : undefined}
+            tabindex="-1"
+            aria-selected="false"
+            data-row
+            data-hay={hay(r)}
+          >
+            <span class="label">{r.label}</span>
+            <span class="hint">{r.hint}</span>
+          </a>
+        ) : (
+          <div role="option" id={`pal-${i}`} aria-selected="false" data-row data-hay={hay(r)} data-copy-email={r.copy}>
+            <span class="label">{r.label}</span>
+            <span class="hint">{r.hint}</span>
+          </div>
+        )
+      )
+    }
+  </div>
+  <p class="none" hidden data-pal-none>Nothing matches “<span data-pal-none-q></span>”.</p>
+  <p class="sr-only" aria-live="polite" data-pal-status></p>
+</dialog>
+
+<style>
+  .palette {
+    width: min(620px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px);
+    margin: clamp(24px, 12vh, 90px) auto auto;
+    padding: 0;
+    border: 1px solid var(--ink);
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow-print);
+  }
+
+  .palette::backdrop {
+    background: rgb(28 26 22 / 0.25);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: 14px 18px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* the field always has the focus while the palette is open: the caret
+     and the ink rule under it mark it, as in the prototype */
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font: italic 400 1.3rem var(--serif);
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: var(--muted);
+  }
+
+  .list {
+    max-height: min(440px, calc(100dvh - 190px));
+    padding: var(--s-2) 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  [role="option"] {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 18px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .label {
+    font-size: 1.1rem;
+  }
+
+  .hint {
+    margin-left: auto;
+    font: 500 0.78rem var(--sans);
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  [aria-selected="true"] {
+    background: var(--paper-deep);
+  }
+
+  [aria-selected="true"] .label {
+    color: var(--accent);
+  }
+
+  .none {
+    margin: 0;
+    padding: 14px 18px 18px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* on a phone the hint goes under the label, so long titles keep one line */
+  @media (max-width: 480px) {
+    [role="option"] {
+      flex-wrap: wrap;
+      gap: 0 10px;
+    }
+
+    .hint {
+      margin-left: 0;
+      text-align: left;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/palette";
+</script>

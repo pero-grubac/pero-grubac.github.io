@@ -3,8 +3,10 @@ order: 15
 slug: dev-timeline
 title: "Dev Timeline"
 kind: live
+applicationCategory: DeveloperApplication
 year: 2026
 summary: "Turns a GitHub profile into a timeline of the languages used."
+metaDescription: "Dev Timeline reads any public GitHub profile and turns its language usage and repo topics into a skill timeline: which languages were used, and when."
 description: "Reads any public GitHub profile and turns language usage and repo topics into a skill timeline — which languages were used, and when."
 highlights:
   - "Skills map: language and tooling bars plus a language-by-year heatmap"

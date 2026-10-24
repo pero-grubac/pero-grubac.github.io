@@ -3,8 +3,10 @@ order: 29
 slug: lora-score-table
 title: "Lora Score Table"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Scorecard for Lora, a four-player card game of seven contracts."
+metaDescription: "Lora Score Table, a scorecard for Lora, the four-player card game of seven contracts: round totals checked, house rules per game, final table as a PNG."
 description: "Scorecard for Lora, a four-player card game played across seven contracts — lowest score wins."
 highlights:
   - "All seven games, from Plus and Minus to Dame, K srca and Lora"

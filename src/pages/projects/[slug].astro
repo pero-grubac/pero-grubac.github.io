@@ -14,7 +14,8 @@ import Flow from "../../components/Flow.astro";
 import ProjectLinks from "../../components/ProjectLinks.astro";
 import DemoFigure from "../../components/DemoFigure.astro";
 import Commands from "../../components/Commands.astro";
-import { KIND_NOUNS, listOf, type Project } from "../../lib/projects";
+import { KIND_NOUNS, listOf, parentOf, type Project } from "../../lib/projects";
+import { caseStudyJsonLd } from "../../lib/seo";
 
 const diagrams = import.meta.glob<{ default: AstroComponentFactory }>("../../components/diagrams/*.astro", { eager: true });
 
@@ -45,21 +46,19 @@ const diagram = diagrams[`../../components/diagrams/${p.slug}.astro`] as { defau
 const Diagram = diagram?.default;
 const [one, many] = KIND_NOUNS[p.kind];
 
-// Where the breadcrumb leads back to: the systems, the apps gallery, or the index filtered to this kind
-const parent =
-  p.kind === "system"
-    ? { href: "/#systems", label: "Systems" }
-    : p.kind === "live"
-      ? { href: "/apps/", label: "Browser apps" }
-      : { href: `/#projects?kind=${p.kind}`, label: "Projects" };
-
-const summary = p.summary.replace(/\.$/, "");
-const description = p.flow
-  ? `Case study of ${p.title}: ${summary}. Architecture: ${p.flow}.`
-  : `Case study of ${p.title}, a ${one}: ${summary}. Built with ${listOf(p.stack.slice(0, 4))}.`;
+const parent = parentOf(p);
+// What the social image (/projects/<slug>/og.png) shows
+const imageAlt = `${p.title}, a ${one} by Pero Grubač. ${p.flow ? `Architecture: ${p.flow}` : p.summary}`;
 ---
 
-<Base title={`${p.title} case study | Pero Grubač`} description={description}>
+<Base
+  title={`${p.title} | Pero Grubač`}
+  description={p.metaDescription!}
+  type="article"
+  image={`/projects/${p.slug}/og.png`}
+  imageAlt={imageAlt}
+  jsonLd={caseStudyJsonLd(p)}
+>
   <article class="wrap case" aria-labelledby="case-h">
     <nav class="crumbs" aria-label="Breadcrumb">
       <ol>

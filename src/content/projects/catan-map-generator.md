@@ -3,8 +3,10 @@ order: 12
 slug: catan-map-generator
 title: "Catan Map Generator"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Balanced Catan boards from constraint-solving backtracking."
+metaDescription: "Catan Map Generator: random, balanced Catan boards from constraint-solving backtracking, with share links, a fairness overlay and PNG export."
 description: "Random, balanced Catan boards generated with constraint-solving backtracking instead of blind retries."
 highlights:
   - "Standard (19 tiles), Cities & Knights with a barbarian track, Extended 5–6 player (30 tiles)"

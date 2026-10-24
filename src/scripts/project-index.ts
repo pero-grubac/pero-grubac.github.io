@@ -1,6 +1,7 @@
 // The projects index on the home page (REDESIGN.md 7.4): search, kind
 // filters with live counts, the state mirrored in the URL hash
-// (#projects?kind=live&q=react), and one entry open at a time.
+// (#projects?kind=live&q=react), and one entry open at a time; #p-<slug>
+// opens that entry.
 // A typed query matches any part of a title, summary or technology; a
 // technology picked in About (#projects?tech=Java) matches the stack exactly.
 // The markup is in components/home/ProjectIndex.astro.
@@ -131,6 +132,19 @@ function readHash(): boolean {
   return true;
 }
 
+/** Opens the entry a #p-<slug> hash names (the palette's link to a project's details); null for any other hash. */
+function readEntryHash(): HTMLElement | null {
+  const item = location.hash.startsWith("#p-") ? items.find((i) => `#p-${i.dataset.slug}` === location.hash) : undefined;
+  if (!item) return null;
+  if (item.hidden) {
+    state.kind = state.q = state.tech = input.value = "";
+    apply();
+  }
+  setOpen(item);
+  item.scrollIntoView({ behavior: "instant" });
+  return item;
+}
+
 /** Shows the projects built with `tech` (and resets the kind filter), as the stack terms in About do. */
 export function findTech(tech: string, { scroll = false, focus = false } = {}) {
   state.tech = input.value = tech;
@@ -166,6 +180,7 @@ empty.querySelector("[data-clear]")!.addEventListener("click", () => {
 
 window.addEventListener("hashchange", () => {
   if (readHash()) section.scrollIntoView();
+  else readEntryHash()?.querySelector<HTMLElement>("[data-toggle]")?.focus({ preventScroll: true });
 });
 
 /* ---------- Esc closes the open entry (`/` is FindField's) ---------- */
@@ -181,3 +196,4 @@ document.addEventListener("keydown", (e) => {
 });
 
 if (readHash()) requestAnimationFrame(() => section.scrollIntoView({ behavior: "instant" }));
+else requestAnimationFrame(readEntryHash);

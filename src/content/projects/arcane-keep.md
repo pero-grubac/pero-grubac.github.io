@@ -3,8 +3,10 @@ order: 18
 slug: arcane-keep
 title: "Arcane Keep"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Endless tower defense on procedurally generated maps."
+metaDescription: "Arcane Keep, an endless tower defense on procedurally generated maps, with a deterministic, seedable simulation and a daily challenge. React and Canvas."
 description: "Endless tower defense on procedurally generated maps, with waves that scale until they are genuinely dangerous. The whole simulation runs in tile space on a fixed 1/60 s timestep — no DOM, no React, no pixels — so combat is deterministic and seedable."
 highlights:
   - "5 towers, 15 evolutions — including an Obelisk support tower that buffs everything in range"

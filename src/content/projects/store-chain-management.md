@@ -5,6 +5,7 @@ title: "Store Chain Management"
 kind: desktop
 year: 2023
 summary: "Retail chain desktop app; the MySQL database enforces the rules."
+metaDescription: "Store Chain Management, a C# desktop app for a retail chain whose MySQL database enforces the business rules: 41 stored procedures, 21 triggers, 11 views."
 description: "Desktop app for running a retail chain — stores, staff, stock, discounts, shopping and reports — built around a MySQL database that enforces the business rules itself."
 highlights:
   - "17 tables, 41 stored procedures, 21 triggers, 5 functions and 11 views"

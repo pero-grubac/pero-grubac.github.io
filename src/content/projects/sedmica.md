@@ -3,8 +3,10 @@ order: 28
 slug: sedmica
 title: "Sedmica"
 kind: live
+applicationCategory: GameApplication
 year: 2026
 summary: "Scorecard for the card game Sedmica, for 2–4 players."
+metaDescription: "Sedmica, a digital scorecard for the card game Sedmica for 2–4 players: it checks every round as you enter it and keeps a history of the last 50 games."
 description: "Digital scorecard for the card game Sedmica, for 2–4 players — the first player whose total reaches the limit (51 by default) loses."
 highlights:
   - "Validates every round live: the points must add up to 8 or 9"

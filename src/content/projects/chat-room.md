@@ -5,6 +5,7 @@ title: "Chat Room"
 kind: system
 year: 2024
 summary: "Secure forum with two-factor sign-in and TLS on every hop."
+metaDescription: "Chat Room, a secure forum in Spring Boot and React: admin-approved accounts, moderated comments, two-factor sign-in, TLS on every hop, a WAF and a SIEM."
 description: "Secure internet forum where accounts are approved by an admin and every comment waits for a room moderator. Two-factor sign-in with an emailed code, Google OAuth2, and revocable JWT sessions in an httpOnly cookie. TLS on every hop with certificates from an internal OpenSSL CA; a WAF hit ends the sender's session and a SIEM logs 18 kinds of security events. 219 backend and 86 frontend tests."
 flow: "React → Nginx → Spring Boot (WAF · SIEM) → MySQL"
 highlights: []

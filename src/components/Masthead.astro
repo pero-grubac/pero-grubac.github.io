@@ -1,6 +1,6 @@
 ---
 // Sticky masthead (REDESIGN.md 6.6): wordmark, section links, and the
-// "Search ⌘K" pill that opens the command palette (wired up in phase 5).
+// "Search ⌘K" pill that opens the command palette (Palette.astro).
 const links = [
   { href: "/#about", label: "About" },
   { href: "/#systems", label: "Systems" },
@@ -27,8 +27,8 @@ const here = Astro.url.pathname;
         }
       </ul>
     </nav>
-    <button type="button" class="find" data-palette aria-haspopup="dialog" aria-label="Search, opens the command palette">
-      Search <kbd><span data-mod>Ctrl</span> K</kbd>
+    <button type="button" class="find" data-palette aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+      Search <kbd aria-hidden="true"><span data-mod>Ctrl</span> K</kbd>
     </button>
   </div>
 </header>

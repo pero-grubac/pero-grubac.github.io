@@ -5,6 +5,7 @@ title: "eMobilityHub"
 kind: system
 year: 2025
 summary: "Electric vehicle rental platform: four apps on one database."
+metaDescription: "eMobilityHub, an electric vehicle rental platform: an Angular back office, a JSP shop with card payments, a promotions portal and a Spring Boot API."
 description: "Electric vehicle rental platform made of four apps on one database: an Angular back office for admins, operators and managers, a mobile-first JSP shop where clients rent, pay by card and get a PDF invoice, a JSP promotions portal, and the Spring Boot API. Operators see the fleet on an OpenStreetMap map; managers get revenue and fault statistics."
 flow: "Angular → Nginx → Spring Boot API + JSP apps → MySQL"
 highlights: []

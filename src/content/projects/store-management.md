@@ -5,6 +5,7 @@ title: "Store Management"
 kind: desktop
 year: 2023
 summary: "Desktop app for a retail store, with admin and cashier roles."
+metaDescription: "Store Management, a C# desktop app for a retail store: a till with bar code scanning, admin and cashier roles, and sales as transactional stored procedures."
 description: "Desktop app for running a retail store, with separate administrator and cashier roles."
 repeatsSummary: true
 highlights:

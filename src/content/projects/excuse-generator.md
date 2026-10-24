@@ -3,8 +3,10 @@ order: 30
 slug: excuse-generator
 title: "excuse.exe"
 kind: live
+applicationCategory: EntertainmentApplication
 year: 2026
 summary: "One button, one excuse, from 1,600+ in English and 1,250+ in Serbian."
+metaDescription: "excuse.exe: one button, one excuse, from 1,600+ in English and 1,250+ in Serbian, with no repeats until the whole list has been used. An offline PWA."
 description: "One button, one excuse — from 1,600+ in English and 1,250+ in Serbian, with no repeats until the whole list has been used."
 highlights:
   - "Seven categories as filter chips, from Work and Tech to Absurd; an excuse of the day"

@@ -9,6 +9,14 @@ import { glob, type Loader } from "astro/loaders";
 import { z } from "astro/zod";
 
 const KINDS = ["system", "live", "web", "mobile", "desktop", "tool"] as const;
+// schema.org applicationCategory values (Google's list) that fit these apps
+const APP_CATEGORIES = [
+  "DeveloperApplication",
+  "EducationalApplication",
+  "EntertainmentApplication",
+  "GameApplication",
+  "UtilitiesApplication",
+] as const;
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const GITHUB = /^https:\/\/github\.com\/pero-grubac\/[\w.-]+(?:\/[\w./-]*)?$/;
 // Absolute https URL, or a root-relative app path such as /devkit/
@@ -29,6 +37,8 @@ const projects = defineCollection({
       summary: text
         .max(75, "summary: one sentence of about 70 characters")
         .refine((s) => !/[.!?]\s+\S/.test(s), "summary: one sentence only"),
+      // The case study page's meta description (10.1): what a visitor will find there
+      metaDescription: text.min(140, "metaDescription: 140–160 characters").max(160, "metaDescription: 140–160 characters").optional(),
       description: text.optional(),
       // The description only rewords the summary, so the expanded view
       // leaves it out instead of showing the same sentence twice (7.4)
@@ -56,6 +66,8 @@ const projects = defineCollection({
         .refine((p) => existsSync(join(process.cwd(), "public", p)), "video: file not found under public/")
         .optional(),
       commands: z.array(z.object({ cmd: z.string().regex(/^\/[\w-]+$/), text }).strict()).optional(),
+      // What kind of app a live app is, for the structured data on /apps/ (10.3)
+      applicationCategory: z.enum(APP_CATEGORIES).optional(),
       featured: z.boolean(),
       caseStudy: z.boolean(),
     })
@@ -88,6 +100,9 @@ const projects = defineCollection({
       if (new Set(stack).size !== stack.length) fail("stack: each technology once", ["stack"]);
       if (p.stack.some((s) => /^\d|\d\s*[×x]\s/.test(s))) fail("stack: no counts next to technologies", ["stack"]);
 
+      if (p.caseStudy && !p.metaDescription) fail("a case study page needs a metaDescription (10.1)", ["metaDescription"]);
+      if ((p.kind === "live") !== Boolean(p.applicationCategory))
+        fail("applicationCategory is required for kind 'live' and only for it", ["applicationCategory"]);
       if ((p.kind === "live") !== Boolean(p.links.live)) fail("links.live is required for kind 'live' and only for it", ["links", "live"]);
       if (p.links.apk && p.kind !== "mobile") fail("links.apk is for mobile apps", ["links", "apk"]);
       if (Boolean(p.links.privateRepo) !== (p.links.repos.length === 0))
@@ -103,7 +118,7 @@ const projects = defineCollection({
 });
 
 // The glob loader plus the rules that span files: the file name is the
-// slug, and every `order` is used once.
+// slug, and every `order` and every `metaDescription` is used once.
 function projectsLoader(): Loader {
   const files = glob({
     pattern: "*.md",
@@ -122,11 +137,14 @@ function projectsLoader(): Loader {
     name: "projects",
     load: async (context) => {
       await files.load(context);
-      const seen = new Map<number, string>();
+      const seen = new Map<string, string>();
       for (const { id, data } of context.store.values()) {
-        const order = data.order as number;
-        if (seen.has(order)) throw new Error(`projects: order ${order} is used by both "${seen.get(order)}" and "${id}"`);
-        seen.set(order, id);
+        for (const field of ["order", "metaDescription"]) {
+          const value = data[field];
+          if (value === undefined) continue;
+          if (seen.has(`${field}:${value}`)) throw new Error(`projects: ${field} ${JSON.stringify(value)} is used by both "${seen.get(`${field}:${value}`)}" and "${id}"`);
+          seen.set(`${field}:${value}`, id);
+        }
       }
     },
   };

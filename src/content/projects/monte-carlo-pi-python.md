@@ -3,8 +3,10 @@ order: 19
 slug: monte-carlo-pi-python
 title: "Monte Carlo π · Python"
 kind: live
+applicationCategory: EducationalApplication
 year: 2023
 summary: "Estimates π with NumPy: in the browser, a Jupyter notebook and a CLI."
+metaDescription: "Monte Carlo π · Python: one NumPy package that estimates π in the browser through Pyodide, in a Jupyter notebook and on the command line, with no server."
 description: "One NumPy package that estimates π three ways: in the browser, in a Jupyter notebook and on the command line. The web version runs real Python and NumPy locally through Pyodide, with no server."
 highlights:
   - "About 45 million points per second on one core, about 28 million in the browser"

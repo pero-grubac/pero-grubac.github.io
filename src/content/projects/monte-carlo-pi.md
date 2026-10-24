@@ -5,6 +5,7 @@ title: "Monte Carlo π"
 kind: desktop
 year: 2023
 summary: "Estimates π by throwing random points at a square, shown live."
+metaDescription: "Monte Carlo π, a C# desktop app that estimates π by throwing random points at a square and shows them land live, at about a billion points per second."
 description: "Estimates π by throwing random points at a square and shows them land live, turning correct digits green. Runs at about a billion points per second on 12 cores."
 highlights:
   - "Own xoshiro256** generator with SplitMix64 streams: reproducible however work is split"

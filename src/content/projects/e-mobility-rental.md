@@ -5,6 +5,7 @@ title: "e-Mobility Rental"
 kind: desktop
 year: 2024
 summary: "Multithreaded simulation of an electric vehicle rental company."
+metaDescription: "e-Mobility Rental: a multithreaded Java simulation of an electric car, bike and scooter rental company, each rental in its own thread on a shared city map."
 description: "Multithreaded simulation of an electric car, bike and scooter rental company. Every rental runs in its own thread on a shared 20×20 city map, for exactly as many seconds as it lasts."
 highlights:
   - "Rentals in a time slot run in parallel and are joined before the next slot starts"

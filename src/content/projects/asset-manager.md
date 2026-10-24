@@ -5,6 +5,7 @@ title: "AssetManager"
 kind: mobile
 year: 2024
 summary: "Android app that tracks company assets, who has them and where."
+metaDescription: "AssetManager, a Flutter app for Android that tracks company assets, who has them and where, with camera barcode scanning and an OpenStreetMap view."
 description: "Android app for tracking company assets — furniture, electronics, office supplies — who has them and where they are."
 repeatsSummary: true
 highlights:

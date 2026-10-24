@@ -2,6 +2,8 @@
 // Self-hosted fonts from @fontsource (REDESIGN.md 6.3): latin and latin-ext
 // subsets only, `font-display: swap`, and a preload for the one file the
 // first screen needs most, Newsreader roman latin (h1 and body text).
+// The build cuts the files down to the glyphs and weights the site uses
+// (integrations/subset-fonts.mjs); the weights here match its ranges.
 import newsreaderLatin from "@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url";
 import newsreaderLatinExt from "@fontsource-variable/newsreader/files/newsreader-latin-ext-opsz-normal.woff2?url";
 import newsreaderItalicLatin from "@fontsource-variable/newsreader/files/newsreader-latin-opsz-italic.woff2?url";
@@ -16,12 +18,12 @@ const LATIN_EXT =
   "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
 
 const faces = [
-  { family: "Newsreader Variable", style: "normal", weight: "200 800", url: newsreaderLatin, range: LATIN },
-  { family: "Newsreader Variable", style: "normal", weight: "200 800", url: newsreaderLatinExt, range: LATIN_EXT },
-  { family: "Newsreader Variable", style: "italic", weight: "200 800", url: newsreaderItalicLatin, range: LATIN },
-  { family: "Newsreader Variable", style: "italic", weight: "200 800", url: newsreaderItalicLatinExt, range: LATIN_EXT },
-  { family: "Instrument Sans Variable", style: "normal", weight: "400 700", url: instrumentLatin, range: LATIN },
-  { family: "Instrument Sans Variable", style: "normal", weight: "400 700", url: instrumentLatinExt, range: LATIN_EXT },
+  { family: "Newsreader Variable", style: "normal", weight: "300 600", url: newsreaderLatin, range: LATIN },
+  { family: "Newsreader Variable", style: "normal", weight: "300 600", url: newsreaderLatinExt, range: LATIN_EXT },
+  { family: "Newsreader Variable", style: "italic", weight: "300 600", url: newsreaderItalicLatin, range: LATIN },
+  { family: "Newsreader Variable", style: "italic", weight: "300 600", url: newsreaderItalicLatinExt, range: LATIN_EXT },
+  { family: "Instrument Sans Variable", style: "normal", weight: "400 600", url: instrumentLatin, range: LATIN },
+  { family: "Instrument Sans Variable", style: "normal", weight: "400 600", url: instrumentLatinExt, range: LATIN_EXT },
 ];
 
 const css = faces
