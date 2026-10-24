@@ -5,13 +5,13 @@ It is written for Claude Code. Read it fully before writing any code, then
 work through the phases in section 12 in order. If something in this spec
 conflicts with what you find in the repo, stop and ask instead of guessing.
 
-> **Git rule: you are not allowed to commit.** Never run any git command
-> that changes history or the remote: no `git commit`, `git push`,
-> `git merge`, `git rebase`, `git reset`, `git checkout -b`/`git switch -c`,
-> `git branch`, `git stash`, `git tag`, and no `git add`. Read-only commands
-> (`git status`, `git diff`, `git log`, `git show`) are fine. The owner
-> reviews every change and commits himself. At the end of each phase,
-> suggest a commit message in your summary instead.
+> **Git rule: commit only on the `redesign` branch.** All work happens on
+> the `redesign` branch (created from `main`). You may `git add` and
+> `git commit` there, and nowhere else: never commit to `main`.
+> Before every commit, run `git branch --show-current` and stop if it is
+> not `redesign`. Never push, merge, rebase, reset, or delete branches;
+> the owner pushes and merges himself. Read-only commands (`git status`,
+> `git diff`, `git log`, `git show`) are always fine.
 
 **The visual design is not decided yet.** Phase 0 is a design exploration
 where you build three different directions and the owner picks one. Do not
@@ -560,20 +560,19 @@ Upwork profile.
 ## 12. Implementation phases
 
 Each phase ends with a short summary of what changed, what's left, any
-`TODO(owner)` items, and a **suggested** commit message (do not commit, see
-the git rule at the top). **Stop after every phase and wait for the owner.**
+`TODO(owner)` items, and the commits made on `redesign` (see the git rule
+at the top). **Stop after every phase and wait for the owner.**
 
 **Phase 0: Design exploration**
-- Follow section 6.0. Work on whatever branch is currently checked out;
-  if the owner wants a separate branch, he creates it.
+- Follow section 6.0. Work on the `redesign` branch.
 - Done when: three prototypes open in a browser, README describes them,
   owner has picked a direction and approved the filled-in section 6.
 
 **Phase 1: Setup**
-- Before touching anything, remind the owner to commit or back up the
-  current state, and wait for his OK.
+- Before touching anything, check that you are on `redesign` and the
+  working tree is clean (commit pending work first).
 - Create the Astro project. Move the current site files into `legacy/`
-  (plain file moves, no git commands); do not delete it until phase 6.
+  (`git mv` or plain file moves); do not delete it until phase 6.
 - Add design tokens from section 6, fonts, base layout, navigation,
   footer, theme handling with no flash on load.
 - GitHub Actions deploy workflow (do not switch Pages source yet).
@@ -615,8 +614,9 @@ the git rule at the top). **Stop after every phase and wait for the owner.**
 
 ## 13. Don't
 
-- Don't commit, push, create branches, or run any other git write command
-  (see the git rule at the top).
+- Don't commit anywhere but the `redesign` branch, and never commit to
+  `main`. Don't push, merge, rebase, reset, or delete branches (see the
+  git rule at the top).
 - Don't start phase 1 before the owner picks a direction.
 - Don't add analytics, cookies, or third-party scripts to the real site.
 - Don't invent project facts. If something is missing, leave
