@@ -218,5 +218,7 @@ test.describe("other pages at 360", () => {
     await page.goto("/projects/incident-alert/", { waitUntil: "networkidle" });
     await expect(page.locator("[data-diagram-frame]"), "and the frame is a Tab stop").toHaveAttribute("tabindex", "0");
     expect(await page.$eval("[data-diagram-frame] svg", (svg) => svg.getBoundingClientRect().width), "at a readable size").toBeGreaterThanOrEqual(859);
+    const frame = await page.$eval("[data-diagram-frame]", (f) => ({ scrolls: f.scrollWidth > f.clientWidth, thin: f.classList.contains("thin-scroll") }));
+    expect(frame, "it scrolls, with the Journal scrollbar (6.4)").toEqual({ scrolls: true, thin: true });
   });
 });

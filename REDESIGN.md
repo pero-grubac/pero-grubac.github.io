@@ -513,7 +513,8 @@ oldstyle-nums`).
   leaders. The only shadow is the palette's print offset
   `8px 8px 0 var(--rule)`.
 - Scrollbar (phase 5 review; the prototype had none): an area inside
-  the page that scrolls, today only the palette's results, gets the
+  the page that scrolls (the palette's results, and since phase 6 a
+  diagram's frame below 860px), gets the
   Journal scrollbar, the `.thin-scroll` class in `global.css`: 6px, a
   `--rule` thumb with no track and no arrow buttons, `--muted` while the
   pointer is over it, square ends. Chrome, Edge and Safari draw it from
@@ -1092,8 +1093,9 @@ at the top). **Stop after every phase and wait for the owner.**
 - After he deploys, verify the live site, that every app subpath listed in
   section 2 (`/arcane-keep/` etc.) still loads, and that the RepoHealth
   link still opens.
-- Before the owner merges, delete `REDESIGN.md` and
-  `design-explorations/` (owner's instruction, phase 5 review). In the
+- At the very end, after the owner confirms the live site works (owner's
+  instruction at the start of phase 6; it replaces "before the merge"),
+  delete `REDESIGN.md` and `design-explorations/`. In the
   same commit, rewrite what points to them so nothing dangles: code
   comments that cite "REDESIGN.md" sections, the README's mentions,
   `ci.yml`'s comment and `tsconfig.json`'s exclude (45 lines in 34 files

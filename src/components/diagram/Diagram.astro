@@ -3,7 +3,7 @@
 // ink lines on paper, Newsreader names, Instrument Sans notes, and accent
 // only on the arrowheads, as in the flow line. The drawing is inline SVG so
 // it uses the page's fonts. Below its natural width it keeps a readable
-// size and scrolls sideways in its own frame.
+// size and scrolls sideways in its own frame, with the Journal scrollbar.
 //   solid line   a request (HTTP, JDBC, TCP, RMI …)
 //   dashed line  a message through a queue
 //   dotted line  certificates, chat, or another side channel
@@ -20,7 +20,7 @@ const { width, height, label, caption } = Astro.props;
 ---
 
 <figure class="diagram" style={`--dg-width: ${width}px`}>
-  <div class="frame" tabindex="0" data-diagram-frame>
+  <div class="frame thin-scroll" tabindex="0" data-diagram-frame>
     <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} role="img" aria-label={label}>
       <defs>
         <marker

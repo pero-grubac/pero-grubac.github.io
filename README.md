@@ -4,17 +4,16 @@
 
 [![CI](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/ci.yml)
 [![Deploy](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/pero-grubac/pero-grubac.github.io/actions/workflows/deploy.yml)
-![HTML5](https://img.shields.io/badge/HTML-5-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS-3-1572B6?logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
-![Build](https://img.shields.io/badge/build_step-none-2EA44F)
-![Tests](https://img.shields.io/badge/tests-6_unit_·_7_e2e-2EA44F?logo=nodedotjs&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Playwright](https://img.shields.io/badge/tests-Playwright_·_axe-2EAD33?logo=playwright&logoColor=white)
+![Lighthouse](https://img.shields.io/badge/Lighthouse-checked_in_CI-F44B21?logo=lighthouse&logoColor=white)
 
-**My portfolio: 30 projects behind one search bar, live apps that open in place, a command menu and a light/dark theme, in plain HTML, CSS and JavaScript.**
+**My portfolio: backend systems as magazine features with case studies and architecture diagrams, every other project in one searchable index, and a gallery of browser apps. Built with Astro, set like a printed page.**
 
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-pero--grubac.github.io-4C8AF5?style=for-the-badge)](https://pero-grubac.github.io)
 
-<img src="readme_assets/demo.gif" alt="Portfolio demo: the hero, searching projects for pwa, opening the Countdown and Catan rows with their previews, the Ctrl+K command menu and switching between dark and light theme" width="800">
+<img src="readme_assets/home.webp" alt="The home page: the name Pero Grubač in a large serif, the line Backend developer in Banja Luka. I build services that talk to each other over queues, sockets and REST, links to the systems, GitHub and LinkedIn, and an In this portfolio list of the four systems, the index of projects and the browser apps" width="800">
 
 </div>
 
@@ -22,27 +21,26 @@
 
 ## 📌 Project Overview
 
-A portfolio built from scratch without frameworks or a build step. Every project is in one **Projects** section with a single search bar (`grep -i …`) and kind filters. Rows open in place with a preview, a short description and the key points, and live apps launch straight from their row.
+A static portfolio for a backend developer. The four systems come first, each as a feature with its architecture line, a demo video that plays only when you ask for it, and a case study with an architecture diagram. Every other project is a one-line entry in an index that opens on demand, with search and kind filters, and the browser apps have a gallery of their own.
 
-Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-keep` opens that exact view.
+Each project is one Markdown file. A strict schema checks it at build time, and every count on the site is computed from those files.
 
 ---
 
 ## ✨ Features
 
-- 🔎 **One search for everything**: names, descriptions and tags, with matches highlighted; clicking a Tech Stack tag searches for it
-- 🗂️ **Kind filters**: systems · live · mobile · desktop · web · tool
-- 🎬 **Featured systems** with demo videos that play only while on screen
-- 📂 **Index rows** that open in place, with previews of every live app
-- ⌨️ **Command menu** (`Ctrl` + `K`): jump to a project, launch an app, copy the email, switch theme
-- 🌗 **Light and dark theme** following the system, switchable and remembered
-- 🔗 **Shareable views** through `?q=`, `?kind=` and `#project`
-- 📱 **Responsive**, with a collapsible menu on phones
-- ♿ **Keyboard first**: everything is reachable without a mouse
+- 🏗️ **Systems as features**: headline, architecture line, description, and a demo video (AV1 WebM, with an H.264 MP4 as fallback) that loads only on hover, click or tap
+- 📖 **Case studies** for every project with a public repo, with an architecture diagram where a project has parts that talk to each other, and a sticky margin: on this page, stack, code
+- 🔎 **Index of projects**: search by title, summary or technology, kind filters with live counts, one entry open at a time; the state lives in the URL (`#projects?kind=live&q=react`)
+- 🧭 **Command palette** (`Ctrl` / `⌘` + `K`) on every page: sections, every project, open an app, copy the email
+- 🖼️ **Browser apps** gallery at `/apps/`, each app one click from its screenshot
+- 🗞️ **Social images** for every page, set at build time in the site's own fonts
+- ♿ **Accessible**: keyboard only, visible focus everywhere, reduced motion respected, axe clean
+- ⚡ **Fast**: about 3 kB of JavaScript on the home page, fonts subset to the characters the site uses
 
 ### 🗂️ Projects
 
-**Featured systems** (each with a demo video):
+**Featured systems** (each with a demo video and a case study):
 
 1. **Incident Alert**: citizen incident reports with moderation, four .NET 10 services (ASP.NET · MassTransit/RabbitMQ · ML.NET · React · Docker)
 2. **eMobilityHub**: electric vehicle rental platform, four apps on one database (Spring Boot · Angular · JSP · MySQL · Docker)
@@ -61,11 +59,10 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 
 | Key | Action |
 |-----|--------|
-| `/` | Search projects |
-| `Ctrl` + `K` | Command menu |
-| `t` | Toggle light / dark theme |
-| `j` / `k` | Move between index rows · `Enter` opens · `o` launches a live app |
-| `Esc` | Clear the search |
+| `/` | Find in the index (home) or in the apps (`/apps/`) |
+| `Ctrl` / `⌘` + `K` | Command palette, from any page, even while typing |
+| `↑` `↓` `Enter` | Move through the palette and run a row |
+| `Esc` | Close the palette, or the open index entry |
 
 ---
 
@@ -73,24 +70,24 @@ Searches and filters live in the URL, so `?q=docker`, `?kind=live` or `#arcane-k
 
 | Technology | Usage |
 |------------|-------|
-| HTML5 | Structure, `<details>` rows, `<dialog>` command menu |
-| CSS3 | OKLCH colour tokens (light + dark), animations, responsive layout |
-| Vanilla JavaScript | Search, filters, command menu, keyboard shortcuts, theme, lazy video |
-| Google Fonts | Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels) |
-| Font Awesome | Icons |
-| `node:test` | Static checks: links, assets, anchors, ids, thumbnails |
-| Playwright | End-to-end smoke tests on desktop and phone |
-| Lighthouse CI | Performance, accessibility, best practices and SEO on every pull request |
-| GitHub Actions + GitHub Pages | CI and deployment |
+| Astro 7 | Static site: pages, content collections, image pipeline (AVIF and WebP), sitemap |
+| TypeScript (strict) | Components, the content schema and the browser scripts |
+| Zod (via Astro) | The project schema: the build fails on an invalid project file |
+| CSS custom properties | The design tokens: paper, ink, one accent, rules; no framework |
+| Vanilla TypeScript | Search, filters and hash state, the palette, the demo videos, Copy |
+| Newsreader and Instrument Sans | Self-hosted from `@fontsource`, subset at build time with HarfBuzz |
+| fontkit and sharp | Social images and favicons, typeset as paths in the site's own fonts |
+| Playwright and axe | Browser tests at 360 and 1440 px, keyboard only, reduced motion, accessibility |
+| Lighthouse CI | Performance, accessibility, best practices and SEO on every push |
+| GitHub Actions and GitHub Pages | CI and deployment |
 
 ---
 
 ## 📁 Project Structure
 
-> **Redesign in progress on the `redesign` branch** (see `REDESIGN.md`).
-> The site is being rebuilt with Astro. Project Structure, Installation,
-> Usage, Tests and CI/CD describe the new setup; the rest of this README
-> still describes the live site and is rewritten at launch.
+> `REDESIGN.md`, `design-explorations/` and `legacy/` are the redesign's spec, its
+> design prototypes and the old hand-written site; they are removed after
+> the launch.
 
 ```
 pero-grubac.github.io/
@@ -216,15 +213,16 @@ tests are kept in `legacy/tests/` and no longer run.
 
 ```mermaid
 flowchart LR
-    HTML[index.html<br/>cards · index rows · dialog] --> JS[js/scripts.js]
-    JS --> IDX[buildIndex<br/>name · tags · text per item]
-    IDX --> S[Search + kind filters]
-    S <--> URL[(URL<br/>?q · ?kind · #id)]
-    JS --> P[Command menu<br/>Ctrl+K]
-    P --> S
-    JS --> T[Theme toggle] <--> LS[(localStorage)]
-    JS --> V[IntersectionObserver<br/>plays videos on screen]
+    MD[src/content/projects<br/>one .md per project] --> Z{Schema<br/>content.config.ts}
+    Z --> B[astro build]
+    F[@fontsource fonts] --> SF[subset-fonts] --> B
+    B --> P[Pages<br/>home · /apps/ · case studies · 404]
+    B --> E[Endpoints<br/>og.png · favicons · manifest]
+    B --> S[Sitemap · robots.txt]
+    P & E & S --> D[(dist/)] --> GP[GitHub Pages]
 ```
+
+Everything is decided at build time: counts, the index, the palette rows, the structured data and the social images all come from the project files. The browser gets plain HTML with every project's details already in it, and small scripts that show and hide them.
 
 ### Opening a shared link
 
@@ -232,15 +230,15 @@ flowchart LR
 sequenceDiagram
     autonumber
     actor U as Visitor
-    participant P as Page
+    participant P as Home page
     participant I as Index
 
-    U->>P: open /?q=pwa#countdown
-    P->>I: build the index from the page
-    P->>I: apply ?q and ?kind
-    I-->>U: matching projects, matches highlighted
-    P->>I: find #countdown
-    I-->>U: row opened and scrolled into view
+    U->>P: open /#projects?kind=live&q=react
+    P->>I: read the hash: kind and query
+    I-->>U: matching live apps, counts per kind
+    P->>U: scroll to the index, again once the fonts are in
+    U->>I: edit the search
+    I->>P: update the hash, so the view can be shared
 ```
 
 ---
@@ -262,8 +260,10 @@ CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.
 
 ## 🧭 Design Decisions
 
-- **No framework, no build.** The page is content first; plain HTML is fast, crawlable and works without JavaScript, which then adds search and shortcuts on top.
-- **One search for everything** instead of separate sections, so a visitor looking for "docker" or "pwa" finds every match at once.
-- **State in the URL**, so any view can be shared.
-- **Videos only play on screen**, which keeps the page light on phones.
-- **Decorations never widen the page**: the background glows are clipped to their sections, and a test checks that nothing is wider than the screen.
+- **Backend first.** The systems get the most space; small apps and games sit in a compact index that opens on demand, so the home page reads in under a minute.
+- **One file per project.** Adding a project means adding one Markdown file; a strict schema rejects anything the pages can't show, and no count is ever typed by hand.
+- **Static and small.** No framework on the page and no backend: plain HTML, a few kilobytes of script, and details that are in the HTML for search engines even while collapsed.
+- **Set like a printed page.** Paper, ink, rules and two typefaces carry the design; one accent colour marks only what you can act on.
+- **Nothing moves on its own.** Videos play only on hover, click or tap, and with reduced motion only on click or tap.
+- **State in the URL**, so any view of the index can be shared.
+- **Checked on every push**: browser tests, axe and Lighthouse run in CI, and the deploy publishes only a commit that passed them.
