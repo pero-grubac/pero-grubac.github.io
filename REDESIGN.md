@@ -57,6 +57,9 @@ the long run of small browser apps, games and side projects.
   **Never create a route with any of these names.** All new routes live
   under `/`, `/apps/`, `/projects/<slug>/` and `/404`. RepoHealth is the
   one live app hosted elsewhere (Vercel), so it has no subpath here.
+  Since phase 4 the build enforces this: `astro.config.mjs` fails it when
+  a page or anything at the top of `dist/` (files from `public/`
+  included) takes one of these names, in any letter case.
 - Reuse every existing image and video under `/assets/` (paths listed in
   section 5). Do not delete `/assets/` or `assets/og-card.png`. Since
   phase 2 the project screenshots live in `src/assets/` (same sub-paths)
@@ -420,6 +423,7 @@ the hero. It must never lower text contrast.
 | role | font | size | line height | weight / style |
 |---|---|---|---|---|
 | Display (h1) | serif, opsz 72 | `clamp(3.4rem, 12vw, 9.4rem)` | 0.92 | 400, tracking −0.03em |
+| Page title (h1 of /apps/ and case studies) | serif, opsz 72 | `clamp(2.6rem, 7vw, 5.6rem)` | 0.98 | 400, −0.025em |
 | Section (h2) | serif, opsz 72 | `clamp(2.2rem, 5vw, 3.6rem)` | 1.0 | 400, −0.02em |
 | Feature title (h3, systems) | serif, opsz 60 | `clamp(2rem, 4vw, 2.9rem)` | 1.02 | 500, −0.015em |
 | Standfirst (hero) | serif | `clamp(1.3rem, 2.6vw, 1.85rem)` | 1.35 | 300 italic |

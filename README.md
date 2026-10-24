@@ -98,7 +98,7 @@ pero-grubac.github.io/
 │   ├── content/projects/      One Markdown file per project (<slug>.md)
 │   ├── content.config.ts      The projects schema; the build fails on an invalid file
 │   ├── assets/                Project screenshots and the portrait, optimized by Astro
-│   ├── pages/                 Routes (index.astro so far)
+│   ├── pages/                 Routes: index, apps, projects/[slug] (case studies), 404
 │   ├── layouts/Base.astro     Head, fonts, masthead, main, footer, toast
 │   ├── components/            Masthead, Footer, FontFaces and shared pieces (links, demo figure, …)
 │   │   └── home/              The home page sections: hero, about, systems, index, apps, contact
@@ -108,7 +108,8 @@ pero-grubac.github.io/
 ├── public/assets/             Demo videos, avatar, og-card.png, favicons, served at /assets/
 ├── scripts/check-links.mjs    Checks every live, repo and APK link in the content
 ├── tests/check-home.mjs       Browser checks of the built home page (Playwright)
-├── astro.config.mjs           Static output, trailingSlash "always"
+├── tests/check-pages.mjs      Internal links of every built page, and browser checks of /apps/, case studies, 404
+├── astro.config.mjs           Static output, trailingSlash "always", and a guard for the other repos' paths
 ├── design-explorations/       Phase 0 prototypes (direction B is the reference)
 ├── legacy/                    The old hand-written site, until launch
 ├── REDESIGN.md                The redesign spec
@@ -140,6 +141,7 @@ npm run build      # static site in dist/
 npm run preview    # serves dist/
 npm run check:links  # every live, repo and APK link in the content must return 200
 npm run check:home   # browser checks of the built home page (run npm run build first)
+npm run check:pages  # internal links, then browser checks of /apps/, the case studies and the 404
 ```
 
 ### Adding a project
@@ -155,8 +157,10 @@ exactly which field is wrong if something doesn't fit.
 (Playwright; Edge on Windows, `PW_CHANNEL` to change, `SHOTS=<dir>` for
 screenshots): counts, search and hash, details, the demo video, Copy,
 keyboard only, reduced motion, and no horizontal scroll at 360 and 1440 px.
-It starts its own `astro preview` on port 4399 beside any you have open.
-It doesn't run in CI yet; phase 5 of `REDESIGN.md` turns it into real
+`npm run check:pages` first checks that every internal link on every built
+page resolves, then does the same kind of browser checks for `/apps/`, the
+case studies and the 404. Both start their own `astro preview` (ports 4399
+and 4398) beside any you have open. They don't run in CI yet; phase 5 of `REDESIGN.md` turns it into real
 tests and adds Lighthouse. The old site's tests are kept in
 `legacy/tests/` and no longer run.
 

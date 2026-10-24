@@ -8,9 +8,11 @@ interface Props {
   project: Project;
   /** Lead with "Read the case study →" (systems) */
   caseStudy?: boolean;
+  /** "Open" instead of "Open app", as in the /apps/ gallery (6.8) */
+  short?: boolean;
 }
 
-const { project: p, caseStudy = false } = Astro.props;
+const { project: p, caseStudy = false, short = false } = Astro.props;
 ---
 
 <div class="links">
@@ -25,7 +27,8 @@ const { project: p, caseStudy = false } = Astro.props;
   {
     p.links.live && (
       <a class="lnk" href={p.links.live} target="_blank" rel="noopener">
-        Open app<span class="sr-only">: {p.title}</span>
+        {short ? "Open" : "Open app"}
+        <span class="sr-only">{short ? ` ${p.title}` : `: ${p.title}`}</span>
         <span aria-hidden="true"> ↗</span>
       </a>
     )

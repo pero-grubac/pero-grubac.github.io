@@ -12,9 +12,11 @@ interface Props {
   alt: string;
   title: string;
   video?: string | undefined;
+  /** The page's main image, above the fold: load it first (10.6) */
+  priority?: boolean;
 }
 
-const { image, alt, title, video } = Astro.props;
+const { image, alt, title, video, priority = false } = Astro.props;
 ---
 
 <figure class="media" data-video={video} data-state="idle">
@@ -25,7 +27,8 @@ const { image, alt, title, video } = Astro.props;
     fallbackFormat="webp"
     widths={[480, 960]}
     sizes="(min-width: 1280px) 1184px, 92vw"
-    loading="lazy"
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : undefined}
     decoding="async"
   />
   {

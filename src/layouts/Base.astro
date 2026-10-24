@@ -10,9 +10,14 @@ import Toast from "../components/Toast.astro";
 interface Props {
   title: string;
   description: string;
+  /** Keep the page out of search results (the 404) */
+  noindex?: boolean;
+  /** What `/` does on this page, for the footer ("search the index");
+      leave it out on pages without a find field */
+  findHint?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false, findHint } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,6 +27,7 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f4f0e6" />
     <link rel="icon" href="/assets/favicon.ico" sizes="32x32" />
@@ -34,7 +40,7 @@ const { title, description } = Astro.props;
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer findHint={findHint} />
     <Toast />
     <script>
       // Show ⌘ instead of Ctrl in the keyboard hints on Apple devices.

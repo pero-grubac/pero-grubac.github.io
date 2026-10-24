@@ -1,0 +1,84 @@
+---
+// The "Find" search field (6.6): a sans label, an italic serif input over
+// a 2px ink rule, and the `/` hint. Used by the home index and /apps/;
+// `/` anywhere on the page (outside a text field) focuses it.
+interface Props {
+  id: string;
+  label: string;
+}
+
+const { id, label } = Astro.props;
+---
+
+<div class="find-in">
+  <label for={id}>{label}</label>
+  <input id={id} type="search" placeholder="a title or a technology" autocomplete="off" spellcheck="false" data-find />
+  <kbd aria-hidden="true">/</kbd>
+</div>
+
+<style>
+  .find-in {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* the field row carries the focus ring, around label, input and hint */
+  .find-in:focus-within {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  label {
+    font: 600 0.85rem var(--sans);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    font: italic 400 1.35rem var(--serif);
+  }
+
+  /* .find-in shows the focus instead */
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: var(--muted);
+  }
+
+  /* the browser's clear button, redrawn in --muted instead of system blue */
+  input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    width: 0.7em;
+    height: 0.7em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%236a6457' stroke-width='1.4'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  // `/` focuses the field, unless the visitor is typing or a dialog is open
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "/" || e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (document.querySelector("dialog[open]") || (e.target as Element).closest?.("input, textarea, select, [contenteditable]")) return;
+    const input = document.querySelector<HTMLInputElement>("[data-find]");
+    if (!input) return;
+    e.preventDefault();
+    const box = input.getBoundingClientRect();
+    if (box.top < 90 || box.bottom > innerHeight) (input.closest("section") ?? input).scrollIntoView();
+    input.focus({ preventScroll: true });
+    input.select();
+  });
+</script>

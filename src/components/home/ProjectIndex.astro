@@ -6,6 +6,8 @@
 // they are indexed and the tab order follows the page.
 import { Picture } from "astro:assets";
 import SectionHead from "../SectionHead.astro";
+import FindField from "../FindField.astro";
+import NoMatch from "../NoMatch.astro";
 import BuiltWith from "../BuiltWith.astro";
 import ProjectLinks from "../ProjectLinks.astro";
 import Commands from "../Commands.astro";
@@ -31,11 +33,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
   <div class="index-grid" data-index>
     <div>
       <div class="find" role="search">
-        <div class="find-in">
-          <label for="q">Find in the index</label>
-          <input id="q" type="search" placeholder="a title or a technology" autocomplete="off" spellcheck="false" />
-          <kbd aria-hidden="true">/</kbd>
-        </div>
+        <FindField id="q" label="Find in the index" />
         <div class="show" role="group" aria-label="Filter by kind">
           <span aria-hidden="true">Show</span>
           <button type="button" data-filter="" data-one="project" data-many="projects" aria-pressed="true">
@@ -129,10 +127,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
         }
       </ul>
 
-      <div class="empty" data-empty hidden>
-        <p>No <span data-empty-noun>project</span> matches “<span data-empty-q></span>”.</p>
-        <button type="button" data-clear>Clear search</button>
-      </div>
+      <NoMatch noun="project" />
     </div>
 
     <!-- What the pane shows until an entry is open; screen readers get the details inline -->
@@ -157,56 +152,6 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
     display: grid;
     gap: 14px;
     margin-bottom: 18px;
-  }
-
-  .find-in {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  /* the field row carries the focus ring, around label, input and hint */
-  .find-in:focus-within {
-    border-color: var(--accent);
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-
-  label {
-    font: 600 0.85rem var(--sans);
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  input {
-    flex: 1;
-    width: 100%;
-    min-width: 0;
-    padding: 4px 0;
-    border: 0;
-    background: none;
-    font: italic 400 1.35rem var(--serif);
-  }
-
-  /* .find-in shows the focus instead */
-  input:focus {
-    outline: none;
-  }
-
-  input::placeholder {
-    color: var(--muted);
-  }
-
-  /* the browser's clear button, redrawn in --muted instead of system blue */
-  input::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    width: 0.7em;
-    height: 0.7em;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%236a6457' stroke-width='1.4'/%3E%3C/svg%3E")
-      center / contain no-repeat;
-    cursor: pointer;
   }
 
   .show {
@@ -395,26 +340,6 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
   .highlights li::before {
     content: "– ";
     color: var(--accent);
-  }
-
-  .empty {
-    padding: 28px 0;
-    border-bottom: var(--hairline-soft);
-  }
-
-  .empty p {
-    margin: 0 0 var(--s-3);
-    font-size: 1.25rem;
-    font-style: italic;
-  }
-
-  .empty button {
-    padding: 6px var(--s-4);
-    border: 1px solid var(--ink);
-    border-radius: var(--radius-pill);
-    background: none;
-    font: 600 0.85rem var(--sans);
-    cursor: pointer;
   }
 
   /* ---------- the reader pane, from 980px ---------- */

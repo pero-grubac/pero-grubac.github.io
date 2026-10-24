@@ -1,12 +1,21 @@
 ---
-// Colophon footer (REDESIGN.md 6.6 and 7.7). One theme, so no `t` hint.
+// Colophon footer (REDESIGN.md 6.6 and 7.7). One theme, so no `t` hint;
+// the `/` hint only on pages that have a find field.
+interface Props {
+  findHint?: string | undefined;
+}
+
+const { findHint } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="wrap">
     <p>© {year} Pero Grubač. Set in Newsreader and Instrument Sans.</p>
-    <p>Press <kbd>/</kbd> to search the index, <kbd><span data-mod>Ctrl</span> K</kbd> for commands.</p>
+    <p>
+      Press {findHint && <Fragment><kbd>/</kbd> to {findHint}, </Fragment>}<kbd><span data-mod>Ctrl</span> K</kbd> for
+      commands.
+    </p>
   </div>
 </footer>
 

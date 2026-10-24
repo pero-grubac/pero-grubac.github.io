@@ -8,6 +8,7 @@ const links = [
   { href: "/apps/", label: "Apps" },
   { href: "/#contact", label: "Contact" },
 ];
+const here = Astro.url.pathname;
 ---
 
 <header class="masthead">
@@ -15,7 +16,15 @@ const links = [
     <a class="wordmark" href="/">Pero Grubač</a>
     <nav aria-label="Sections">
       <ul>
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={l.href === here ? "page" : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
     <button type="button" class="find" data-palette aria-haspopup="dialog" aria-label="Search, opens the command palette">
@@ -68,6 +77,12 @@ const links = [
   nav a:hover {
     color: var(--accent);
     text-decoration: underline;
+  }
+
+  nav a[aria-current="page"] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
   }
 
   .find {

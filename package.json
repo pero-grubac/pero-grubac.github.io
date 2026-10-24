@@ -11,6 +11,7 @@
     "check": "astro check",
     "check:links": "node scripts/check-links.mjs",
     "check:home": "node tests/check-home.mjs",
+    "check:pages": "node tests/check-pages.mjs",
     "astro": "astro"
   },
   "engines": {

@@ -98,6 +98,13 @@ h1 {
   margin: 0;
 }
 
+/* h1 of /apps/ and the case studies: a page title, smaller than the name */
+.page-title {
+  font-size: var(--fs-title);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
 h2 {
   font-weight: 400;
   font-size: var(--fs-section);

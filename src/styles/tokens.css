@@ -24,7 +24,8 @@
   --sans: "Instrument Sans Variable", "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  --fs-display: clamp(3.4rem, 12vw, 9.4rem); /* h1 */
+  --fs-display: clamp(3.4rem, 12vw, 9.4rem); /* h1 on the home page and the 404 */
+  --fs-title: clamp(2.6rem, 7vw, 5.6rem); /* h1 on the other pages */
   --fs-section: clamp(2.2rem, 5vw, 3.6rem); /* h2 */
   --fs-feature: clamp(2rem, 4vw, 2.9rem); /* system h3 */
   --fs-standfirst: clamp(1.3rem, 2.6vw, 1.85rem);

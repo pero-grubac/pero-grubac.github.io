@@ -1,0 +1,260 @@
+---
+// Case study (REDESIGN.md 6.8, 8.2), one page per project with
+// caseStudy: true: breadcrumb, title, summary and repos, the architecture
+// line, the demo figure, the Markdown body (or, while it's empty, the
+// description and a note), then the previous and next system.
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Flow from "../../components/Flow.astro";
+import BuiltWith from "../../components/BuiltWith.astro";
+import ProjectLinks from "../../components/ProjectLinks.astro";
+import DemoFigure from "../../components/DemoFigure.astro";
+import type { Project } from "../../lib/projects";
+
+export async function getStaticPaths() {
+  const entries = (await getCollection("projects", (e) => e.data.caseStudy)).sort((a, b) => a.data.order - b.data.order);
+  return entries.map((entry, i) => ({
+    params: { slug: entry.data.slug },
+    props: { entry, prev: entries[i - 1]?.data, next: entries[i + 1]?.data },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+  prev?: Project | undefined;
+  next?: Project | undefined;
+}
+
+const { entry, prev, next } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+const written = Boolean(entry.body?.trim());
+const description = `Case study of ${p.title}: ${p.summary.replace(/\.$/, "")}. Architecture: ${p.flow}.`;
+---
+
+<Base title={`${p.title} case study | Pero Grubač`} description={description}>
+  <article class="wrap case" aria-labelledby="case-h">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#systems">Systems</a></li>
+        <li><span aria-current="page">{p.title}</span></li>
+      </ol>
+    </nav>
+
+    <header class="head">
+      <h1 id="case-h" class="page-title">{p.title}</h1>
+      <p class="dek">{p.summary}</p>
+    </header>
+
+    <div class="facts">
+      {/* TODO(owner): a proper architecture diagram to go with (or replace) the flow line */}
+      <Flow flow={p.flow!} />
+      <div>
+        <BuiltWith stack={p.stack} />
+        <ProjectLinks project={p} />
+      </div>
+    </div>
+
+    <DemoFigure image={p.image!} alt={p.imageAlt!} title={p.title} video={p.video} priority />
+
+    <div class="body">
+      {
+        written ? (
+          <Content />
+        ) : (
+          <Fragment>
+            <p>{p.description}</p>
+            {p.highlights.length > 0 && (
+              <ul>
+                {p.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+            <p class="note">Case study in progress.</p>
+          </Fragment>
+        )
+      }
+    </div>
+
+    <nav class="pager" aria-label="Other systems">
+      {
+        prev && (
+          <a class="prev" href={`/projects/${prev.slug}/`} rel="prev">
+            <span class="dir">
+              <span aria-hidden="true">← </span>Previous system
+            </span>{" "}
+            <span class="name">{prev.title}</span>
+          </a>
+        )
+      }
+      {
+        next && (
+          <a class="next" href={`/projects/${next.slug}/`} rel="next">
+            <span class="dir">
+              Next system<span aria-hidden="true"> →</span>
+            </span>{" "}
+            <span class="name">{next.title}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .case {
+    padding-top: clamp(28px, 4vw, 48px);
+    padding-bottom: var(--section-pad);
+  }
+
+  /* ---------- breadcrumb ---------- */
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-2);
+    list-style: none;
+    margin: 0 0 var(--s-5);
+    padding: 0;
+    font: 500 0.85rem var(--sans);
+    color: var(--muted);
+  }
+
+  .crumbs li + li::before {
+    content: "/" / "";
+    margin-right: var(--s-2);
+    color: var(--rule);
+  }
+
+  .crumbs a {
+    color: var(--ink-soft);
+    text-decoration-color: var(--rule);
+  }
+
+  .crumbs a:hover {
+    color: var(--accent);
+  }
+
+  /* ---------- head ---------- */
+  .head {
+    padding-top: 18px;
+    border-top: var(--rule-double);
+  }
+
+  .dek {
+    max-width: 40ch;
+    margin: 20px 0 0;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--s-5) var(--s-7);
+    margin: clamp(28px, 4vw, 44px) 0;
+  }
+
+  /* a hairline over the stack and links too, level with the flow line's */
+  .facts > div {
+    padding-top: 14px;
+    border-top: var(--hairline);
+  }
+
+  @media (min-width: 900px) {
+    .facts,
+    .body {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  /* ---------- body ---------- */
+  .body {
+    display: grid;
+    margin-top: clamp(32px, 5vw, 56px);
+  }
+
+  .body > :global(*) {
+    grid-column: -2;
+    max-width: 65ch;
+  }
+
+  .body :global(p),
+  .body :global(ul),
+  .body :global(ol) {
+    margin: 0 0 1em;
+  }
+
+  .body :global(ul),
+  .body :global(ol) {
+    padding-left: 1.2em;
+  }
+
+  .body :global(h2) {
+    margin: 1.6em 0 0.5em;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .body :global(h3) {
+    margin: 1.4em 0 0.4em;
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+
+  .body :global(code) {
+    font: 0.9em var(--mono);
+  }
+
+  .body :global(a) {
+    color: var(--accent);
+  }
+
+  .note {
+    padding-top: var(--s-3);
+    border-top: var(--hairline);
+    font: 500 0.85rem var(--sans);
+    color: var(--muted);
+  }
+
+  /* ---------- previous / next ---------- */
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+    margin-top: var(--section-pad);
+    padding-top: 18px;
+    border-top: var(--rule-double);
+  }
+
+  .pager a {
+    display: grid;
+    gap: var(--s-1);
+    text-decoration: none;
+  }
+
+  .next {
+    grid-column: 2;
+    text-align: right;
+  }
+
+  .dir {
+    font: 600 0.85rem var(--sans);
+    color: var(--muted);
+  }
+
+  .name {
+    font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .pager a:hover .name {
+    color: var(--accent);
+  }
+</style>

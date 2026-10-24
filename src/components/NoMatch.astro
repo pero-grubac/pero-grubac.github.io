@@ -1,0 +1,35 @@
+---
+// What a search shows when nothing matches (7.4): the query in quotes and
+// a way back. The page's script fills in the query and shows the block.
+interface Props {
+  /** "project", "app"; a script may change it to the active kind */
+  noun: string;
+}
+---
+
+<div class="empty" data-empty hidden>
+  <p>No <span data-empty-noun>{Astro.props.noun}</span> matches “<span data-empty-q></span>”.</p>
+  <button type="button" data-clear>Clear search</button>
+</div>
+
+<style>
+  .empty {
+    padding: 28px 0;
+    border-bottom: var(--hairline-soft);
+  }
+
+  p {
+    margin: 0 0 var(--s-3);
+    font-size: 1.25rem;
+    font-style: italic;
+  }
+
+  button {
+    padding: 6px var(--s-4);
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-pill);
+    background: none;
+    font: 600 0.85rem var(--sans);
+    cursor: pointer;
+  }
+</style>

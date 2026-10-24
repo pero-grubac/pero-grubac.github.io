@@ -7,7 +7,7 @@
 
 const section = document.getElementById("projects")!;
 const root = section.querySelector<HTMLElement>("[data-index]")!;
-const input = root.querySelector<HTMLInputElement>('input[type="search"]')!;
+const input = root.querySelector<HTMLInputElement>("[data-find]")!;
 const items = [...root.querySelectorAll<HTMLElement>("[data-item]")];
 const filters = [...root.querySelectorAll<HTMLButtonElement>("[data-filter]")];
 const empty = root.querySelector<HTMLElement>("[data-empty]")!;
@@ -168,18 +168,12 @@ window.addEventListener("hashchange", () => {
   if (readHash()) section.scrollIntoView();
 });
 
-/* ---------- keyboard: / focuses the search, Esc closes the open entry ---------- */
+/* ---------- Esc closes the open entry (`/` is FindField's) ---------- */
 
 document.addEventListener("keydown", (e) => {
   if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || document.querySelector("dialog[open]")) return;
   if ((e.target as Element).closest?.("input, textarea, select, [contenteditable]")) return;
-  if (e.key === "/") {
-    e.preventDefault();
-    const box = input.getBoundingClientRect();
-    if (box.top < 90 || box.bottom > innerHeight) section.scrollIntoView();
-    input.focus({ preventScroll: true });
-    input.select();
-  } else if (e.key === "Escape" && open) {
+  if (e.key === "Escape" && open) {
     const { button } = partsOf(open);
     setOpen(null);
     button.focus();
