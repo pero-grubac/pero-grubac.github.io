@@ -126,7 +126,8 @@ summary:     string                 // one sentence, max ~70 chars
 description?: string                // one paragraph (the current site's text);
                                     // required for systems, shown in the
                                     // expanded view for everything else
-flow?:       string                 // architecture one-liner, systems only
+flow?:       string                 // architecture one-liner, systems only;
+                                    // no counts, each technology once
 highlights:  string[]               // 2–5 short bullets, shown when expanded;
                                     // systems have none on the current site
 stack:       string[]               // display names, e.g. "Spring Boot"
@@ -175,8 +176,8 @@ Technologies are never categories. They go in `stack` and are searchable.
 
 ### Inventory (migrate all of these)
 
-Take titles, descriptions, highlights, stack, flow and image alts from the
-current `index.html`. Write `summary` as one sentence of max ~70 chars,
+Take titles, descriptions, highlights, stack and image alts from the
+current `index.html`, and `flow` from the table in the notes below. Write `summary` as one sentence of max ~70 chars,
 shortened from the current text (no new facts). Row order is `order`: the
 current order of the site, serious work first, games and score tables
 last. Systems use the `demo.webp` stills; the old `demo.png` paths never
@@ -226,6 +227,16 @@ Notes:
   summary so the owner can check them.
 - RepoHealth's repo is private and will never be public: `repos: []`,
   `privateRepo: true`. Never ask for or invent a GitHub link.
+- `flow` strings differ from the current site: no counts next to
+  technologies ("2 × PostgreSQL", "4 ASP.NET services") and each
+  technology once. Use these:
+
+  | slug | flow |
+  |---|---|
+  | incident-alert | React apps → ASP.NET services ⇄ RabbitMQ + PostgreSQL |
+  | e-mobility-hub | Angular → Nginx → Spring Boot API + JSP apps → MySQL |
+  | chat-room | React → Nginx → Spring Boot (WAF · SIEM) → MySQL |
+  | online-library-system | Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis |
 
 ---
 
@@ -321,7 +332,9 @@ systems with RabbitMQ and Docker, open to freelance). Photo
 `/assets/avatar.jpeg`.
 
 Stack (Languages / Frameworks / Infrastructure). Clicking an item sets the
-project search to that term and scrolls to the projects.
+project search to that term and scrolls to the projects. An item that no
+project matches (computed at build time with the same matching as the
+search; today FastAPI and GCP) is plain, non-clickable text.
 
 ### 7.3 Systems
 
@@ -339,11 +352,18 @@ the crowding.
   `Live {n}`, `Web {n}`, `Mobile {n}`, `Desktop {n}`, `Tool {n}`. A kind
   with no projects gets no button. Never type a count by hand.
 - Search input focused by `/`, matching title, summary and stack,
-  case-insensitive.
+  case-insensitive. Search covers **all** projects, including the
+  systems: while a query is active, matching systems join the list,
+  listed first, marked `system` and linking to their entry in the systems
+  section (they are not in the list when the search is empty). `All {n}`
+  counts them; the kind filters don't. There is no separate "matching
+  systems" line.
 - Filter and search state mirrored in the URL hash (e.g.
   `#projects?kind=live&q=react`) and restored on load.
-- Collapsed item shows at most: title, one-line summary, kind, and
-  optionally a thumbnail.
+- Collapsed item shows at most: title, one-line summary, kind, optionally
+  a thumbnail, and for live apps a one-click "Open" link (new tab,
+  accessible name "Open {title}"), so a visitor can launch an app without
+  expanding it.
 - Details on demand (inline expand, drawer or modal; the direction
   decides): description, highlights, stack, "Open app" (live only),
   "Download APK" (when `apk` is set), "Source" per repo or a "Private repo"
@@ -553,6 +573,9 @@ Upwork profile.
   "Read the case study", "Copy email".
 - No "simply", "seamless", "cutting-edge", "passionate".
 - No exclamation marks.
+- Never show a count next to a technology ("2× PostgreSQL"), and list
+  each technology once wherever technologies are listed (flow strings,
+  stack lists).
 - English only on the site.
 
 ---

@@ -57,6 +57,7 @@
   --on-accent: #ffffff;
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -363,7 +364,7 @@ dialog.palette::backdrop { background: rgb(0 0 0 / .35); }
         <table>
           <thead><tr><th scope="col">Name<span aria-hidden="true">----</span></th><th scope="col" class="f">Flow<span aria-hidden="true">----</span></th></tr></thead>
           <tbody>
-            <tr><td><a href="#incident-alert">Incident Alert</a></td><td class="f">2 React apps → 4 ASP.NET services ⇄ RabbitMQ + 2 × PostgreSQL</td></tr><tr><td><a href="#e-mobility-hub">eMobilityHub</a></td><td class="f">Angular → Nginx → Spring Boot API + 2 JSP apps → MySQL</td></tr><tr><td><a href="#chat-room">Chat Room</a></td><td class="f">React → Nginx (TLS) → Spring Boot (WAF · SIEM) → MySQL (TLS)</td></tr><tr><td><a href="#online-library-system">Online Library System</a></td><td class="f">7 Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis</td></tr>
+            <tr><td><a href="#incident-alert">Incident Alert</a></td><td class="f">React apps → ASP.NET services ⇄ RabbitMQ + PostgreSQL</td></tr><tr><td><a href="#e-mobility-hub">eMobilityHub</a></td><td class="f">Angular → Nginx → Spring Boot API + JSP apps → MySQL</td></tr><tr><td><a href="#chat-room">Chat Room</a></td><td class="f">React → Nginx → Spring Boot (WAF · SIEM) → MySQL</td></tr><tr><td><a href="#online-library-system">Online Library System</a></td><td class="f">Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis</td></tr>
           </tbody>
         </table>
       </div>
@@ -399,7 +400,7 @@ dialog.palette::backdrop { background: rgb(0 0 0 / .35); }
       </figure>
       <div class="sys-text">
         <h3>Incident Alert</h3>
-        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">2 React apps</span> <span class="op">→</span> <span class="n">4 ASP.NET services</span> <span class="op">⇄</span> <span class="n">RabbitMQ</span> <span class="op">+</span> <span class="n">2 × PostgreSQL</span></p>
+        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">React apps</span> <span class="op">→</span> <span class="n">ASP.NET services</span> <span class="op">⇄</span> <span class="n">RabbitMQ</span> <span class="op">+</span> <span class="n">PostgreSQL</span></p>
         <p class="desc">Citizens report incidents on a map with photos; nothing reaches the public map until a moderator approves it. Four ASP.NET Core 10 services: a public API, a moderation service with its own database, ML.NET k-means grouping of similar reports, and statistics with hot spots and daily trends. Reports, approvals and categories travel as MassTransit events over RabbitMQ, photos included. Accounts are approved by an admin, and Google ID tokens are verified on the server. 94 backend and 108 frontend tests; CI runs an end-to-end smoke test against the whole Docker stack and publishes the images to GHCR.</p>
         <p class="stack"><span class="sr-only">Stack: </span>ASP.NET<span aria-hidden="true"> · </span>C#<span aria-hidden="true"> · </span>React<span aria-hidden="true"> · </span>RabbitMQ<span aria-hidden="true"> · </span>MassTransit<span aria-hidden="true"> · </span>PostgreSQL<span aria-hidden="true"> · </span>ML.NET<span aria-hidden="true"> · </span>Leaflet<span aria-hidden="true"> · </span>Docker<span aria-hidden="true"> · </span>Microservices<span aria-hidden="true"> · </span>JWT<span aria-hidden="true"> · </span>REST APIs</p>
         <div class="links"><a class="btn btn-primary" href="/projects/incident-alert/" data-proto="case-study" aria-label="Read the case study: Incident Alert">Read the case study</a><a class="btn" href="https://github.com/pero-grubac/IncidentAlert" target="_blank" rel="noopener" aria-label="Source code for Incident Alert, backend">Source: Backend</a>
@@ -414,7 +415,7 @@ dialog.palette::backdrop { background: rgb(0 0 0 / .35); }
       </figure>
       <div class="sys-text">
         <h3>eMobilityHub</h3>
-        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">Angular</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot API</span> <span class="op">+</span> <span class="n">2 JSP apps</span> <span class="op">→</span> <span class="n">MySQL</span></p>
+        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">Angular</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot API</span> <span class="op">+</span> <span class="n">JSP apps</span> <span class="op">→</span> <span class="n">MySQL</span></p>
         <p class="desc">Electric vehicle rental platform made of four apps on one database: an Angular back office for admins, operators and managers, a mobile-first JSP shop where clients rent, pay by card and get a PDF invoice, a JSP promotions portal, and the Spring Boot API. Operators see the fleet on an OpenStreetMap map; managers get revenue and fault statistics.</p>
         <p class="stack"><span class="sr-only">Stack: </span>Spring Boot<span aria-hidden="true"> · </span>Java<span aria-hidden="true"> · </span>Angular<span aria-hidden="true"> · </span>TypeScript<span aria-hidden="true"> · </span>JSP<span aria-hidden="true"> · </span>MySQL<span aria-hidden="true"> · </span>Spring Security<span aria-hidden="true"> · </span>Flyway<span aria-hidden="true"> · </span>OpenAPI<span aria-hidden="true"> · </span>Leaflet<span aria-hidden="true"> · </span>Testcontainers<span aria-hidden="true"> · </span>Docker<span aria-hidden="true"> · </span>Nginx<span aria-hidden="true"> · </span>JWT</p>
         <div class="links"><a class="btn btn-primary" href="/projects/e-mobility-hub/" data-proto="case-study" aria-label="Read the case study: eMobilityHub">Read the case study</a><a class="btn" href="https://github.com/pero-grubac/e-Mobility-Hub" target="_blank" rel="noopener" aria-label="Source code for eMobilityHub">Source</a></div>
@@ -427,20 +428,20 @@ dialog.palette::backdrop { background: rgb(0 0 0 / .35); }
       </figure>
       <div class="sys-text">
         <h3>Chat Room</h3>
-        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">React</span> <span class="op">→</span> <span class="n">Nginx (TLS)</span> <span class="op">→</span> <span class="n">Spring Boot (WAF · SIEM)</span> <span class="op">→</span> <span class="n">MySQL (TLS)</span></p>
+        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">React</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot (WAF · SIEM)</span> <span class="op">→</span> <span class="n">MySQL</span></p>
         <p class="desc">Secure internet forum where accounts are approved by an admin and every comment waits for a room moderator. Two-factor sign-in with an emailed code, Google OAuth2, and revocable JWT sessions in an httpOnly cookie. TLS on every hop with certificates from an internal OpenSSL CA; a WAF hit ends the sender's session and a SIEM logs 18 kinds of security events. 219 backend and 86 frontend tests.</p>
         <p class="stack"><span class="sr-only">Stack: </span>Spring Boot<span aria-hidden="true"> · </span>Java<span aria-hidden="true"> · </span>React<span aria-hidden="true"> · </span>Vite<span aria-hidden="true"> · </span>MySQL<span aria-hidden="true"> · </span>Spring Security<span aria-hidden="true"> · </span>JWT<span aria-hidden="true"> · </span>OAuth2<span aria-hidden="true"> · </span>OpenSSL<span aria-hidden="true"> · </span>Flyway<span aria-hidden="true"> · </span>Docker<span aria-hidden="true"> · </span>Nginx</p>
         <div class="links"><a class="btn btn-primary" href="/projects/chat-room/" data-proto="case-study" aria-label="Read the case study: Chat Room">Read the case study</a><a class="btn" href="https://github.com/pero-grubac/Chat-room" target="_blank" rel="noopener" aria-label="Source code for Chat Room">Source</a></div>
       </div>
     </article>
-    <article class="sys" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform of seven java applications. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
+    <article class="sys" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform; each link uses the protocol that fits. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
       <figure class="media" data-video="../../assets/library/demo.mp4" data-title="Online Library System" data-state="idle">
         <img class="" src="../../assets/library/demo.webp" alt="Online Library System" width="960" height="702" loading="lazy" decoding="async">
         <button type="button" class="play" data-play><span class="play-glyph" aria-hidden="true"></span><span data-play-text>Play demo</span></button>
       </figure>
       <div class="sys-text">
         <h3>Online Library System</h3>
-        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">7 Java apps</span> <span class="op">⇄</span> <span class="n">REST · TCP/TLS · multicast · MQ · RMI</span> <span class="op">+</span> <span class="n">Redis</span></p>
+        <p class="flow"><span class="sr-only">Architecture: </span><span class="n">Java apps</span> <span class="op">⇄</span> <span class="n">REST · TCP/TLS · multicast · MQ · RMI</span> <span class="op">+</span> <span class="n">Redis</span></p>
         <p class="desc">Distributed library platform of seven Java applications: three Swing clients for the library, members and suppliers, plus a REST API, a discovery server, a supplier server that downloads books from Project Gutenberg, and an RMI accounting server. Each link uses the protocol that fits it: REST, TCP and TLS sockets, UDP multicast, RabbitMQ and RMI. Supplier orders go through durable queues, invoices get 17% VAT over RMI, and nothing is Java-deserialized off the wire. 171 tests.</p>
         <p class="stack"><span class="sr-only">Stack: </span>Java<span aria-hidden="true"> · </span>Redis<span aria-hidden="true"> · </span>Sockets<span aria-hidden="true"> · </span>TLS<span aria-hidden="true"> · </span>UDP Multicast<span aria-hidden="true"> · </span>RMI<span aria-hidden="true"> · </span>RabbitMQ<span aria-hidden="true"> · </span>JAX-RS<span aria-hidden="true"> · </span>Swing<span aria-hidden="true"> · </span>JWT<span aria-hidden="true"> · </span>REST APIs</p>
         <div class="links"><a class="btn btn-primary" href="/projects/online-library-system/" data-proto="case-study" aria-label="Read the case study: Online Library System">Read the case study</a><a class="btn" href="https://github.com/pero-grubac/Online-Library-System" target="_blank" rel="noopener" aria-label="Source code for Online Library System">Source</a></div>
@@ -986,6 +987,11 @@ addEventListener("DOMContentLoaded", () => {
     const counts = {};
     let shown = 0;
     for (const it of items) {
+      // System entries (if a direction lists them) only join the list while searching
+      if (it.dataset.kind === "system" && !needle) {
+        it.hidden = true;
+        continue;
+      }
       const hit = !needle || it.dataset.hay.includes(needle);
       if (hit) counts[it.dataset.kind] = (counts[it.dataset.kind] || 0) + 1;
       const visible = hit && (!state.kind || it.dataset.kind === state.kind);

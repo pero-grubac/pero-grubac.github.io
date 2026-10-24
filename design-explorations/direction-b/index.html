@@ -25,6 +25,7 @@
   --sans: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -89,7 +90,6 @@ main > section { padding: clamp(48px, 8vw, 96px) 0; }
 .about-text { column-gap: 48px; column-rule: 1px solid var(--rule-soft); }
 @media (min-width: 760px) { .about-text { columns: 2; } }
 .about-text p { margin: 0 0 1em; hyphens: auto; }
-.about-text p:first-child::first-letter { float: left; font-size: 4.6em; line-height: .82; padding: .06em .08em 0 0; font-weight: 500; color: var(--accent); }
 .portrait { margin: 0; }
 .portrait img { width: 100%; max-width: 380px; aspect-ratio: 4 / 5; object-fit: cover; filter: sepia(.12) contrast(1.02); }
 .portrait figcaption { font: 500 .8rem var(--sans); color: var(--muted); margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 8px; max-width: 380px; }
@@ -101,6 +101,7 @@ main > section { padding: clamp(48px, 8vw, 96px) 0; }
 .terms button { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 5px; }
 .terms button:hover { color: var(--accent); text-decoration-color: currentColor; }
 .terms .term { white-space: nowrap; }
+.terms .plain { color: var(--ink-soft); }
 .terms .sep { color: var(--muted); }
 .tools-hint { font: 400 .85rem var(--sans); color: var(--muted); margin: 12px 0 0; }
 
@@ -147,10 +148,17 @@ a.lnk[target="_blank"]::after { content: " ↗"; }
 .show button:hover { background: var(--paper-deep); }
 .show button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .show button[aria-pressed="true"] [data-count] { color: inherit; opacity: .75; }
-.also { font: 400 .9rem var(--sans); color: var(--muted); margin: 0 0 12px; }
-.also a { color: var(--accent); }
 .index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.entry { position: relative; display: grid; grid-template-columns: auto minmax(24px, 1fr) auto; column-gap: 10px; align-items: baseline; padding: 12px 6px 12px 0; border-bottom: 1px solid var(--rule-soft); }
+.entry { position: relative; display: grid; grid-template-columns: auto minmax(24px, 1fr) auto 3.6rem; column-gap: 10px; align-items: baseline; padding: 12px 6px 12px 0; border-bottom: 1px solid var(--rule-soft); }
+.e-open { text-align: right; font: 600 .85rem var(--sans); position: relative; z-index: 2; }
+.e-open a { color: var(--accent); text-decoration: underline; text-decoration-color: currentColor; text-underline-offset: 4px; }
+.e-open a[target="_blank"]::after { content: " ↗"; }
+.e-open a:hover { color: var(--ink); }
+.entry-system { background: var(--card); }
+.entry-system .e-title a { text-decoration: none; }
+.entry-system .e-title a::after { content: ""; position: absolute; inset: 0; }
+.entry-system .e-kind { color: var(--accent); }
+.entry-system + .entry:not(.entry-system) { border-top: 1px solid var(--ink); }
 .e-title { margin: 0; font-weight: 500; font-size: 1.3rem; line-height: 1.25; }
 .e-title button { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
 .e-title button::after { content: ""; position: absolute; inset: 0; }
@@ -196,15 +204,34 @@ a.lnk[target="_blank"]::after { content: " ↗"; }
 .apps-shots a:hover { color: var(--accent); }
 
 /* ---------- contact ---------- */
-.contact { text-align: left; }
-.contact h2 { font-weight: 400; font-size: clamp(2.8rem, 9vw, 6.4rem); line-height: .95; letter-spacing: -.03em; margin: 0 0 18px; font-variation-settings: "opsz" 72; }
-.contact > p { font-style: italic; font-size: 1.3rem; color: var(--ink-soft); margin: 0 0 32px; max-width: 40ch; }
-.mail { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; }
-.mail a { font-size: clamp(1.4rem, 4.4vw, 2.6rem); text-decoration-color: var(--accent); overflow-wrap: anywhere; }
-.copy { border: 1px solid var(--ink); background: none; border-radius: 999px; padding: 6px 16px; font: 600 .85rem var(--sans); cursor: pointer; }
-.copy:hover { background: var(--ink); color: var(--paper); }
+.copy { border: 1px solid var(--rule); background: var(--card); border-radius: 999px; padding: 2px 10px; margin-left: 6px; font: 600 .75rem/1.5 var(--sans); color: var(--ink-soft); cursor: pointer; vertical-align: 2px; }
+.copy:hover { border-color: var(--ink); color: var(--ink); }
 .copy[data-copied] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
-.socials { display: flex; gap: 26px; margin-top: 26px; font: 600 1rem var(--sans); }
+.proto-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 36px; padding: 8px 12px; border: 1px dashed var(--muted); font: 500 .8rem var(--sans); color: var(--muted); width: fit-content; max-width: 100%; }
+.proto-switch button { border: 1px solid var(--rule); background: none; border-radius: 3px; padding: 3px 10px; font: inherit; color: var(--ink-soft); cursor: pointer; }
+.proto-switch button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* variant 1: the closing of a letter */
+.letter { max-width: 40rem; }
+.letter p { margin: 0 0 .5em; font-size: 1.2rem; line-height: 1.6; }
+.letter .letter-lead { font-style: italic; color: var(--ink-soft); margin-bottom: 1.2em; }
+.letter .lnk { font-weight: 500; overflow-wrap: anywhere; }
+.signoff { margin-top: 1.6em !important; font-style: italic; font-size: 1.6rem !important; font-weight: 400; }
+.signoff::before { content: "— "; color: var(--muted); }
+
+/* variant 2: a magazine colophon */
+.colophon { display: grid; gap: 28px 56px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 26px 0; }
+@media (min-width: 900px) { .colophon { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+.col-lead h2 { font-weight: 400; font-size: clamp(1.8rem, 3.4vw, 2.4rem); line-height: 1.05; margin: 0 0 10px; letter-spacing: -.01em; }
+.col-lead p { margin: 0; font-style: italic; color: var(--ink-soft); max-width: 36ch; }
+.col-list { margin: 0; }
+.col-list div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 4px 16px; padding: 9px 0; border-bottom: 1px solid var(--rule-soft); align-items: baseline; }
+.col-list div:first-child { padding-top: 0; }
+.col-list div:last-child { border-bottom: 0; }
+.col-list dt { font: 600 .8rem var(--sans); color: var(--muted); }
+.col-list dd { margin: 0; min-width: 0; font-size: 1.05rem; }
+.col-list .lnk { font: inherit; overflow-wrap: anywhere; }
+@media (max-width: 480px) { .col-list div { grid-template-columns: 1fr; } }
 
 footer { border-top: 1px solid var(--rule); padding: 22px 0 34px; font: 400 .85rem var(--sans); color: var(--muted); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
@@ -273,7 +300,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <div>
         <div class="about-text"><p>I'm a Software Engineering graduate from Trebinje, now based in Banja Luka, with a focus on backend systems. I build reliable, scalable applications, from microservices to mobile apps.</p><p>My work spans distributed systems with RabbitMQ and Docker, real-time platforms, REST APIs and full-stack web applications. I'm comfortable across several ecosystems and like picking the right tool for the job.</p><p>I work professionally as a backend developer and I'm open to freelance work on backend, API or full-stack projects.</p></div>
         <div class="tools">
-          <div><h3>Languages</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Java" aria-label="Find Java in the projects index">Java</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="C#" aria-label="Find C# in the projects index">C#</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Python" aria-label="Find Python in the projects index">Python</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="JavaScript" aria-label="Find JavaScript in the projects index">JavaScript</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="TypeScript" aria-label="Find TypeScript in the projects index">TypeScript</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Dart" aria-label="Find Dart in the projects index">Dart</button></span> </p></div><div><h3>Frameworks</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Spring Boot" aria-label="Find Spring Boot in the projects index">Spring Boot</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="ASP.NET" aria-label="Find ASP.NET in the projects index">ASP.NET</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="FastAPI" aria-label="Find FastAPI in the projects index">FastAPI</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Flutter" aria-label="Find Flutter in the projects index">Flutter</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="React" aria-label="Find React in the projects index">React</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Angular" aria-label="Find Angular in the projects index">Angular</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Django" aria-label="Find Django in the projects index">Django</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="WPF" aria-label="Find WPF in the projects index">WPF</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="SvelteKit" aria-label="Find SvelteKit in the projects index">SvelteKit</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Godot" aria-label="Find Godot in the projects index">Godot</button></span> </p></div><div><h3>Infrastructure</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Docker" aria-label="Find Docker in the projects index">Docker</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="RabbitMQ" aria-label="Find RabbitMQ in the projects index">RabbitMQ</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="PostgreSQL" aria-label="Find PostgreSQL in the projects index">PostgreSQL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="MySQL" aria-label="Find MySQL in the projects index">MySQL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Redis" aria-label="Find Redis in the projects index">Redis</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Nginx" aria-label="Find Nginx in the projects index">Nginx</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Canvas" aria-label="Find Canvas in the projects index">Canvas</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="PWA" aria-label="Find PWA in the projects index">PWA</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="GCP" aria-label="Find GCP in the projects index">GCP</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Vite" aria-label="Find Vite in the projects index">Vite</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="OpenSSL" aria-label="Find OpenSSL in the projects index">OpenSSL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Testcontainers" aria-label="Find Testcontainers in the projects index">Testcontainers</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Playwright" aria-label="Find Playwright in the projects index">Playwright</button></span> </p></div>
+          <div><h3>Languages</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Java" aria-label="Find Java in the projects index">Java</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="C#" aria-label="Find C# in the projects index">C#</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Python" aria-label="Find Python in the projects index">Python</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="JavaScript" aria-label="Find JavaScript in the projects index">JavaScript</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="TypeScript" aria-label="Find TypeScript in the projects index">TypeScript</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Dart" aria-label="Find Dart in the projects index">Dart</button></span> </p></div><div><h3>Frameworks</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Spring Boot" aria-label="Find Spring Boot in the projects index">Spring Boot</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="ASP.NET" aria-label="Find ASP.NET in the projects index">ASP.NET</button><span class="sep">,</span></span> <span class="term"><span class="plain">FastAPI</span><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Flutter" aria-label="Find Flutter in the projects index">Flutter</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="React" aria-label="Find React in the projects index">React</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Angular" aria-label="Find Angular in the projects index">Angular</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Django" aria-label="Find Django in the projects index">Django</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="WPF" aria-label="Find WPF in the projects index">WPF</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="SvelteKit" aria-label="Find SvelteKit in the projects index">SvelteKit</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Godot" aria-label="Find Godot in the projects index">Godot</button></span> </p></div><div><h3>Infrastructure</h3><p class="terms" style="margin:0"><span class="term"><button type="button" data-term="Docker" aria-label="Find Docker in the projects index">Docker</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="RabbitMQ" aria-label="Find RabbitMQ in the projects index">RabbitMQ</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="PostgreSQL" aria-label="Find PostgreSQL in the projects index">PostgreSQL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="MySQL" aria-label="Find MySQL in the projects index">MySQL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Redis" aria-label="Find Redis in the projects index">Redis</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Nginx" aria-label="Find Nginx in the projects index">Nginx</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Canvas" aria-label="Find Canvas in the projects index">Canvas</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="PWA" aria-label="Find PWA in the projects index">PWA</button><span class="sep">,</span></span> <span class="term"><span class="plain">GCP</span><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Vite" aria-label="Find Vite in the projects index">Vite</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="OpenSSL" aria-label="Find OpenSSL in the projects index">OpenSSL</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Testcontainers" aria-label="Find Testcontainers in the projects index">Testcontainers</button><span class="sep">,</span></span> <span class="term"><button type="button" data-term="Playwright" aria-label="Find Playwright in the projects index">Playwright</button></span> </p></div>
           <p class="tools-hint">Select a technology to find it in the projects index.</p>
         </div>
       </div>
@@ -291,7 +318,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <div class="feature-head">
         <h3>Incident Alert</h3>
         <p class="dek">Citizens report incidents on a map; moderators approve them first.</p>
-        <p class="flow"><span class="flow-label">Architecture</span><span class="n">2 React apps</span> <span class="op">→</span> <span class="n">4 ASP.NET services</span> <span class="op">⇄</span> <span class="n">RabbitMQ</span> <span class="op">+</span> <span class="n">2 × PostgreSQL</span></p>
+        <p class="flow"><span class="flow-label">Architecture</span><span class="n">React apps</span> <span class="op">→</span> <span class="n">ASP.NET services</span> <span class="op">⇄</span> <span class="n">RabbitMQ</span> <span class="op">+</span> <span class="n">PostgreSQL</span></p>
       </div>
       <div class="feature-body">
         <p class="desc">Citizens report incidents on a map with photos; nothing reaches the public map until a moderator approves it. Four ASP.NET Core 10 services: a public API, a moderation service with its own database, ML.NET k-means grouping of similar reports, and statistics with hot spots and daily trends. Reports, approvals and categories travel as MassTransit events over RabbitMQ, photos included. Accounts are approved by an admin, and Google ID tokens are verified on the server. 94 backend and 108 frontend tests; CI runs an end-to-end smoke test against the whole Docker stack and publishes the images to GHCR.</p>
@@ -309,7 +336,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <div class="feature-head">
         <h3>eMobilityHub</h3>
         <p class="dek">Electric vehicle rental platform: four apps on one database.</p>
-        <p class="flow"><span class="flow-label">Architecture</span><span class="n">Angular</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot API</span> <span class="op">+</span> <span class="n">2 JSP apps</span> <span class="op">→</span> <span class="n">MySQL</span></p>
+        <p class="flow"><span class="flow-label">Architecture</span><span class="n">Angular</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot API</span> <span class="op">+</span> <span class="n">JSP apps</span> <span class="op">→</span> <span class="n">MySQL</span></p>
       </div>
       <div class="feature-body">
         <p class="desc">Electric vehicle rental platform made of four apps on one database: an Angular back office for admins, operators and managers, a mobile-first JSP shop where clients rent, pay by card and get a PDF invoice, a JSP promotions portal, and the Spring Boot API. Operators see the fleet on an OpenStreetMap map; managers get revenue and fault statistics.</p>
@@ -325,7 +352,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <div class="feature-head">
         <h3>Chat Room</h3>
         <p class="dek">Secure forum with two-factor sign-in and TLS on every hop.</p>
-        <p class="flow"><span class="flow-label">Architecture</span><span class="n">React</span> <span class="op">→</span> <span class="n">Nginx (TLS)</span> <span class="op">→</span> <span class="n">Spring Boot (WAF · SIEM)</span> <span class="op">→</span> <span class="n">MySQL (TLS)</span></p>
+        <p class="flow"><span class="flow-label">Architecture</span><span class="n">React</span> <span class="op">→</span> <span class="n">Nginx</span> <span class="op">→</span> <span class="n">Spring Boot (WAF · SIEM)</span> <span class="op">→</span> <span class="n">MySQL</span></p>
       </div>
       <div class="feature-body">
         <p class="desc">Secure internet forum where accounts are approved by an admin and every comment waits for a room moderator. Two-factor sign-in with an emailed code, Google OAuth2, and revocable JWT sessions in an httpOnly cookie. TLS on every hop with certificates from an internal OpenSSL CA; a WAF hit ends the sender's session and a SIEM logs 18 kinds of security events. 219 backend and 86 frontend tests.</p>
@@ -337,11 +364,11 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
         <button type="button" class="play" data-play><span data-play-text>Play demo</span></button>
       </figure>
     </article>
-    <article class="feature" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform of seven java applications. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
+    <article class="feature" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform; each link uses the protocol that fits. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
       <div class="feature-head">
         <h3>Online Library System</h3>
-        <p class="dek">Distributed library platform of seven Java applications.</p>
-        <p class="flow"><span class="flow-label">Architecture</span><span class="n">7 Java apps</span> <span class="op">⇄</span> <span class="n">REST · TCP/TLS · multicast · MQ · RMI</span> <span class="op">+</span> <span class="n">Redis</span></p>
+        <p class="dek">Distributed library platform; each link uses the protocol that fits.</p>
+        <p class="flow"><span class="flow-label">Architecture</span><span class="n">Java apps</span> <span class="op">⇄</span> <span class="n">REST · TCP/TLS · multicast · MQ · RMI</span> <span class="op">+</span> <span class="n">Redis</span></p>
       </div>
       <div class="feature-body">
         <p class="desc">Distributed library platform of seven Java applications: three Swing clients for the library, members and suppliers, plus a REST API, a discovery server, a supplier server that downloads books from Project Gutenberg, and an RMI accounting server. Each link uses the protocol that fits it: REST, TCP and TLS sockets, UDP multicast, RabbitMQ and RMI. Supplier orders go through durable queues, invoices get 17% VAT over RMI, and nothing is Java-deserialized off the wire. 171 tests.</p>
@@ -372,13 +399,42 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
           </div>
         </div>
         <p class="sr-only" id="result-status" aria-live="polite"></p>
-        <p class="also" id="also" hidden>Also among the systems above: <span data-also-list></span></p>
         <ul class="index">
+          
+    <li class="entry entry-system" data-item data-slug="incident-alert" data-kind="system" data-hay="incident alert citizens report incidents on a map; moderators approve them first. asp.net c# react rabbitmq masstransit postgresql ml.net leaflet docker microservices jwt rest apis" hidden>
+      <p class="e-title"><a href="#incident-alert">Incident Alert</a></p>
+      <span class="leader" aria-hidden="true"></span>
+      <span class="e-kind">system</span>
+      <span class="e-open" aria-hidden="true">↑</span>
+      <p class="e-sum">Citizens report incidents on a map; moderators approve them first.</p>
+    </li>
+    <li class="entry entry-system" data-item data-slug="e-mobility-hub" data-kind="system" data-hay="emobilityhub electric vehicle rental platform: four apps on one database. spring boot java angular typescript jsp mysql spring security flyway openapi leaflet testcontainers docker nginx jwt" hidden>
+      <p class="e-title"><a href="#e-mobility-hub">eMobilityHub</a></p>
+      <span class="leader" aria-hidden="true"></span>
+      <span class="e-kind">system</span>
+      <span class="e-open" aria-hidden="true">↑</span>
+      <p class="e-sum">Electric vehicle rental platform: four apps on one database.</p>
+    </li>
+    <li class="entry entry-system" data-item data-slug="chat-room" data-kind="system" data-hay="chat room secure forum with two-factor sign-in and tls on every hop. spring boot java react vite mysql spring security jwt oauth2 openssl flyway docker nginx" hidden>
+      <p class="e-title"><a href="#chat-room">Chat Room</a></p>
+      <span class="leader" aria-hidden="true"></span>
+      <span class="e-kind">system</span>
+      <span class="e-open" aria-hidden="true">↑</span>
+      <p class="e-sum">Secure forum with two-factor sign-in and TLS on every hop.</p>
+    </li>
+    <li class="entry entry-system" data-item data-slug="online-library-system" data-kind="system" data-hay="online library system distributed library platform; each link uses the protocol that fits. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis" hidden>
+      <p class="e-title"><a href="#online-library-system">Online Library System</a></p>
+      <span class="leader" aria-hidden="true"></span>
+      <span class="e-kind">system</span>
+      <span class="e-open" aria-hidden="true">↑</span>
+      <p class="e-sum">Distributed library platform; each link uses the protocol that fits.</p>
+    </li>
           
     <li class="entry" data-item data-slug="repohealth" data-kind="live" data-hay="repohealth scores each of my public repositories from 0 to 100, every week. sveltekit javascript github api vercel" id="p-repohealth">
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-repohealth">RepoHealth</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://repository-health-monitor.vercel.app/" target="_blank" rel="noopener" aria-label="Open RepoHealth (opens in a new tab)">Open</a></span>
       <p class="e-sum">Scores each of my public repositories from 0 to 100, every week.</p>
       <div class="panel" id="d-repohealth" hidden>
         <p class="panel-title" aria-hidden="true">RepoHealth</p>
@@ -394,6 +450,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-fitforge">FitForge</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">mobile</span>
+      <span class="e-open"></span>
       <p class="e-sum">Plan weekly workouts, log sets and watch strength grow over time.</p>
       <div class="panel" id="d-fitforge" hidden>
         <p class="panel-title" aria-hidden="true">FitForge</p>
@@ -409,6 +466,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-store-chain-management">Store Chain Management</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Retail chain desktop app; the MySQL database enforces the rules.</p>
       <div class="panel" id="d-store-chain-management" hidden>
         <p class="panel-title" aria-hidden="true">Store Chain Management</p>
@@ -423,6 +481,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-etf-oglasi">ETF Oglasi</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">mobile</span>
+      <span class="e-open"></span>
       <p class="e-sum">University announcements and schedules, offline. My thesis.</p>
       <div class="panel" id="d-etf-oglasi" hidden>
         <p class="panel-title" aria-hidden="true">ETF Oglasi</p>
@@ -438,6 +497,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-store-management">Store Management</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Desktop app for a retail store, with admin and cashier roles.</p>
       <div class="panel" id="d-store-management" hidden>
         <p class="panel-title" aria-hidden="true">Store Management</p>
@@ -452,6 +512,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-asset-manager">AssetManager</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">mobile</span>
+      <span class="e-open"></span>
       <p class="e-sum">Android app that tracks company assets, who has them and where.</p>
       <div class="panel" id="d-asset-manager" hidden>
         <p class="panel-title" aria-hidden="true">AssetManager</p>
@@ -466,6 +527,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-devkit">DevKit</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/devkit/" target="_blank" rel="noopener" aria-label="Open DevKit (opens in a new tab)">Open</a></span>
       <p class="e-sum">30 developer tools in one tab; everything runs in the browser.</p>
       <div class="panel" id="d-devkit" hidden>
         <p class="panel-title" aria-hidden="true">DevKit</p>
@@ -481,6 +543,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-catan-map-generator">Catan Map Generator</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/catan-map-generator/" target="_blank" rel="noopener" aria-label="Open Catan Map Generator (opens in a new tab)">Open</a></span>
       <p class="e-sum">Balanced Catan boards from constraint-solving backtracking.</p>
       <div class="panel" id="d-catan-map-generator" hidden>
         <p class="panel-title" aria-hidden="true">Catan Map Generator</p>
@@ -496,6 +559,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-minimal-blog">Minimal Blog</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">web</span>
+      <span class="e-open"></span>
       <p class="e-sum">Django blog with drafts, publishing and moderated comments.</p>
       <div class="panel" id="d-minimal-blog" hidden>
         <p class="panel-title" aria-hidden="true">Minimal Blog</p>
@@ -510,6 +574,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-countdown">Countdown</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/countdown/" target="_blank" rel="noopener" aria-label="Open Countdown (opens in a new tab)">Open</a></span>
       <p class="e-sum">Timers to a duration or a date that survive refreshes and sleep.</p>
       <div class="panel" id="d-countdown" hidden>
         <p class="panel-title" aria-hidden="true">Countdown</p>
@@ -525,6 +590,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-dev-timeline">Dev Timeline</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/dev-timeline/" target="_blank" rel="noopener" aria-label="Open Dev Timeline (opens in a new tab)">Open</a></span>
       <p class="e-sum">Turns a GitHub profile into a timeline of the languages used.</p>
       <div class="panel" id="d-dev-timeline" hidden>
         <p class="panel-title" aria-hidden="true">Dev Timeline</p>
@@ -540,6 +606,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-brick-breaker">Brick Breaker</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/brick-breaker/" target="_blank" rel="noopener" aria-label="Open Brick Breaker (opens in a new tab)">Open</a></span>
       <p class="e-sum">Retro arcade game with 100 levels, 30 power-ups and an editor.</p>
       <div class="panel" id="d-brick-breaker" hidden>
         <p class="panel-title" aria-hidden="true">Brick Breaker</p>
@@ -555,6 +622,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-snake">Snake (Blavor)</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Classic Snake for Windows with a second player and a demo bot.</p>
       <div class="panel" id="d-snake" hidden>
         <p class="panel-title" aria-hidden="true">Snake (Blavor)</p>
@@ -569,6 +637,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-arcane-keep">Arcane Keep</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/arcane-keep/" target="_blank" rel="noopener" aria-label="Open Arcane Keep (opens in a new tab)">Open</a></span>
       <p class="e-sum">Endless tower defense on procedurally generated maps.</p>
       <div class="panel" id="d-arcane-keep" hidden>
         <p class="panel-title" aria-hidden="true">Arcane Keep</p>
@@ -584,6 +653,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-monte-carlo-pi-python">Monte Carlo π · Python</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/Monte-Carlo-based-Pi-Calculator-py/" target="_blank" rel="noopener" aria-label="Open Monte Carlo π · Python (opens in a new tab)">Open</a></span>
       <p class="e-sum">Estimates π with NumPy in the browser, a notebook and the CLI.</p>
       <div class="panel" id="d-monte-carlo-pi-python" hidden>
         <p class="panel-title" aria-hidden="true">Monte Carlo π · Python</p>
@@ -599,6 +669,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-anova">ANOVA</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">One-factor analysis of variance that updates as you type.</p>
       <div class="panel" id="d-anova" hidden>
         <p class="panel-title" aria-hidden="true">ANOVA</p>
@@ -613,6 +684,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-monte-carlo-pi">Monte Carlo π</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Throws random points at a square to estimate π, drawn live.</p>
       <div class="panel" id="d-monte-carlo-pi" hidden>
         <p class="panel-title" aria-hidden="true">Monte Carlo π</p>
@@ -627,6 +699,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-echo-player">Echo Player</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Adds a feedback echo to WAV recordings, with a live preview.</p>
       <div class="panel" id="d-echo-player" hidden>
         <p class="panel-title" aria-hidden="true">Echo Player</p>
@@ -641,6 +714,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-secure-repository">Secure Repository</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">tool</span>
+      <span class="e-open"></span>
       <p class="e-sum">Document vault on a private certificate authority.</p>
       <div class="panel" id="d-secure-repository" hidden>
         <p class="panel-title" aria-hidden="true">Secure Repository</p>
@@ -655,6 +729,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-e-mobility-rental">e-Mobility Rental</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">desktop</span>
+      <span class="e-open"></span>
       <p class="e-sum">Multithreaded simulation of an electric vehicle rental company.</p>
       <div class="panel" id="d-e-mobility-rental" hidden>
         <p class="panel-title" aria-hidden="true">e-Mobility Rental</p>
@@ -669,6 +744,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-git-discord-bot">GitHub Discord Bot</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">tool</span>
+      <span class="e-open"></span>
       <p class="e-sum">Manage GitHub issues and get activity reports from Discord.</p>
       <div class="panel" id="d-git-discord-bot" hidden>
         <p class="panel-title" aria-hidden="true">GitHub Discord Bot</p>
@@ -683,6 +759,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-github-dashboard">GitHub Dashboard</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/github-dashboard/" target="_blank" rel="noopener" aria-label="Open GitHub Dashboard (opens in a new tab)">Open</a></span>
       <p class="e-sum">Terminal-style analytics for any GitHub user, with no backend.</p>
       <div class="panel" id="d-github-dashboard" hidden>
         <p class="panel-title" aria-hidden="true">GitHub Dashboard</p>
@@ -698,6 +775,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-yamb-table">Yamb Table</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/yamb-table/" target="_blank" rel="noopener" aria-label="Open Yamb Table (opens in a new tab)">Open</a></span>
       <p class="e-sum">Multiplayer scoresheet for Yamb, Yahtzee and Yatzy.</p>
       <div class="panel" id="d-yamb-table" hidden>
         <p class="panel-title" aria-hidden="true">Yamb Table</p>
@@ -713,6 +791,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-sedmica">Sedmica</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/sedmica/" target="_blank" rel="noopener" aria-label="Open Sedmica (opens in a new tab)">Open</a></span>
       <p class="e-sum">Scorecard for the card game Sedmica, for 2–4 players.</p>
       <div class="panel" id="d-sedmica" hidden>
         <p class="panel-title" aria-hidden="true">Sedmica</p>
@@ -728,6 +807,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-lora-score-table">Lora Score Table</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/lora-score-table/" target="_blank" rel="noopener" aria-label="Open Lora Score Table (opens in a new tab)">Open</a></span>
       <p class="e-sum">Scorecard for Lora, a four-player card game of seven contracts.</p>
       <div class="panel" id="d-lora-score-table" hidden>
         <p class="panel-title" aria-hidden="true">Lora Score Table</p>
@@ -743,6 +823,7 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
       <h3 class="e-title"><button type="button" data-toggle aria-expanded="false" aria-controls="d-excuse-generator">excuse.exe</button></h3>
       <span class="leader" aria-hidden="true"></span>
       <span class="e-kind">live</span>
+      <span class="e-open"><a href="https://pero-grubac.github.io/excuse-generator/" target="_blank" rel="noopener" aria-label="Open excuse.exe (opens in a new tab)">Open</a></span>
       <p class="e-sum">One button, one excuse, from 1,600+ in English and 1,250+ in Serbian.</p>
       <div class="panel" id="d-excuse-generator" hidden>
         <p class="panel-title" aria-hidden="true">excuse.exe</p>
@@ -784,16 +865,38 @@ dialog.palette::backdrop { background: rgb(28 26 22 / .25); }
     </div>
   </section>
 
-  <section id="contact" class="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h">Let's work together</h2>
-    <p>Open to freelance projects, collaborations and interesting opportunities.</p>
-    <div class="mail">
-      <a href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a>
-      <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button>
+  <section id="contact" class="contact">
+    <div class="proto-switch" role="group" aria-label="Prototype only: contact variant">
+      <span>Prototype only · contact variant</span>
+      <button type="button" data-variant="letter" aria-pressed="true">1 · Letter</button>
+      <button type="button" data-variant="colophon" aria-pressed="false">2 · Colophon</button>
     </div>
-    <div class="socials">
-      <a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">GitHub</a>
-      <a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">LinkedIn</a>
+
+    <!-- Variant 1: the closing of a letter -->
+    <div class="cv" data-variant-panel="letter">
+      <div class="sec-head"><h2>Let's work together</h2></div>
+      <div class="letter">
+        <p class="letter-lead">Open to freelance projects, collaborations and interesting opportunities.</p>
+        <p>Write to me at <a class="lnk" href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a> <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button></p>
+        <p>or find me on <a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">GitHub</a> and <a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+        <p class="signoff">Pero Grubač</p>
+      </div>
+    </div>
+
+    <!-- Variant 2: a magazine colophon -->
+    <div class="cv" data-variant-panel="colophon" hidden>
+      <div class="colophon">
+        <div class="col-lead">
+          <h2>Let's work together</h2>
+          <p>Open to freelance projects, collaborations and interesting opportunities.</p>
+        </div>
+        <dl class="col-list">
+          <div><dt>Email</dt><dd><a class="lnk" href="mailto:pero.grubac00@gmail.com">pero.grubac00@gmail.com</a> <button type="button" class="copy" data-copy aria-label="Copy email address"><span data-copy-label>Copy</span></button></dd></div>
+          <div><dt>GitHub</dt><dd><a class="lnk" href="https://github.com/pero-grubac" target="_blank" rel="noopener">github.com/pero-grubac</a></dd></div>
+          <div><dt>LinkedIn</dt><dd><a class="lnk" href="https://www.linkedin.com/in/perogrubac/" target="_blank" rel="noopener">linkedin.com/in/perogrubac</a></dd></div>
+          <div><dt>Based in</dt><dd>Banja Luka, Bosnia and Herzegovina</dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 </main>
@@ -832,6 +935,21 @@ window.ProtoConfig = (() => {
     afterOpen(item, panel) { cur = [item, panel]; place(); },
     beforeClose(item, panel) { item.append(panel); document.getElementById("reader-empty").hidden = false; cur = null; },
   };
+})();
+
+// Prototype only: switch between the two contact variants (?contact=colophon)
+(() => {
+  const buttons = [...document.querySelectorAll("[data-variant]")];
+  const panels = [...document.querySelectorAll("[data-variant-panel]")];
+  const set = (v) => {
+    panels.forEach((p) => (p.hidden = p.dataset.variantPanel !== v));
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.variant === v)));
+  };
+  set(new URLSearchParams(location.search).get("contact") === "colophon" ? "colophon" : "letter");
+  buttons.forEach((b) => b.addEventListener("click", () => {
+    set(b.dataset.variant);
+    history.replaceState(null, "", "?contact=" + b.dataset.variant + location.hash);
+  }));
 })();</script>
 <script>/* Shared prototype behaviour: filter, search, URL hash, counts, details,
    copy email, on-demand demo video, command palette, keyboard shortcuts.
@@ -909,6 +1027,11 @@ window.ProtoConfig = (() => {
     const counts = {};
     let shown = 0;
     for (const it of items) {
+      // System entries (if a direction lists them) only join the list while searching
+      if (it.dataset.kind === "system" && !needle) {
+        it.hidden = true;
+        continue;
+      }
       const hit = !needle || it.dataset.hay.includes(needle);
       if (hit) counts[it.dataset.kind] = (counts[it.dataset.kind] || 0) + 1;
       const visible = hit && (!state.kind || it.dataset.kind === state.kind);

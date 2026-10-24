@@ -1,8 +1,9 @@
 # Design explorations (phase 0)
 
 Three throwaway prototypes of the home page, built from the real content of
-the current site. Pick one, or combine parts ("layout from A, colours
-from C"). None of this is deployed: the deploy workflow only copies
+the current site. **The owner picked direction B (Journal)**; its design
+system is written up in section 6 of `REDESIGN.md`. A and C stay here for
+reference. None of this is deployed: the deploy workflow only copies
 `index.html`, `css`, `js` and `assets`, and every prototype has
 `<meta name="robots" content="noindex">`.
 
@@ -40,17 +41,21 @@ for flow arrows and stack. Light theme: `#fafafa` with darkened versions of
 the same accents. Fonts: **Cascadia Code** (Windows Terminal's own font)
 for headings, tables and UI, **IBM Plex Sans** for running text.
 
-## Direction B: Journal
+## Direction B: Journal (chosen)
 
 A printed long-form profile on warm paper with a grain texture. Big serif
 name, an italic standfirst, and an "In this portfolio" contents box with
-dotted leaders. The about text is set in two columns with a drop cap next
-to a 4:5 portrait. Each system is a magazine feature: headline and dek
+dotted leaders. The about text is set in two columns next to a 4:5
+portrait. Each system is a magazine feature: headline and dek
 with the architecture line on the left, the description on the right, and
 the screenshot full width underneath. Projects are an "Index of projects"
 with dotted leaders (title …… kind); on wide screens the selected entry
 opens in a sticky reader pane beside the index, and on phones it expands
-inline. Light only: paper `#f4f0e6`, ink `#1c1a16`, muted `#6a6457`, one
+inline. Live apps have a one-click "Open" link in the index; while you
+search, matching systems join the index at the top. The contact section
+has two variants to choose from, a letter closing and a magazine
+colophon: switch with the dashed "Prototype only" control above it, or
+open `?contact=colophon`. Light only: paper `#f4f0e6`, ink `#1c1a16`, muted `#6a6457`, one
 accent, oxblood `#a4321f`, for links, flow arrows and the selected entry.
 Fonts: **Newsreader** (display and text serif, optical sizes) and
 **Instrument Sans** for labels, navigation and buttons.
@@ -77,8 +82,11 @@ labels.
   count (filters, apps teaser, contents box) is computed from the data.
 - Search (`/` to focus) over title, summary and stack; filter by kind with
   live counts. The state is kept in the URL hash
-  (`#projects?kind=live&q=react`) and restored on load. If the query also
-  matches a system, a line under the filters links to it.
+  (`#projects?kind=live&q=react`) and restored on load. In A and C, a
+  line under the filters links to matching systems; B lists them in the
+  index instead (the chosen behaviour).
+- Architecture lines show no counts next to technologies, and each
+  technology appears once.
 - Details on demand, one open at a time, `Esc` closes and focus returns to
   the project.
 - Demo videos follow the video rule: the `demo.webp` still is shown, and
@@ -94,6 +102,24 @@ Prototype stand-ins: "Read the case study" shows a note (those pages come
 in phase 4), and the apps teaser links to `#projects?kind=live` instead of
 `/apps/`. Live app screenshots use a placeholder alt ("Screenshot of …")
 until real alts are written in phase 2.
+
+## Regenerating
+
+The pages are generated; don't edit the HTML by hand. The scripts live in
+`_scripts/` and need only Node (and Playwright, already a dev dependency,
+for the checks):
+
+```sh
+node design-explorations/_scripts/extract.mjs   # current index.html → projects.raw.json
+node design-explorations/_scripts/build.mjs     # projects.raw.json + templates → direction-*/index.html
+node design-explorations/_scripts/check.mjs     # browser checks at 360 and 1440 px (all three, or: b)
+```
+
+`content.mjs` holds the shared data (slugs, short summaries, flow lines,
+links), `core.js` the shared page script (search, filters, hash, details,
+video, palette, copy), and `dir-a/b/c.mjs` one template each.
+`check.mjs` starts its own server; on Windows it drives Edge
+(`PW_CHANNEL` to change), and `SHOTS=<dir>` saves screenshots.
 
 All six fonts exist as `@fontsource` packages for phase 1: A
 `@fontsource-variable/cascadia-code` + `@fontsource/ibm-plex-sans`, B

@@ -28,6 +28,7 @@
   --rail: 236px;
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
 @media (min-width: 1024px) { html { scroll-padding-top: 24px; } }
 body {
@@ -380,7 +381,7 @@ dialog.palette::backdrop { background: rgb(6 20 46 / .6); }
         <h3>Incident Alert</h3>
         <p class="sheet-sum">Citizens report incidents on a map; moderators approve them first.</p>
       </header>
-      <ol class="schem" aria-label="Architecture: 2 React apps → 4 ASP.NET services ⇄ RabbitMQ + 2 × PostgreSQL"><li class="node">2 React apps</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">4 ASP.NET services</li><li class="wire" aria-hidden="true"><span>⇄</span></li><li class="node">RabbitMQ</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">2 × PostgreSQL</li></ol>
+      <ol class="schem" aria-label="Architecture: React apps → ASP.NET services ⇄ RabbitMQ + PostgreSQL"><li class="node">React apps</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">ASP.NET services</li><li class="wire" aria-hidden="true"><span>⇄</span></li><li class="node">RabbitMQ</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">PostgreSQL</li></ol>
       <div class="sheet-body">
         <figure class="media" data-video="../../assets/incident_alert/demo.mp4" data-title="Incident Alert" data-state="idle">
           <img class="" src="../../assets/incident_alert/demo.webp" alt="Incident Alert" width="960" height="600" fetchpriority="high" decoding="async">
@@ -400,7 +401,7 @@ dialog.palette::backdrop { background: rgb(6 20 46 / .6); }
         <h3>eMobilityHub</h3>
         <p class="sheet-sum">Electric vehicle rental platform: four apps on one database.</p>
       </header>
-      <ol class="schem" aria-label="Architecture: Angular → Nginx → Spring Boot API + 2 JSP apps → MySQL"><li class="node">Angular</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Nginx</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Spring Boot API</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">2 JSP apps</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">MySQL</li></ol>
+      <ol class="schem" aria-label="Architecture: Angular → Nginx → Spring Boot API + JSP apps → MySQL"><li class="node">Angular</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Nginx</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Spring Boot API</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">JSP apps</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">MySQL</li></ol>
       <div class="sheet-body">
         <figure class="media" data-video="../../assets/e-mobility-hub/demo.mp4" data-title="eMobilityHub" data-state="idle">
           <img class="" src="../../assets/e-mobility-hub/demo.webp" alt="eMobilityHub" width="960" height="540" loading="lazy" decoding="async">
@@ -418,7 +419,7 @@ dialog.palette::backdrop { background: rgb(6 20 46 / .6); }
         <h3>Chat Room</h3>
         <p class="sheet-sum">Secure forum with two-factor sign-in and TLS on every hop.</p>
       </header>
-      <ol class="schem" aria-label="Architecture: React → Nginx (TLS) → Spring Boot (WAF · SIEM) → MySQL (TLS)"><li class="node">React</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Nginx (TLS)</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Spring Boot (WAF · SIEM)</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">MySQL (TLS)</li></ol>
+      <ol class="schem" aria-label="Architecture: React → Nginx → Spring Boot (WAF · SIEM) → MySQL"><li class="node">React</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Nginx</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">Spring Boot (WAF · SIEM)</li><li class="wire" aria-hidden="true"><span>→</span></li><li class="node">MySQL</li></ol>
       <div class="sheet-body">
         <figure class="media" data-video="../../assets/chatroom/demo.mp4" data-title="Chat Room" data-state="idle">
           <img class="" src="../../assets/chatroom/demo.webp" alt="Chat Room" width="880" height="495" loading="lazy" decoding="async">
@@ -431,12 +432,12 @@ dialog.palette::backdrop { background: rgb(6 20 46 / .6); }
         </div>
       </div>
     </article>
-    <article class="sheet" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform of seven java applications. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
+    <article class="sheet" id="online-library-system" data-system data-title="Online Library System" data-hay="online library system distributed library platform; each link uses the protocol that fits. java redis sockets tls udp multicast rmi rabbitmq jax-rs swing jwt rest apis">
       <header class="sheet-head">
         <h3>Online Library System</h3>
-        <p class="sheet-sum">Distributed library platform of seven Java applications.</p>
+        <p class="sheet-sum">Distributed library platform; each link uses the protocol that fits.</p>
       </header>
-      <ol class="schem" aria-label="Architecture: 7 Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis"><li class="node">7 Java apps</li><li class="wire" aria-hidden="true"><span>⇄</span></li><li class="node">REST · TCP/TLS · multicast · MQ · RMI</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">Redis</li></ol>
+      <ol class="schem" aria-label="Architecture: Java apps ⇄ REST · TCP/TLS · multicast · MQ · RMI + Redis"><li class="node">Java apps</li><li class="wire" aria-hidden="true"><span>⇄</span></li><li class="node">REST · TCP/TLS · multicast · MQ · RMI</li><li class="wire" aria-hidden="true"><span>+</span></li><li class="node">Redis</li></ol>
       <div class="sheet-body">
         <figure class="media" data-video="../../assets/library/demo.mp4" data-title="Online Library System" data-state="idle">
           <img class="" src="../../assets/library/demo.webp" alt="Online Library System" width="960" height="702" loading="lazy" decoding="async">
@@ -1105,6 +1106,11 @@ window.ProtoConfig = (() => {
     const counts = {};
     let shown = 0;
     for (const it of items) {
+      // System entries (if a direction lists them) only join the list while searching
+      if (it.dataset.kind === "system" && !needle) {
+        it.hidden = true;
+        continue;
+      }
       const hit = !needle || it.dataset.hay.includes(needle);
       if (hit) counts[it.dataset.kind] = (counts[it.dataset.kind] || 0) + 1;
       const visible = hit && (!state.kind || it.dataset.kind === state.kind);
