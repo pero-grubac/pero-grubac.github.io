@@ -1,4 +1,4 @@
-// Structured data (REDESIGN.md 10.3) and absolute URLs for the <Seo>
+// Structured data and absolute URLs for the <Seo>
 // component. Every list here comes from the projects collection. The
 // RepoHealth repo is private, so nothing here may link to it: its
 // SoftwareApplication has no codeRepository, and it has no case study.

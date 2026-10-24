@@ -1,4 +1,4 @@
-// The command palette (REDESIGN.md 8.3); the markup is in
+// The command palette; the markup is in
 // components/Palette.astro. ⌘K / Ctrl K opens and closes it, even while
 // typing, and always calls preventDefault() so the browser's own shortcut
 // never fires. A native modal <dialog> traps the focus and Esc closes it.

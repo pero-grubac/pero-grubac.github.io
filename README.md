@@ -85,10 +85,6 @@ Each project is one Markdown file. A strict schema checks it at build time, and 
 
 ## 📁 Project Structure
 
-> `REDESIGN.md`, `design-explorations/` and `legacy/` are the redesign's spec, its
-> design prototypes and the old hand-written site; they are removed after
-> the launch.
-
 ```
 pero-grubac.github.io/
 ├── src/
@@ -113,12 +109,9 @@ pero-grubac.github.io/
 ├── scripts/check-links.mjs    Checks every live, repo and APK link in the content
 ├── tests/                     Playwright: home, other pages, palette, axe, and the build output (SEO)
 ├── playwright.config.ts       Runs the tests against `astro preview` of dist/
-├── lighthouserc.json          Lighthouse on mobile: home, /apps/, a case study (REDESIGN.md section 2)
+├── lighthouserc.json          Lighthouse on mobile for home, /apps/ and a case study, and its targets
 ├── astro.config.mjs           Static output, trailingSlash "always", sitemap, inlined CSS, font subsetting,
 │                              and a guard for the other repos' paths
-├── design-explorations/       Phase 0 prototypes (direction B is the reference)
-├── legacy/                    The old hand-written site, until launch
-├── REDESIGN.md                The redesign spec
 └── .github/workflows/
     ├── ci.yml                 astro check + build, Playwright tests and Lighthouse on every push and PR
     └── deploy.yml             After CI passes on main: withastro/action → GitHub Pages
@@ -152,18 +145,90 @@ npm run check:links  # every live, repo and APK link in the content must return 
 
 ### Adding a project
 
-Add one file, `src/content/projects/<slug>.md`, with the fields described
-in section 5 of `REDESIGN.md` (copy an existing project of the same kind),
-and put its screenshot under `src/assets/`. `npm run build` tells you
-exactly which field is wrong if something doesn't fit.
+A project is one file, `src/content/projects/<slug>.md`, and nothing else:
+the home page, the index and its counts, `/apps/`, the command palette,
+the case study page, its social image, the sitemap and the structured data
+all pick it up on the next build.
 
-With `caseStudy: true` (every project but RepoHealth) it also gets a page
-at `/projects/<slug>/`, with its own social image and a `metaDescription`
-of 140–160 characters for search results. Its case study is the Markdown
-body of the same file, written from the project's README; a project with
-several parts that talk to each other can also have an architecture
-diagram, `src/components/diagrams/<slug>.astro`. A live app also names its
-`applicationCategory`. See sections 5, 6.8, 8.2 and 10 of `REDESIGN.md`.
+1. Pick its **kind**, by what a visitor can do with it, the first that fits:
+   `system` (shown mainly for its architecture and code), `live` (runs in a
+   browser at a URL), `web` (a web project you run yourself), `mobile`
+   (installs on a phone), `desktop` (runs on a desktop), `tool` (anything
+   else: bots, CLIs, integrations). Technologies are never kinds; they go in
+   `stack`.
+2. Copy a project file of the same kind and rename it after the new slug.
+3. Put the screenshot in `src/assets/<folder>/` (WebP), and for a system the
+   demo video in `public/assets/<folder>/` (see Demo videos below).
+4. Fill in the fields, then run `npm run build`. The schema
+   (`src/content.config.ts`) fails the build with the field and the reason
+   if anything doesn't fit.
+5. Run `npm test`, and `npm run check:links` to check the new links.
+
+A live app, for example:
+
+```yaml
+---
+order: 14                       # its place in every list; each number once
+slug: countdown                 # kebab-case, the same as the file name
+title: "Countdown"
+kind: live
+applicationCategory: UtilitiesApplication
+year: 2026                      # the year its repo was created
+summary: "Timers to a duration or a date that survive refreshes and sleep."
+metaDescription: "Countdown: as many timers as you like, to a duration or a date. ..."
+description: "As many timers as you like, to a duration or a date. ..."
+highlights:
+  - "Repaint loop pauses in hidden tabs and recalculates the moment you return"
+  - "Installable PWA · zero dependencies · 57 unit + 10 Playwright e2e tests"
+stack: ["JavaScript", "Web Audio", "Canvas", "PWA", "Playwright"]
+links:
+  live: "https://pero-grubac.github.io/countdown/"
+  repos:
+    - label: "Source"
+      url: "https://github.com/pero-grubac/countdown"
+image: "../../assets/live/countdown.webp"
+imageAlt: "Countdown: what the screenshot shows, for screen readers"
+featured: false
+caseStudy: true
+---
+
+The case study, in Markdown (see below).
+```
+
+| Field | Rules |
+|-------|-------|
+| `order`, `slug`, `title`, `kind` | Required. `order` and `slug` are unique; the file is named after the slug |
+| `summary` | One sentence, at most 75 characters: the line under the title everywhere |
+| `description` | One paragraph; required for systems, shown when an index entry opens |
+| `repeatsSummary` | `true` when the description only rewords the summary, so the open entry doesn't show it twice |
+| `highlights` | 2–5 short points for every kind but `system` |
+| `stack` | Display names (`"Spring Boot"`); each technology once and no counts (`"2× PostgreSQL"`). The search and the About stack terms match these |
+| `flow` | Systems only: the architecture line, such as `React → Nginx → Spring Boot → MySQL`; no counts, each technology once |
+| `links.live` | Exactly for `live`: an absolute `https://` URL. An app from another repo on this domain must be listed in `src/lib/other-repos.mjs`, which also keeps this site off its path |
+| `links.repos` | `{ label, url }` under `github.com/pero-grubac/`: one repo is labelled `Source`, several by their part (`Backend`, `Frontend`). A private repo: `repos: []` and `privateRepo: true`, which shows "Private repo" and never links it |
+| `links.apk` | Mobile apps only: the latest release's download |
+| `image`, `imageAlt` | Together; the path is relative to the project file. Without a screenshot, list `commands` instead (slash commands, shown as a code block) |
+| `video` | Systems only: `/assets/<folder>/demo.mp4`, with `demo.webm` beside it |
+| `applicationCategory` | Exactly for `live`: `DeveloperApplication`, `EducationalApplication`, `EntertainmentApplication`, `GameApplication` or `UtilitiesApplication` |
+| `featured` | `true` exactly for systems |
+| `caseStudy` | `true` builds `/projects/<slug>/`; then `metaDescription` is required: 140–160 characters, unique, what the page offers |
+| `year` | Optional |
+
+**The case study** is the Markdown body under the front matter. Write it in
+the first person from the project's README, with only the sections the
+project has material for, in this order: What it does, How it works (one
+application) or Architecture (several parts), Decisions and why, Security,
+Testing and deployment. A score table gets one to three short sections, a
+system all five. Each `##` heading shows in the page's "On this page" list.
+Notes for later go in hidden Markdown comments, such as
+`[//]: # "TODO(owner): …"`; the tests fail if one shows on a page.
+
+**An architecture diagram**, for a project made of several parts that talk to
+each other, is `src/components/diagrams/<slug>.astro`, drawn with the shapes
+in `src/components/diagram/` (copy an existing one). Boxes are applications,
+cylinders databases, a double rule a message broker; solid lines are
+requests, dashed lines messages through a queue, dotted lines side channels.
+The case study shows it when the file exists.
 
 ### Demo videos
 
@@ -203,9 +268,9 @@ To test with that one locally too: `npx playwright install chromium`, then
 | `tests/build.spec.ts` | `dist/` without a browser: internal links, titles and descriptions, canonical, Open Graph, JSON-LD, sitemap, robots.txt, icons, social images, demo video sources, font subsets |
 
 `npm run lighthouse` runs Lighthouse CI (fetched with `npx`) on mobile
-for home, `/apps/` and a case study, and fails below the targets of
-`REDESIGN.md` section 2: performance 95, the rest 100. The old site's
-tests are kept in `legacy/tests/` and no longer run.
+for home, `/apps/` and a case study. It fails below performance 95 or
+below 100 for accessibility, best practices and SEO, and warns when the
+LCP passes 2.5 s or the CLS 0.05.
 
 ---
 
@@ -250,11 +315,11 @@ sequenceDiagram
 | `ci.yml` | Every push (including `main`) and pull request | Three jobs side by side: `astro check` and `astro build`; the Playwright tests; Lighthouse (reports kept as an artifact) |
 | `deploy.yml` | After **CI passes on `main`**, or a manual run | `withastro/action` builds `dist/` and uploads it; `actions/deploy-pages` publishes it |
 
-Deploy is chained to CI (`workflow_run`): a push to `main` is tested once, and only a green run is published, from exactly the commit that was tested. Documentation-only commits start neither. Nothing deploys from other branches, so the redesign goes live only when `redesign` is merged into `main`.
+Deploy is chained to CI (`workflow_run`): a push to `main` is tested once, and only a green run is published, from exactly the commit that was tested. Documentation-only commits start neither. Nothing deploys from other branches.
 
-CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the build output (`dist/`) is deployed; `legacy/` and `design-explorations/` never are.
+CI **skips documentation-only changes** (`*.md`, `readme_assets/`, `LICENSE`, `.gitignore`, `.vscode/`), and a newer run on the same branch cancels the older one. Only the build output (`dist/`) is deployed.
 
-**One-time setup:** **Settings → Pages → Build and deployment → Source** → **GitHub Actions**. Until then GitHub keeps publishing `main` directly and the checks don't gate the deploy.
+The repository's **Settings → Pages → Build and deployment → Source** must be **GitHub Actions**; with "Deploy from a branch", GitHub would publish the repository root instead of `dist/`.
 
 ---
 

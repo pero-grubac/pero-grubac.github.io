@@ -1,4 +1,4 @@
-// /site.webmanifest (REDESIGN.md 10.7): the name, the paper colour as theme
+// /site.webmanifest: the name, the paper colour as theme
 // and background, and the monogram icons.
 import type { APIRoute } from "astro";
 import { site } from "../lib/site";

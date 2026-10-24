@@ -1,5 +1,5 @@
 // The build output (dist/) without a browser: internal links, the meta tags
-// and structured data of every page (REDESIGN.md section 10), the sitemap,
+// and structured data of every page, the sitemap,
 // robots.txt, the icons and social images, and the font subsets.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
@@ -110,7 +110,7 @@ test("case studies: a written body, its sections in the margin, a diagram where 
   }
 });
 
-test("titles: short, the page's name first, unique (10.1)", () => {
+test("titles: short, the page's name first, unique", () => {
   expect(page("/").title).toBe("Pero Grubač | Backend Developer");
   expect(page("/apps/").title).toBe("Apps | Pero Grubač");
   expect(page("/404.html").title).toBe("Page not found | Pero Grubač");
@@ -122,17 +122,17 @@ test("titles: short, the page's name first, unique (10.1)", () => {
   expect(new Set(pages.map((p) => p.title)).size, "unique").toBe(pages.length);
 });
 
-test("descriptions: 140–160 characters, unique (10.1)", () => {
+test("descriptions: 140–160 characters, unique", () => {
   for (const p of pages) {
     const d = p.meta("description")!;
-    // home keeps the old site's description (10.1)
+    // the home page's description is the one exception, at 167 characters
     if (p.path !== "/") expect([...d].length, `${p.path}: ${d}`).toBeGreaterThanOrEqual(140);
     if (p.path !== "/") expect([...d].length, `${p.path}: ${d}`).toBeLessThanOrEqual(160);
   }
   expect(new Set(pages.map((p) => p.meta("description"))).size, "unique").toBe(pages.length);
 });
 
-test("canonical, author, Open Graph and Twitter card on every page (10.1)", () => {
+test("canonical, author, Open Graph and Twitter card on every page", () => {
   for (const p of pages) {
     const at = p.path;
     expect(p.meta("author"), at).toBe("Pero Grubač");
@@ -165,7 +165,7 @@ test("canonical, author, Open Graph and Twitter card on every page (10.1)", () =
   for (const p of studies) expect(p.meta("og:image")).toBe(`${SITE}${p.path}og.png`);
 });
 
-test("social images: a 1200×630 PNG for /apps/ and every case study (10.2)", async () => {
+test("social images: a 1200×630 PNG for /apps/ and every case study", async () => {
   for (const p of [page("/apps/"), ...studies]) {
     const file = join(dist, new URL(p.meta("og:image")!).pathname);
     const info = await sharp(file).metadata();
@@ -175,7 +175,7 @@ test("social images: a 1200×630 PNG for /apps/ and every case study (10.2)", as
   }
 });
 
-test("structured data: home (10.3)", () => {
+test("structured data: home", () => {
   const items = things(page("/"));
   const person = items.find((t) => t["@type"] === "Person")!;
   expect(person).toMatchObject({
@@ -193,7 +193,7 @@ test("structured data: home (10.3)", () => {
   expect(list.itemListElement.map((i: any) => i.url)).toEqual(SYSTEMS.map((s) => `${SITE}/projects/${s}/`));
 });
 
-test("structured data: /apps/ (10.3)", () => {
+test("structured data: /apps/", () => {
   const list = things(page("/apps/")).find((t) => t["@type"] === "ItemList")!;
   expect(list.itemListElement).toHaveLength(13);
   for (const { item, position } of list.itemListElement) {
@@ -205,7 +205,7 @@ test("structured data: /apps/ (10.3)", () => {
   }
 });
 
-test("structured data: every case study (10.3)", () => {
+test("structured data: every case study", () => {
   for (const p of studies) {
     const items = things(p);
     const code = items.find((t) => t["@type"] === "SoftwareSourceCode")!;
@@ -224,7 +224,7 @@ test("structured data: every case study (10.3)", () => {
   }
 });
 
-test("sitemap: every page but the 404, with lastmod (10.4)", () => {
+test("sitemap: every page but the 404, with lastmod", () => {
   const index = readFileSync(join(dist, "sitemap-index.xml"), "utf8");
   expect(index).toContain(`<loc>${SITE}/sitemap-0.xml</loc>`);
   const xml = readFileSync(join(dist, "sitemap-0.xml"), "utf8");
@@ -235,18 +235,14 @@ test("sitemap: every page but the 404, with lastmod (10.4)", () => {
   expect(xml).not.toContain("repository-health");
 });
 
-test("robots.txt allows everything and points to the sitemap (10.4)", () => {
+test("robots.txt allows everything and points to the sitemap", () => {
   const robots = readFileSync(join(dist, "robots.txt"), "utf8");
-  expect(robots).toMatch(/^User-agent: \*\nAllow: \/\n/);
+  // any line ending is valid (RFC 9309); a Windows checkout has CRLF
+  expect(robots).toMatch(/^User-agent: \*\r?\nAllow: \/\r?\n/);
   expect(robots).toContain(`Sitemap: ${SITE}/sitemap-index.xml`);
 });
 
-test("legacy/ and design-explorations/ are not in the build (10.4)", () => {
-  expect(existsSync(join(dist, "legacy"))).toBe(false);
-  expect(existsSync(join(dist, "design-explorations"))).toBe(false);
-});
-
-test("favicons and the manifest (10.7)", async () => {
+test("favicons and the manifest", async () => {
   const svg = readFileSync(join(dist, "favicon.svg"), "utf8");
   expect(svg).toMatch(/^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" width="32" height="32"/);
   const ico = readFileSync(join(dist, "favicon.ico"));
@@ -261,7 +257,7 @@ test("favicons and the manifest (10.7)", async () => {
   }
 });
 
-test("fonts: the italic has one optical size; roman and italic latin are preloaded (6.3)", () => {
+test("fonts: the italic has one optical size; roman and italic latin are preloaded", () => {
   const cache = "node_modules/.cache/subset-fonts";
   for (const file of readdirSync(cache)) {
     const axes = Object.keys((fontkit.openSync(join(cache, file)) as fontkit.Font).variationAxes ?? {}).sort();

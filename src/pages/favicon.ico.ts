@@ -1,5 +1,5 @@
 // /favicon.ico, 32×32: the "pg" monogram for browsers and tools that ask
-// for the .ico (REDESIGN.md 10.7).
+// for the .ico.
 import type { APIRoute } from "astro";
 import { ico, monogramPng } from "../lib/icons";
 

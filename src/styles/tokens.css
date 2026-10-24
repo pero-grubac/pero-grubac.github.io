@@ -1,10 +1,11 @@
-/* Design tokens for the "Journal" direction (REDESIGN.md section 6).
+/* Design tokens of "Journal", the site's design: set like a printed page,
+   with paper, ink, rules and one accent colour for what you can act on.
    One light theme; there is no dark variant and no theme toggle. */
 
 :root {
   color-scheme: light;
 
-  /* Colour (6.2). Contrast on --paper: ink 15.3, ink-soft 10.0,
+  /* Colour. Contrast on --paper: ink 15.3, ink-soft 10.0,
      muted 5.2 (4.7 on --paper-deep, the lowest allowed), accent 6.0. */
   --paper: #f4f0e6;
   --paper-deep: #ebe5d6;
@@ -19,7 +20,7 @@
   /* Paper grain: SVG noise, ~9% alpha, 240px tile */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  /* Typography (6.3) */
+  /* Typography */
   --serif: "Newsreader Variable", Georgia, "Times New Roman", serif;
   --sans: "Instrument Sans Variable", "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
@@ -36,7 +37,7 @@
   --fs-label: 0.9rem;
   --fs-caption: 0.8rem;
 
-  /* Space and layout (6.4). Breakpoints, which can't be custom
+  /* Space and layout. Breakpoints, which can't be custom
      properties: 720 masthead wraps, 760 about columns, 900 features
      split, 980 reader pane, 1000 hero and about split. */
   --s-1: 4px;
@@ -61,7 +62,7 @@
   --leader: 1px dotted var(--muted);
   --shadow-print: 8px 8px 0 var(--rule); /* the palette's, the only shadow */
 
-  /* Motion (6.5) */
+  /* Motion */
   --t-video: 0.25s;
   --t-toast: 0.2s;
 }

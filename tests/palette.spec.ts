@@ -1,4 +1,4 @@
-// The command palette (REDESIGN.md 8.3): ⌘K / Ctrl K and the Search pill,
+// The command palette: ⌘K / Ctrl K and the Search pill,
 // Esc, the backdrop, ↑ ↓ and Enter, fuzzy matching on title and stack,
 // and what each kind of row does.
 import { test, expect, desktop, phone, hash, topOf, SCROLL_PAD } from "./helpers";
@@ -74,7 +74,7 @@ test.describe("palette at 1440", () => {
     const appHrefs = await page.$$eval("#pal-list a[target=_blank]", (as) => as.map((a) => a.getAttribute("href")));
     expect(appHrefs.filter((h) => !h?.startsWith("https://")), "absolute app URLs").toEqual([]);
     await expect(page.locator('#pal-list a[href="https://pero-grubac.github.io/brick-breaker/"]')).toHaveCount(1);
-    // every case study is in it (10.4)
+    // every case study is in it
     const studies = await page.$$eval('#pal-list a[href^="/projects/"]', (as) => as.length);
     expect(studies).toBe(29);
     // RepoHealth's repo is private: its row shows its details in the index, its app opens
@@ -191,7 +191,7 @@ test.describe("palette at 1440", () => {
 });
 
 // The dialog is never taller than the window and never scrolls; only the
-// results list does, with the Journal scrollbar (6.4)
+// results list does, with the Journal scrollbar
 for (const [name, viewport] of [
   ["1366×768", { viewport: { width: 1366, height: 768 } }],
   ["360×780", phone],

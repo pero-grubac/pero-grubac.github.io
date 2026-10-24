@@ -8,7 +8,7 @@ import { OTHER_REPOS, SITE } from "./src/lib/other-repos.mjs";
 
 /**
  * GitHub Pages user site: other repos are served as project pages under the
- * same domain (REDESIGN.md section 2), so this site must never create a
+ * same domain, so this site must never create a
  * route with one of their names (src/lib/other-repos.mjs). Fails the build
  * when a page, or anything at the top of dist/ (public/ files included),
  * would take one of those paths. Compared without case, so not even a
@@ -26,7 +26,7 @@ function reservedPaths() {
           reserved.has(name.toLowerCase())
         );
         if (taken.length)
-          throw new Error(`${taken.map((t) => `/${t}/`).join(", ")}: served by another repo on this domain (REDESIGN.md section 2)`);
+          throw new Error(`${taken.map((t) => `/${t}/`).join(", ")}: served by another repo on this domain`);
       },
     },
   };
@@ -57,7 +57,7 @@ function lastChanged() {
 let changed;
 
 /**
- * The sitemap's lastmod (REDESIGN.md 10.4): a case study changes with its
+ * The sitemap's lastmod: a case study changes with its
  * project file or its diagram; home and /apps/ show every project, so they
  * change with anything under src/.
  * @param {string} url

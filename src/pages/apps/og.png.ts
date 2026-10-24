@@ -1,4 +1,4 @@
-// /apps/og.png: the social image of the apps gallery (REDESIGN.md 10.2).
+// /apps/og.png: the social image of the apps gallery.
 import type { APIRoute } from "astro";
 import { getProjects } from "../../lib/projects";
 import { ogImage, png } from "../../lib/og";

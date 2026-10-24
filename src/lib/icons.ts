@@ -1,4 +1,4 @@
-// The favicon (REDESIGN.md 6.8, 10.7): an italic Newsreader "pg" in ink on
+// The favicon: an italic Newsreader "pg" in ink on
 // paper, made at build time as favicon.svg, favicon.ico (32×32) and
 // apple-touch-icon.png (180×180). The italic at the optical size the site
 // fixes it at (opsz 24, 6.3), a medium weight, so it holds up at 16 px.

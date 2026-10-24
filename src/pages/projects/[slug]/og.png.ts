@@ -1,4 +1,4 @@
-// /projects/<slug>/og.png: the case study's social image (REDESIGN.md 10.2),
+// /projects/<slug>/og.png: the case study's social image,
 // with the project's flow line, or its summary when it has none.
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";

@@ -1,7 +1,6 @@
-// The home page (REDESIGN.md section 7) in a browser: counts, search and
-// hash, details on demand, the demo video, Copy, the stack terms, keyboard
-// only, reduced motion, and 360 and 1440 px. Ported from the phase 3
-// check script.
+// The home page in a browser: counts, search and hash, details on demand,
+// the demo video, Copy, the stack terms, keyboard only, reduced motion,
+// and 360 and 1440 px.
 import { test, expect, desktop, phone, overflow, pokingOut, visible, visibleKinds, hash, activeId, activeText, topOf, tabThrough, videoOf, SCROLL_PAD } from "./helpers";
 
 test.describe("home at 1440", () => {

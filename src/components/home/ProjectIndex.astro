@@ -1,5 +1,5 @@
 ---
-// Index of projects (6.6, 7.4): every non-system project as a one-line
+// Index of projects: every non-system project as a one-line
 // entry that opens on demand, with search, kind filters and the state in
 // the URL hash. From 980px the open entry reads in a pane beside the list;
 // the details stay right after their entry in the HTML either way, so
@@ -58,7 +58,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
 
       <ul class="index">
         {
-          /* Systems join the list only while a search is active (7.4) */
+          /* Systems join the list only while a search is active */
           systems.map((p) => (
             <li class="entry entry-system" data-item data-kind="system" data-hay={haystack(p)} data-stack={stackKey(p)} hidden>
               <p class="title">
@@ -228,7 +228,7 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
     cursor: pointer;
   }
 
-  /* the whole row shows the focus (6.6) */
+  /* the whole row shows the focus */
   .title button:focus-visible {
     outline: none;
   }

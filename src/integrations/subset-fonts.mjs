@@ -1,5 +1,5 @@
 // @ts-check
-// Smaller font files in the build (REDESIGN.md 6.3, 10.6). The @fontsource
+// Smaller font files in the build. The @fontsource
 // files carry every glyph of the latin and latin-ext subsets and the full
 // weight and optical-size ranges, about 500 kB in all; Lighthouse's mobile
 // LCP pays for every byte. This Vite plugin cuts each file down, in the
@@ -9,7 +9,7 @@
 //     the content keeps its glyphs without a change here;
 //   - axes: only the ranges the CSS uses (AXES below), still variable in
 //     weight; the italic, which only appears at 16–30 px, has its optical
-//     size fixed at 24 (owner's call, phase 5 review), half its bytes.
+//     size fixed at 24, which halves the file.
 // The @font-face rules (components/FontFaces.astro) keep the packages'
 // unicode-ranges; a character a file doesn't have falls back to the next
 // font in the stack, as it does for π and the arrows today.

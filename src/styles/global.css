@@ -49,7 +49,7 @@ a {
   text-underline-offset: 4px;
 }
 
-/* Text links in link rows and lists (6.6): ink with a rule-coloured
+/* Text links in link rows and lists: ink with a rule-coloured
    underline, accent on hover; .lnk-strong is the one accent call to
    action ("Read the case study →", "Browse the apps →") */
 .lnk {
@@ -131,7 +131,7 @@ h2 {
   white-space: nowrap;
 }
 
-/* The Journal scrollbar (6.4), for an area inside the page that scrolls:
+/* The Journal scrollbar, for an area inside the page that scrolls:
    6px, a --rule thumb with no track and no arrows, --muted while the
    pointer is over it, square ends. Chrome, Edge and Safari draw it from
    the ::-webkit rules; Firefox, which has none of them, from the standard

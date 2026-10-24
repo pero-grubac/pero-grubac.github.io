@@ -1,6 +1,6 @@
 // @ts-check
 // This site is the GitHub Pages user site; other repos are served as project
-// pages under the same domain (REDESIGN.md section 2). Their paths are taken:
+// pages under the same domain. Their paths are taken:
 // astro.config.mjs fails the build when a page would use one, and the
 // content schema accepts a live app on this domain only at one of them.
 // Plain JS, so astro.config.mjs can import it too.

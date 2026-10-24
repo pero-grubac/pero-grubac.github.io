@@ -22,8 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 # Three jobs side by side, each building the site itself: the type check and
-# build, the browser tests, and Lighthouse. The old site's tests are in
-# legacy/ and no longer run.
+# build, the browser tests, and Lighthouse.
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -61,8 +60,8 @@ jobs:
           retention-days: 7
 
   # Lighthouse on mobile for home, /apps/ and a case study: performance at
-  # least 95, accessibility, best practices and SEO 100 (REDESIGN.md
-  # section 2). Settings in lighthouserc.json.
+  # least 95, accessibility, best practices and SEO 100. Settings in
+  # lighthouserc.json.
   lighthouse:
     runs-on: ubuntu-latest
     timeout-minutes: 15

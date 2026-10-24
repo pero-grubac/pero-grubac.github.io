@@ -1,4 +1,4 @@
-// Social images, 1200×630 PNG, made at build time (REDESIGN.md 6.8, 10.2):
+// Social images, 1200×630 PNG, made at build time:
 // flat paper, the name in small sans at the top with the kind of page
 // opposite, a double rule, the title in Newsreader display, and the flow
 // line (arrows in accent, as on the page) or the summary in italic. The
@@ -49,7 +49,7 @@ async function svgOf(card: Card): Promise<string> {
   const spans: Span[] = card.flow
     ? flowParts(card.line).map((part) => ({ text: part.text, fill: part.op ? C.accent : C.inkSoft }))
     : [{ text: card.line, fill: C.inkSoft }];
-  // the italic at the optical size the site fixes it at (6.3)
+  // the italic at the optical size the site fixes it at
   let italic = await setter({ family: "serif-italic", size: 40, weight: 300, opsz: 24 });
   let lines = italic.wrap(spans, 980);
   while (italic.style.size > 30 && lines.length > 3) {

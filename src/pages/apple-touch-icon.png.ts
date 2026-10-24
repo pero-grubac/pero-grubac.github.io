@@ -1,5 +1,5 @@
 // /apple-touch-icon.png, 180×180: the "pg" monogram with room around it,
-// since iOS rounds the corners (REDESIGN.md 10.7).
+// since iOS rounds the corners.
 import type { APIRoute } from "astro";
 import { monogramPng } from "../lib/icons";
 import { png } from "../lib/og";

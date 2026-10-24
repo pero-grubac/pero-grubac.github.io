@@ -1,6 +1,6 @@
 ---
-// A system's full-width figure (6.4): the demo.webp still, and the demo
-// video only on a user action (the video rule in section 2). The <video>
+// A system's full-width figure: the demo.webp still, and the demo
+// video only on a user action, never on page load. The <video>
 // is created on the first play, so nothing of it loads with the page.
 // Hovering with a mouse previews the video until the pointer leaves; a
 // click or tap (or the button) plays it for good, and the next one pauses.
@@ -19,7 +19,7 @@ interface Props {
   alt: string;
   title: string;
   video?: string | undefined;
-  /** The page's main image, above the fold: load it first (10.6) */
+  /** The page's main image, above the fold: load it first */
   priority?: boolean;
 }
 

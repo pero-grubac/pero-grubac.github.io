@@ -12,7 +12,6 @@ node_modules/
 test-results/
 playwright-report/
 .lighthouseci/
-_site/
 
 # OS
 .DS_Store

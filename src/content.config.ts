@@ -1,4 +1,4 @@
-// Projects collection (REDESIGN.md section 5): one Markdown file per project
+// Projects collection: one Markdown file per project
 // in src/content/projects/, named after its slug. The schema rejects
 // anything the site can't render correctly, so `astro build` fails on an
 // invalid project file.
@@ -22,7 +22,7 @@ const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const GITHUB = /^https:\/\/github\.com\/pero-grubac\/[\w.-]+(?:\/[\w./-]*)?$/;
 // An absolute https URL, so the link works wherever the site runs (in dev
 // too). On this domain it must be one of the other repos' apps, e.g.
-// https://pero-grubac.github.io/devkit/ (section 2).
+// https://pero-grubac.github.io/devkit/.
 const LIVE = /^https:\/\/\S+$/;
 const ON_SITE = new RegExp(`^${SITE.replace(/[.]/g, "\\.")}/`);
 const APP_PATHS = new Set(OTHER_REPOS.map((repo) => `${SITE}/${repo}/`));
@@ -42,11 +42,11 @@ const projects = defineCollection({
       summary: text
         .max(75, "summary: one sentence of about 70 characters")
         .refine((s) => !/[.!?]\s+\S/.test(s), "summary: one sentence only"),
-      // The case study page's meta description (10.1): what a visitor will find there
+      // The case study page's meta description: what a visitor will find there
       metaDescription: text.min(140, "metaDescription: 140–160 characters").max(160, "metaDescription: 140–160 characters").optional(),
       description: text.optional(),
       // The description only rewords the summary, so the expanded view
-      // leaves it out instead of showing the same sentence twice (7.4)
+      // leaves it out instead of showing the same sentence twice
       repeatsSummary: z.boolean().default(false),
       flow: text.optional(),
       highlights: z.array(text).max(5).default([]),
@@ -84,7 +84,7 @@ const projects = defineCollection({
         )
         .optional(),
       commands: z.array(z.object({ cmd: z.string().regex(/^\/[\w-]+$/), text }).strict()).optional(),
-      // What kind of app a live app is, for the structured data on /apps/ (10.3)
+      // What kind of app a live app is, for the structured data on /apps/
       applicationCategory: z.enum(APP_CATEGORIES).optional(),
       featured: z.boolean(),
       caseStudy: z.boolean(),
@@ -96,9 +96,9 @@ const projects = defineCollection({
 
       if (p.featured !== system) fail("featured must be true exactly for kind 'system'", ["featured"]);
       if (system) {
-        if (!p.description) fail("systems need a description (7.3)", ["description"]);
-        if (!p.flow) fail("systems need a flow line (7.3)", ["flow"]);
-        if (!p.image) fail("systems need a screenshot (7.3)", ["image"]);
+        if (!p.description) fail("systems need a description", ["description"]);
+        if (!p.flow) fail("systems need a flow line", ["flow"]);
+        if (!p.image) fail("systems need a screenshot", ["image"]);
       } else {
         if (p.flow) fail("flow is for systems only", ["flow"]);
         if (p.video) fail("video is for systems only", ["video"]);
@@ -107,7 +107,7 @@ const projects = defineCollection({
       if (p.repeatsSummary && (system || !p.description))
         fail("repeatsSummary is for non-system projects that have a description", ["repeatsSummary"]);
 
-      // Section 11: no counts next to technologies, each technology once
+      // Lists of technologies: no counts next to one ("2× PostgreSQL"), and each one once
       if (p.flow) {
         if (/\d/.test(p.flow)) fail("flow: no counts next to technologies", ["flow"]);
         const words = p.flow.toLowerCase().split(/[^\p{L}\p{N}.#]+/u).filter((w) => w.length > 1);
@@ -118,7 +118,7 @@ const projects = defineCollection({
       if (new Set(stack).size !== stack.length) fail("stack: each technology once", ["stack"]);
       if (p.stack.some((s) => /^\d|\d\s*[×x]\s/.test(s))) fail("stack: no counts next to technologies", ["stack"]);
 
-      if (p.caseStudy && !p.metaDescription) fail("a case study page needs a metaDescription (10.1)", ["metaDescription"]);
+      if (p.caseStudy && !p.metaDescription) fail("a case study page needs a metaDescription", ["metaDescription"]);
       if ((p.kind === "live") !== Boolean(p.applicationCategory))
         fail("applicationCategory is required for kind 'live' and only for it", ["applicationCategory"]);
       if ((p.kind === "live") !== Boolean(p.links.live)) fail("links.live is required for kind 'live' and only for it", ["links", "live"]);
@@ -131,7 +131,7 @@ const projects = defineCollection({
         fail("with several repos, label each by its part (Backend, Frontend, …)", ["links", "repos"]);
 
       if (Boolean(p.image) !== Boolean(p.imageAlt)) fail("image and imageAlt go together", ["imageAlt"]);
-      if (!p.image && !p.commands?.length) fail("without a screenshot, list the commands to show instead (8.4)", ["image"]);
+      if (!p.image && !p.commands?.length) fail("without a screenshot, list the commands to show instead", ["image"]);
     }),
 });
 

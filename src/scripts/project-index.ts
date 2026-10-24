@@ -1,4 +1,4 @@
-// The projects index on the home page (REDESIGN.md 7.4): search, kind
+// The projects index on the home page: search, kind
 // filters with live counts, the state mirrored in the URL hash
 // (#projects?kind=live&q=react), and one entry open at a time; #p-<slug>
 // opens that entry.

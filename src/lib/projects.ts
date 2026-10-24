@@ -21,7 +21,7 @@ export const KIND_NOUNS: Record<Kind, readonly [string, string]> = {
   tool: ["tool", "tools"],
 };
 
-/** Filter buttons in this order; systems have none (7.4). */
+/** Filter buttons in this order; systems have none. */
 const FILTER_KINDS = [
   ["live", "Live"],
   ["web", "Web"],
@@ -55,14 +55,14 @@ export function kindLabel(kind: Kind): string {
   return one[0]!.toUpperCase() + one.slice(1);
 }
 
-/** Where a case study's breadcrumb leads back to (8.2): the systems, the apps gallery, or the index filtered to its kind */
+/** Where a case study's breadcrumb leads back to: the systems, the apps gallery, or the index filtered to its kind */
 export function parentOf(p: Project): { href: string; label: string } {
   if (p.kind === "system") return { href: "/#systems", label: "Systems" };
   if (p.kind === "live") return { href: "/apps/", label: "Browser apps" };
   return { href: `/#projects?kind=${p.kind}`, label: "Projects" };
 }
 
-/** Stack entries that are programming languages, for structured data (10.3) */
+/** Stack entries that are programming languages, for structured data */
 const LANGUAGES = new Set(["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart", "Kotlin", "GDScript"]);
 
 export function languagesOf(p: Project): string[] {

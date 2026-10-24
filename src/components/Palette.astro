@@ -1,5 +1,5 @@
 ---
-// The command palette (REDESIGN.md 6.6, 8.3), on every page: ⌘K / Ctrl K
+// The command palette, on every page: ⌘K / Ctrl K
 // or the masthead's Search pill opens it. It lists the sections and
 // pages, every project (its case study, or its entry in the index when it
 // has none), "Open {title} app ↗" for every live app, the ↗ saying that it
@@ -136,7 +136,7 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
   }
 
   /* the field always has the focus while the palette is open: the caret
-     and the ink rule under it mark it, as in the prototype */
+     and the ink rule under it mark it */
   input {
     flex: 1;
     min-width: 0;
@@ -153,7 +153,7 @@ const hay = (r: Row) => `${r.label}\n${r.keywords ?? ""}`.toLowerCase().replace(
     color: var(--muted);
   }
 
-  /* shrinks to the height the dialog has left; the Journal scrollbar (6.4).
+  /* shrinks to the height the dialog has left; the Journal scrollbar.
      Positioned, so the rows' screen-reader text (.sr-only, absolute) stays
      inside the list instead of stretching the dialog. */
   .list {

@@ -1,5 +1,5 @@
 // Facts about the owner that several pages show. The email and the two
-// profile links must stay exactly as they are (REDESIGN.md section 2).
+// profile links must stay exactly as they are.
 export const site = {
   name: "Pero Grubač",
   jobTitle: "Backend Developer",
@@ -11,7 +11,7 @@ export const site = {
   locality: "Banja Luka",
   country: "BA",
   freelanceLine: "Open to freelance projects, collaborations and interesting opportunities.",
-  /** The main stack, as About lists it (7.2); also the Person's knowsAbout (10.3) */
+  /** The main stack, as About lists it; also the Person's knowsAbout */
   stack: {
     Languages: ["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart"],
     Frameworks: ["Spring Boot", "ASP.NET", "FastAPI", "Flutter", "React", "Angular", "Django", "WPF", "SvelteKit", "Godot"],

@@ -1,6 +1,5 @@
-// /apps/, the case studies and the 404 (REDESIGN.md 6.8, 8.1, 8.2, 8.5) in a
-// browser at 1440 and 360 px, keyboard only and with reduced motion.
-// Ported from the phase 4 check script.
+// /apps/, the case studies and the 404 in a browser at 1440 and 360 px,
+// keyboard only and with reduced motion.
 import { test, expect, desktop, phone, overflow, pokingOut, visible, activeId, tabThrough, videoOf } from "./helpers";
 import type { Page } from "@playwright/test";
 
@@ -219,6 +218,6 @@ test.describe("other pages at 360", () => {
     await expect(page.locator("[data-diagram-frame]"), "and the frame is a Tab stop").toHaveAttribute("tabindex", "0");
     expect(await page.$eval("[data-diagram-frame] svg", (svg) => svg.getBoundingClientRect().width), "at a readable size").toBeGreaterThanOrEqual(859);
     const frame = await page.$eval("[data-diagram-frame]", (f) => ({ scrolls: f.scrollWidth > f.clientWidth, thin: f.classList.contains("thin-scroll") }));
-    expect(frame, "it scrolls, with the Journal scrollbar (6.4)").toEqual({ scrolls: true, thin: true });
+    expect(frame, "it scrolls, with the Journal scrollbar").toEqual({ scrolls: true, thin: true });
   });
 });

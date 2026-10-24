@@ -1,6 +1,6 @@
 ---
 // A project's actions, in the same order everywhere: case study, open app,
-// APK, then one Source link per repo or a "Private repo" label (7.4). The
+// APK, then one Source link per repo or a "Private repo" label. The
 // visible text stays short; the accessible name says which project.
 import type { Project } from "../lib/projects";
 
@@ -8,7 +8,7 @@ interface Props {
   project: Project;
   /** Lead with "Read the case study →" (pass the project's caseStudy) */
   caseStudy?: boolean;
-  /** "Open" instead of "Open app", as in the /apps/ gallery (6.8) */
+  /** "Open" instead of "Open app", as in the /apps/ gallery */
   short?: boolean;
   /** Open app and Download APK (false: only the repos, as in a case study's margin) */
   actions?: boolean;

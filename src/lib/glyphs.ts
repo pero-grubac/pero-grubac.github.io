@@ -1,5 +1,5 @@
 // Sets text as SVG paths at build time, for the social images and the
-// favicon (REDESIGN.md 6.8, 10.2, 10.7). It uses the site's own font files
+// favicon. It uses the site's own font files
 // from @fontsource, so the images match the pages: Newsreader at the
 // optical size of its type size (opsz 72 for display, as the h1), and
 // Instrument Sans. fontkit can't apply a variable font's axes to a WOFF2

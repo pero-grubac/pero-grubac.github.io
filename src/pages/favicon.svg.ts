@@ -1,4 +1,4 @@
-// /favicon.svg: the "pg" monogram (REDESIGN.md 10.7).
+// /favicon.svg: the "pg" monogram.
 import type { APIRoute } from "astro";
 import { monogram } from "../lib/icons";
 
