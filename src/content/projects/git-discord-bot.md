@@ -1,4 +1,13 @@
 ---
+# TODO(owner): the bot's public README (master) describes an older version
+# than this file. The highlights (a form, one-click close and label
+# detection; an HMAC-signed webhook for PRs, CI runs and releases; a
+# stale-issue reminder; 232 tests at 99% coverage) and the /stale command
+# aren't in it, and its /repos, /register, /sync-repos, /repo-info and
+# /heatmap aren't in `commands`. Once the README is updated: rewrite the
+# case study below from it, redraw components/diagrams/git-discord-bot.astro
+# if the parts changed, and align summary, description, highlights, stack
+# and commands with it.
 order: 25
 slug: git-discord-bot
 title: "GitHub Discord Bot"
