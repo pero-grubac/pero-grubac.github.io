@@ -3,9 +3,7 @@
 // opposite, a double rule, the title in Newsreader display, and the flow
 // line (arrows in accent, as on the page) or the summary in italic. The
 // text is set as paths (lib/glyphs.ts) and sharp turns the SVG into a PNG.
-// If anything fails, the page's image is /assets/og-card.png instead.
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+// If a page's card fails, it gets the home page's card instead.
 import sharp from "sharp";
 import { setter, type Span } from "./glyphs";
 import { flowParts } from "./projects";
@@ -81,15 +79,26 @@ async function svgOf(card: Card): Promise<string> {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="${C.paper}"/>${out.join("")}</svg>`;
 }
 
-/** The card as a PNG; /assets/og-card.png (with a warning) if it can't be made */
+/** The home page's card, at /assets/og-card.png (pages/assets/og-card.png.ts); its text is fixed, so it always sets */
+export const HOME_CARD: Card = {
+  label: "Portfolio",
+  title: "Backend developer",
+  line: "I build services that talk to each other over queues, sockets and REST, in Java, C# and Python.",
+};
+
+/** What the home card shows, for its alt text */
+export const HOME_CARD_ALT = `${site.name}, backend developer. ${HOME_CARD.line}`;
+
+/** The card as a PNG; the home page's card (with a warning) if it can't be made */
 export async function ogImage(card: Card): Promise<Buffer> {
   try {
     return await sharp(Buffer.from(await svgOf(card)))
       .png({ compressionLevel: 9, palette: false })
       .toBuffer();
   } catch (err) {
-    console.warn(`[og] "${card.title}": ${err instanceof Error ? err.message : err}; using /assets/og-card.png instead`);
-    return readFile(join(process.cwd(), "public/assets/og-card.png"));
+    if (card === HOME_CARD) throw err;
+    console.warn(`[og] "${card.title}": ${err instanceof Error ? err.message : err}; using the home page's card instead`);
+    return ogImage(HOME_CARD);
   }
 }
 

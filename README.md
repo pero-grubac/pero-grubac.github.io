@@ -64,6 +64,8 @@ Each project is one Markdown file. A strict schema checks it at build time, and 
 | `↑` `↓` `Enter` | Move through the palette and run a row |
 | `Esc` | Close the palette, or the open index entry |
 
+On a touch screen without a mouse the pages leave these hints out; the Search pill still opens the palette.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -92,7 +94,8 @@ pero-grubac.github.io/
 │   ├── content.config.ts      The projects schema; the build fails on an invalid file
 │   ├── assets/                Project screenshots and the portrait, optimized by Astro
 │   ├── pages/                 Routes: index, apps, projects/[slug] (case studies), 404, and endpoints
-│   │                          for the social images (og.png), favicons and site.webmanifest
+│   │                          for the social images (og.png; assets/og-card.png for home), favicons
+│   │                          and site.webmanifest
 │   ├── layouts/Base.astro     Head (<Seo>), icons, fonts, masthead, main, footer, toast, palette
 │   ├── components/            Seo, Palette, Masthead, Footer, FontFaces and shared pieces (links, demo figure, …)
 │   │   ├── home/              The home page sections: hero, about, systems, index, apps, contact
@@ -105,7 +108,7 @@ pero-grubac.github.io/
 │   ├── scripts/               Browser scripts: the projects index, the palette, copy, the toast
 │   ├── types/                 Declarations for the two build packages that ship none
 │   └── styles/                tokens.css (design tokens), global.css
-├── public/                    robots.txt; assets/: demo videos, avatar, og-card.png, served at /assets/
+├── public/                    robots.txt; assets/: demo videos and avatar, served at /assets/
 ├── scripts/check-links.mjs    Checks every live, repo and APK link in the content
 ├── tests/                     Playwright: home, other pages, palette, axe, and the build output (SEO)
 ├── playwright.config.ts       Runs the tests against `astro preview` of dist/
@@ -238,17 +241,27 @@ and `demo.mp4` (H.264) for browsers that can't decode AV1, such as Safari
 on most Apple devices. The WebM is there because some Chromium builds,
 including the one Playwright tests with, can't play H.264. The project
 file names only the MP4 (`video:`); the build fails if the WebM beside it
-is missing. To make the WebM from the MP4 with FFmpeg:
+is missing. The still shown before it plays is the project's `image`, a
+full-size frame of the recording.
+
+Both files come from a 1080p screen recording, without sound, and each
+stays under 4 MB. With FFmpeg:
 
 ```bash
-ffmpeg -i demo.mp4 -an -c:v libsvtav1 -crf 42 -preset 5 -svtav1-params scm=1 -pix_fmt yuv420p demo.webm
+COLOR="-pix_fmt yuv420p -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709"
+ffmpeg -i recording.mp4 -an -c:v libx264 -preset veryslow -crf 26 -profile:v high -level:v 4.0 $COLOR -movflags +faststart demo.mp4
+ffmpeg -i recording.mp4 -an -c:v libsvtav1 -preset 4 -crf 46 -svtav1-params scm=1:tune=0 $COLOR demo.webm
 ```
 
-`scm=1` is SVT-AV1's screen-content mode, which keeps UI text sharp. Compare
-it with the MP4 (`ffmpeg -i demo.webm -i demo.mp4 -lavfi ssim -f null -`)
-and lower `-crf` if the SSIM is under about 0.98; Incident Alert's busy map
-needed 36. The page declares both files as level 3.1 (`av01.0.05M.08`,
-`avc1.64001f`), which covers video up to about 960×720.
+`scm=1` is SVT-AV1's screen-content mode, which keeps UI text sharp. With a
+photo or a map behind the UI it costs more than it saves, so Chat Room and
+Incident Alert leave it to the encoder (`scm=2`) and use `-crf 50`.
+Incident Alert's busy map doesn't fit in 4 MB at CRF 26 in H.264, so its
+MP4 is two-pass at a fixed rate (`-b:v 1068k`, `-pass 1` then `-pass 2`).
+Compare a file with the recording (`ffmpeg -i demo.webm -i recording.mp4
+-lavfi ssim -f null -`): each is above 0.98 but Incident Alert's MP4, at
+0.977. The page declares both files as level 4.0 (`av01.0.08M.08`,
+`avc1.640028`), which covers 1080p at 30 fps.
 
 ### Tests
 

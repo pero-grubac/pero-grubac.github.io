@@ -15,7 +15,7 @@ links:
     - label: "Source"
       url: "https://github.com/pero-grubac/e-Mobility-Hub"
 image: "../../assets/e-mobility-hub/demo.webp"
-imageAlt: "eMobilityHub: the employee portal sign-in form, next to a panel for the fleet of electric cars, bicycles and scooters"
+imageAlt: "eMobilityHub: the client web shop on a phone during a ride in an electric car, with the ride time, the amount so far and the drop-off location, ready to finish the ride and pay"
 video: "/assets/e-mobility-hub/demo.mp4"
 featured: true
 caseStudy: true

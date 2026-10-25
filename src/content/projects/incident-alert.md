@@ -19,7 +19,7 @@ links:
     - label: "Management"
       url: "https://github.com/pero-grubac/IncidentAlertFrontend-Mangement"
 image: "../../assets/incident_alert/demo.webp"
-imageAlt: "Incident Alert: a map of Bosnia and Herzegovina with incident pins and clusters, next to a panel with period and category filters and the latest reported incidents"
+imageAlt: "Incident Alert: the public map of Bosnia and Herzegovina with incident pins and a place picked for a new report, next to a panel with period and category filters and the latest reported incidents"
 video: "/assets/incident_alert/demo.mp4"
 featured: true
 caseStudy: true

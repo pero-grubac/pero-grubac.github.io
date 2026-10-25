@@ -3,6 +3,7 @@
 // canonical, Open Graph, Twitter card and JSON-LD. Pages pass their values
 // through the Base layout; none writes meta tags by hand. One light theme,
 // so a single theme-color.
+import { HOME_CARD_ALT } from "../lib/og";
 import { absolute } from "../lib/seo";
 import { site } from "../lib/site";
 
@@ -25,7 +26,7 @@ const {
   title,
   description,
   image = "/assets/og-card.png",
-  imageAlt = "Pero Grubač, backend developer: distributed systems, REST APIs and microservices with Java, C#, Python, Spring Boot, .NET and FastAPI.",
+  imageAlt = HOME_CARD_ALT,
   type = "website",
   noindex = false,
   jsonLd,

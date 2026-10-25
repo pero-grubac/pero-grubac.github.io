@@ -15,7 +15,7 @@ links:
     - label: "Source"
       url: "https://github.com/pero-grubac/Chat-room"
 image: "../../assets/chatroom/demo.webp"
-imageAlt: "Chat Room: the login form with username, password and Google sign-in, on the first step of the two-factor sign-in"
+imageAlt: "Chat Room: the administrator's security log with registrations, account approvals, emailed sign-in codes and sign-ins with password and code"
 video: "/assets/chatroom/demo.mp4"
 featured: true
 caseStudy: true

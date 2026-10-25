@@ -3,6 +3,9 @@
 // and 360 and 1440 px.
 import { test, expect, desktop, phone, overflow, pokingOut, visible, visibleKinds, hash, activeId, activeText, topOf, tabThrough, videoOf, SCROLL_PAD } from "./helpers";
 
+/** The keyboard shortcut hints: Ctrl K on the Search pill, `/` in the find field, the footer's line */
+const KEY_HINTS = [".masthead [data-palette] kbd", ".find-in kbd", ".site-footer .key-hint"];
+
 test.describe("home at 1440", () => {
   test.use(desktop);
 
@@ -23,8 +26,10 @@ test.describe("home at 1440", () => {
     const contents = await page.$$eval(".contents a", (as) => as.map((a) => a.textContent!.replace(/\s+/g, " ").trim()));
     expect(contents).toContain("Index of projects 26 projects");
     expect(contents).toContain("Browser apps 13 apps");
+    expect(contents, "a system's note, unless its title already ends in it").toEqual(expect.arrayContaining(["Incident Alert system", "Online Library System"]));
     await expect(page.locator("#apps .num")).toHaveText("13");
     await expect(page.locator("#apps li"), "three teaser screenshots").toHaveCount(3);
+    for (const hint of KEY_HINTS) await expect(page.locator(hint), `${hint}: shown with a mouse`).toBeVisible();
   });
 
   test("search, filters and the hash", async ({ page }) => {
@@ -93,8 +98,9 @@ test.describe("home at 1440", () => {
     await expect(page.getByRole("link", { name: "Source code for FitForge", exact: true })).toHaveCount(1);
     await expect(page.locator('a[href*="repository-health"]').first()).toBeAttached();
     await expect(page.locator('a[href*="github.com/pero-grubac/repo"]'), "RepoHealth: no repo link").toHaveCount(0);
-    await expect(page.locator('[data-term="FastAPI"], [data-term="GCP"]')).toHaveCount(0);
-    await expect(page.locator(".stack .plain"), "FastAPI and GCP are plain text").toHaveCount(2);
+    await expect(page.locator(".stack dt")).toHaveText(["Languages", "Frameworks", "Infrastructure", "Tools"]);
+    await expect(page.locator('[data-term="FastAPI"]')).toHaveCount(0);
+    await expect(page.locator(".stack .plain"), "FastAPI is plain text").toHaveText(["FastAPI"]);
   });
 
   test("details on demand", async ({ page }) => {
@@ -147,8 +153,8 @@ test.describe("home at 1440", () => {
     await expect.poll(async () => (await videoOf(page, "#incident-alert figure"))?.playing, { message: "playing" }).toBe(true);
     const v = (await videoOf(page, "#incident-alert figure"))!;
     expect(v.sources, "AV1 WebM first, H.264 MP4 second").toEqual([
-      { src: "/assets/incident_alert/demo.webm", type: 'video/webm; codecs="av01.0.05M.08"' },
-      { src: "/assets/incident_alert/demo.mp4", type: 'video/mp4; codecs="avc1.64001f"' },
+      { src: "/assets/incident_alert/demo.webm", type: 'video/webm; codecs="av01.0.08M.08"' },
+      { src: "/assets/incident_alert/demo.mp4", type: 'video/mp4; codecs="avc1.640028"' },
     ]);
     expect(v.chosen, "the browser plays the first source it can decode").toBe(v.firstPlayable);
     expect(new Set(videos.map((u) => new URL(u).pathname)), "and fetches only that one").toEqual(new Set([v.chosen]));
@@ -308,5 +314,14 @@ test.describe("home at 360", () => {
     await page.tap('[data-term="Docker"]');
     await expect.poll(() => page.inputValue("#q")).toBe("Docker");
     expect(await activeId(page), "a tapped stack term searches without opening the keyboard").not.toBe("q");
+  });
+
+  test("no keyboard hints on a touch screen; Search still opens the palette", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    expect(await page.evaluate(() => matchMedia("(hover: none) and (pointer: coarse)").matches), "a touch screen").toBe(true);
+    for (const hint of KEY_HINTS) await expect(page.locator(hint), `${hint}: hidden on touch`).toBeHidden();
+    await page.tap(".masthead [data-palette]");
+    await expect(page.locator("#palette")).toHaveAttribute("open", "");
+    await expect(page.locator("#palette .bar kbd"), "no esc hint in the palette").toBeHidden();
   });
 });

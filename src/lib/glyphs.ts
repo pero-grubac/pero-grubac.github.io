@@ -7,7 +7,7 @@
 // The site's fonts carry only the latin and latin-ext subsets. Like a
 // browser, the setter falls back per character: Noto Serif for Greek (π)
 // and Noto Sans Math for arrows (→ ⇄). Text needing a glyph that none of
-// them has throws, and the caller falls back to /assets/og-card.png.
+// them has throws, and the caller falls back to the home page's card.
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { join } from "node:path";

@@ -28,7 +28,7 @@ const here = Astro.url.pathname;
       </ul>
     </nav>
     <button type="button" class="find" data-palette aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
-      Search <kbd aria-hidden="true"><span data-mod>Ctrl</span> K</kbd>
+      Search <kbd class="key-hint" aria-hidden="true"><span data-mod>Ctrl</span> K</kbd>
     </button>
   </div>
 </header>
@@ -100,6 +100,13 @@ const here = Astro.url.pathname;
 
   .find:hover {
     border-color: var(--ink);
+  }
+
+  /* without the Ctrl K hint (global.css), even padding around "Search" */
+  @media (hover: none) and (pointer: coarse) {
+    .find {
+      padding-right: 14px;
+    }
   }
 
   @media (max-width: 720px) {

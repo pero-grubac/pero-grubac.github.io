@@ -15,6 +15,7 @@ export const site = {
   stack: {
     Languages: ["Java", "C#", "Python", "JavaScript", "TypeScript", "Dart"],
     Frameworks: ["Spring Boot", "ASP.NET", "FastAPI", "Flutter", "React", "Angular", "Django", "WPF", "SvelteKit", "Godot"],
-    Infrastructure: ["Docker", "RabbitMQ", "PostgreSQL", "MySQL", "Redis", "Nginx", "Canvas", "PWA", "GCP", "Vite", "OpenSSL", "Testcontainers", "Playwright"],
+    Infrastructure: ["Docker", "RabbitMQ", "PostgreSQL", "MySQL", "Redis", "Nginx", "OpenSSL", "Testcontainers"],
+    Tools: ["Canvas", "PWA", "Vite", "Playwright"],
   },
 } as const;

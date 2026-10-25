@@ -89,6 +89,14 @@ kbd {
   background: var(--card);
 }
 
+/* Keyboard shortcut hints (Ctrl K, /, esc), left out on a touch screen
+   with no mouse, where there is most likely no keyboard either */
+@media (hover: none) and (pointer: coarse) {
+  .key-hint {
+    display: none;
+  }
+}
+
 h1 {
   font-weight: 400;
   font-size: var(--fs-display);

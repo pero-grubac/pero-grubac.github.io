@@ -13,7 +13,7 @@ const { id, label } = Astro.props;
 <div class="find-in">
   <label for={id}>{label}</label>
   <input id={id} type="search" placeholder="a title or a technology" autocomplete="off" spellcheck="false" data-find />
-  <kbd aria-hidden="true">/</kbd>
+  <kbd class="key-hint" aria-hidden="true">/</kbd>
 </div>
 
 <style>

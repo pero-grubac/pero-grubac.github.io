@@ -81,7 +81,7 @@ test("demo videos: an AV1 WebM first, the H.264 MP4 second, both in dist/", () =
     for (const [, json] of p.html.matchAll(/<figure class="media"[^>]*data-video="([^"]+)"/g)) {
       figures++;
       const sources: { src: string; type: string }[] = JSON.parse(decode(json!));
-      expect(sources.map((s) => s.type), p.path).toEqual(['video/webm; codecs="av01.0.05M.08"', 'video/mp4; codecs="avc1.64001f"']);
+      expect(sources.map((s) => s.type), p.path).toEqual(['video/webm; codecs="av01.0.08M.08"', 'video/mp4; codecs="avc1.640028"']);
       expect(sources[0]!.src.replace(/\.webm$/, ".mp4"), `${p.path}: the same video`).toBe(sources[1]!.src);
       for (const s of sources) expect(existsSync(join(dist, s.src)), `${p.path}: ${s.src}`).toBe(true);
     }
@@ -165,13 +165,14 @@ test("canonical, author, Open Graph and Twitter card on every page", () => {
   for (const p of studies) expect(p.meta("og:image")).toBe(`${SITE}${p.path}og.png`);
 });
 
-test("social images: a 1200×630 PNG for /apps/ and every case study", async () => {
-  for (const p of [page("/apps/"), ...studies]) {
+test("social images: a 1200×630 PNG for home, /apps/ and every case study", async () => {
+  const home = readFileSync(join(dist, "assets/og-card.png"));
+  for (const p of [page("/"), page("/apps/"), ...studies]) {
     const file = join(dist, new URL(p.meta("og:image")!).pathname);
     const info = await sharp(file).metadata();
     expect([info.format, info.width, info.height], file).toEqual(["png", 1200, 630]);
-    // made for this page, not the og-card.png fallback
-    expect(readFileSync(file).equals(readFileSync("public/assets/og-card.png")), `${file} is its own image`).toBe(false);
+    // made for this page, not the home page's card that stands in for one that fails
+    if (p.path !== "/") expect(readFileSync(file).equals(home), `${file} is its own image`).toBe(false);
   }
 });
 

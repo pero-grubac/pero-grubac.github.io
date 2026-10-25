@@ -15,7 +15,7 @@ links:
     - label: "Source"
       url: "https://github.com/pero-grubac/Online-Library-System"
 image: "../../assets/library/demo.webp"
-imageAlt: "Online Library System: the librarian's desktop client with one book in the catalogue and the Choose Supplier dialog open"
+imageAlt: "Online Library System: the librarian's desktop client sending an order from a supplier's offer, next to the supplier's client where the order has arrived, waiting to be approved or rejected"
 video: "/assets/library/demo.mp4"
 featured: true
 caseStudy: true
