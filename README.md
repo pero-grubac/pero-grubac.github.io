@@ -253,6 +253,10 @@ ffmpeg -i recording.mp4 -an -c:v libx264 -preset veryslow -crf 26 -profile:v hig
 ffmpeg -i recording.mp4 -an -c:v libsvtav1 -preset 4 -crf 46 -svtav1-params scm=1:tune=0 $COLOR demo.webm
 ```
 
+eMobilityHub's demo is made exactly this way: 44.7 s through the client
+phone app, the operator, the manager, the admin and the promotions portal,
+at 2.09 MB (MP4) and 1.75 MB (WebM).
+
 `scm=1` is SVT-AV1's screen-content mode, which keeps UI text sharp. With a
 photo or a map behind the UI it costs more than it saves, so Chat Room and
 Incident Alert leave it to the encoder (`scm=2`) and use `-crf 50`.
