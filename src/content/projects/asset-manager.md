@@ -10,8 +10,8 @@ description: "Android app for tracking company assets — furniture, electronics
 repeatsSummary: true
 highlights:
   - "Full CRUD, with barcodes typed in or scanned with the camera"
-  - "OpenStreetMap view: city pins that list the assets at each location"
-  - "Inventory lists that record changes of employee and location"
+  - "OpenStreetMap view: location pins that list the assets at each place"
+  - "Census lists that record changes of worker and location, with CSV export"
   - "Riverpod + SQLite · English / Serbian · light and dark theme"
 stack: ["Flutter", "Dart", "SQLite", "Riverpod", "OpenStreetMap", "Android"]
 links:
@@ -20,7 +20,7 @@ links:
       url: "https://github.com/pero-grubac/AssetManager"
   apk: "https://github.com/pero-grubac/AssetManager/releases/latest"
 image: "../../assets/asset_manager/preview.webp"
-imageAlt: "AssetManager: the home screen, an asset's details with its photo and barcode, and the workers list"
+imageAlt: "AssetManager: the home screen, an asset's details with its photo and barcode, and a census item showing the old and new location on OpenStreetMap"
 featured: false
 caseStudy: true
 ---
