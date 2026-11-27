@@ -40,7 +40,9 @@ jobs:
   # Playwright: the pages at 360 and 1440 px, keyboard only, reduced motion,
   # the command palette, axe, and the SEO output of the build.
   test:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest is 26.04, which this Playwright can't install
+    # its browsers on yet
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
