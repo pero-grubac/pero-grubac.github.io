@@ -20,7 +20,7 @@ links:
       url: "https://github.com/pero-grubac/AssetManager"
   apk: "https://github.com/pero-grubac/AssetManager/releases/latest"
 image: "../../assets/asset_manager/preview.webp"
-imageAlt: "AssetManager: the home screen, an asset's details with its photo and barcode, and a census item showing the old and new location on OpenStreetMap"
+imageAlt: "AssetManager: the asset list, an asset's details with its photo and barcode, and a census item showing the old and new location on OpenStreetMap"
 featured: false
 caseStudy: true
 ---
