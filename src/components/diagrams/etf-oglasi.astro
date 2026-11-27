@@ -1,0 +1,44 @@
+---
+// ETF Oglasi, from the ETFOglasi README and code: lib/features/*/screen,
+// Riverpod providers, ApiService (JSON from
+// https://efee.etf.unibl.org:8443/api/public/), repositories on
+// DatabaseHelper (etf.db, schema version 5), announcement_workmanager.dart,
+// SavedScheduleSync (class reminders, home_widget data) and the Kotlin
+// ScheduleWidgetProvider and NextClassWidgetProvider. Left out: the GitHub
+// Releases update check and the .ics export.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+---
+
+<Diagram
+  width={1000}
+  height={570}
+  label="Architecture of ETF Oglasi"
+  caption="Screens read announcements and schedules through Riverpod. Announcements come from the faculty's JSON API and fall back to SQLite when there is no network; schedules show what is stored first and refresh in the background. A periodic WorkManager task checks every board and notifies about new announcements. SavedScheduleSync turns the saved schedule into weekly class reminders and into data for the native Kotlin widgets, which keep the next class current without the app running."
+>
+  <Group x={20} y={40} w={590} h={470} name="ETF Oglasi · Flutter" />
+
+  <Edge points={[[140, 136], [140, 200]]} label="watch" at={[148, 172]} anchor="start" />
+  <Edge points={[[230, 228], [330, 228]]} label="fetch" at={[280, 220]} />
+  <Edge points={[[140, 256], [140, 348], [330, 348]]} label="cache, fallback" at={[235, 340]} />
+  <Edge points={[[430, 136], [430, 200]]} label="check every board" at={[438, 172]} anchor="start" />
+  <Edge points={[[530, 108], [720, 108]]} label="new announcements" at={[625, 100]} />
+  <Edge points={[[530, 228], [720, 228]]} label="GET JSON, HTTPS" at={[625, 220]} />
+  <Edge points={[[530, 348], [720, 348]]} label="sqflite" at={[625, 340]} />
+  <Edge points={[[430, 376], [430, 440]]} label="saved schedule" at={[438, 412]} anchor="start" />
+  <Edge points={[[530, 468], [720, 468]]} label="home_widget data" at={[625, 460]} />
+  <Edge points={[[480, 496], [480, 530], [960, 530], [960, 108], [920, 108]]} label="class reminders" at={[720, 548]} />
+
+  <Node x={50} y={80} w={180} name="Screens" note="announcements, schedule" />
+  <Node x={50} y={200} w={180} name="Riverpod" note="providers, notifiers" />
+  <Node x={330} y={80} w={200} name="WorkManager" note="periodic, needs network" />
+  <Node x={330} y={200} w={200} name="Services" note="ApiService · http" />
+  <Node x={330} y={320} w={200} name="Repositories" note="on DatabaseHelper" />
+  <Node x={330} y={440} w={200} name="SavedScheduleSync" note="reminders, widget data" />
+  <Node x={720} y={80} w={200} kind="external" name="Notifications" note="Android · per board, per class" />
+  <Node x={720} y={200} w={200} kind="external" name="ETF API" note="efee.etf.unibl.org · JSON" />
+  <Node x={720} y={316} w={200} h={62} kind="store" name="SQLite" note="etf.db · 4 tables · v5" />
+  <Node x={720} y={440} w={200} name="Home screen widgets" note="Kotlin · AlarmManager" />
+</Diagram>

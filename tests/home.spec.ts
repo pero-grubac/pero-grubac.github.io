@@ -22,11 +22,11 @@ test.describe("home at 1440", () => {
     expect(levels.every((l, i) => i === 0 || l <= levels[i - 1]! + 1), "heading levels never skip: " + levels.join("")).toBe(true);
 
     const counts = await page.$$eval("[data-filter]", (bs) => bs.map((b) => `${(b as HTMLElement).dataset.filter}=${b.querySelector("[data-count]")!.textContent}`));
-    expect(counts.join(",")).toBe("=26,live=13,web=1,mobile=3,desktop=7,tool=2");
+    expect(counts.join(",")).toBe("=27,live=13,web=2,mobile=3,desktop=7,tool=2");
     const contents = await page.$$eval(".contents a", (as) => as.map((a) => a.textContent!.replace(/\s+/g, " ").trim()));
-    expect(contents).toContain("Index of projects 26 projects");
+    expect(contents).toContain("Index of projects 27 projects");
     expect(contents).toContain("Browser apps 13 apps");
-    expect(contents, "a system's note, unless its title already ends in it").toEqual(expect.arrayContaining(["Incident Alert system", "Online Library System"]));
+    expect(contents, "every system has its note").toEqual(expect.arrayContaining(["Incident Alert system", "Online Library System system"]));
     await expect(page.locator("#apps .num")).toHaveText("13");
     await expect(page.locator("#apps li"), "three teaser screenshots").toHaveCount(3);
     for (const hint of KEY_HINTS) await expect(page.locator(hint), `${hint}: shown with a mouse`).toBeVisible();
@@ -54,7 +54,7 @@ test.describe("home at 1440", () => {
     expect(await visible(page), "Clear search keeps the kind").toBe(13);
     expect(await activeId(page), "Clear search focuses the box").toBe("q");
     await page.click('[data-filter=""]');
-    expect(await visible(page)).toBe(26);
+    expect(await visible(page)).toBe(27);
     expect(await hash(page)).toBe("#projects");
     await page.fill("#q", "spring boot");
     expect((await visibleKinds(page)).filter((k) => k === "system"), "spring boot finds the two Spring Boot systems").toHaveLength(2);
@@ -99,8 +99,8 @@ test.describe("home at 1440", () => {
     await expect(page.locator('a[href*="repository-health"]').first()).toBeAttached();
     await expect(page.locator('a[href*="github.com/pero-grubac/repo"]'), "RepoHealth: no repo link").toHaveCount(0);
     await expect(page.locator(".stack dt")).toHaveText(["Languages", "Frameworks", "Infrastructure", "Tools"]);
-    await expect(page.locator('[data-term="FastAPI"]')).toHaveCount(0);
-    await expect(page.locator(".stack .plain"), "FastAPI is plain text").toHaveText(["FastAPI"]);
+    await expect(page.locator('[data-term="FastAPI"]'), "FastAPI finds Bookstore API").toHaveCount(1);
+    await expect(page.locator(".stack .plain"), "every stack term has a project").toHaveCount(0);
   });
 
   test("details on demand", async ({ page }) => {
@@ -226,7 +226,7 @@ test.describe("home at 1440", () => {
     expect(hrefs).toContain("https://github.com/pero-grubac");
     expect(hrefs).toContain("https://www.linkedin.com/in/perogrubac/");
     // the systems, every index entry but RepoHealth, and the palette
-    expect(new Set(hrefs.filter((h) => h?.startsWith("/projects/"))).size, "links to all 29 case studies").toBe(29);
+    expect(new Set(hrefs.filter((h) => h?.startsWith("/projects/"))).size, "links to all 30 case studies").toBe(30);
   });
 });
 

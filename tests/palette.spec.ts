@@ -61,8 +61,8 @@ test.describe("palette at 1440", () => {
     const labels = await rows(page);
     expect(labels.slice(0, 6)).toEqual(["Home", "About", "Systems", "Index of projects", "Browser apps", "Contact"]);
     expect(labels.at(-1)).toBe("Copy email");
-    // 30 projects, and "Open … app ↗" for the 13 live apps; one theme, so no theme toggle
-    expect(labels.length).toBe(6 + 30 + 13 + 1);
+    // 31 projects, and "Open … app ↗" for the 13 live apps; one theme, so no theme toggle
+    expect(labels.length).toBe(6 + 31 + 13 + 1);
     const opens = labels.filter((l) => l?.startsWith("Open "));
     expect(opens).toHaveLength(13);
     expect(opens).toContain("Open Brick Breaker app ↗");
@@ -76,7 +76,7 @@ test.describe("palette at 1440", () => {
     await expect(page.locator('#pal-list a[href="https://pero-grubac.github.io/brick-breaker/"]')).toHaveCount(1);
     // every case study is in it
     const studies = await page.$$eval('#pal-list a[href^="/projects/"]', (as) => as.length);
-    expect(studies).toBe(29);
+    expect(studies).toBe(30);
     // RepoHealth's repo is private: its row shows its details in the index, its app opens
     await expect(page.locator('#pal-list a:has(.label:text-is("RepoHealth"))')).toHaveAttribute("href", "/#p-repohealth");
     await expect(page.locator('#pal-list a[target=_blank][href="https://repository-health-monitor.vercel.app/"] .label')).toContainText("Open RepoHealth app");

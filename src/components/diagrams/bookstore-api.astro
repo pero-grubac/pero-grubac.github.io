@@ -1,0 +1,39 @@
+---
+// Bookstore API, from the bookstore-demo-api README (architecture and
+// placing an order) and its docker-compose.yml: five services, with Redis
+// holding the book cache in database 0 and the Celery queue in database 1.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+import Actor from "../diagram/Actor.astro";
+---
+
+<Diagram
+  width={1000}
+  height={400}
+  label="Architecture of the Bookstore API"
+  caption="One Docker Compose stack of five services. Solid lines are requests, dashed lines go through the Celery queue. An order is answered before its email is sent: the API puts a task on the queue in Redis, and the worker loads the order from PostgreSQL and sends the email to Mailpit over SMTP. Redis also caches single books."
+>
+  <Group x={180} y={40} w={400} h={330} name="api · FastAPI · :8000" />
+
+  <Edge points={[[116, 118], [210, 118]]} label="HTTP + JWT" at={[146, 108]} />
+  <Edge points={[[285, 146], [285, 290]]} label="Depends" at={[293, 222]} anchor="start" />
+  <Edge points={[[360, 132], [475, 132], [475, 190]]} />
+  <Edge points={[[360, 104], [640, 104]]} kind="message" label="delay(order_id)" at={[500, 96]} />
+  <Edge points={[[550, 222], [640, 222]]} label="SQLAlchemy" at={[595, 214]} />
+  <Edge points={[[515, 246], [515, 331], [640, 331]]} both label="get, set, clear" at={[578, 323]} />
+  <Edge points={[[810, 104], [850, 104]]} kind="message" label="task" at={[830, 96]} />
+  <Edge points={[[880, 132], [880, 221], [810, 221]]} label="load order" at={[845, 213]} />
+  <Edge points={[[950, 132], [950, 300]]} label="SMTP" at={[958, 220]} anchor="start" />
+
+  <Actor x={60} y={122} name="Client" note="Swagger UI · curl" />
+  <Node x={210} y={90} w={150} name="Routers" note="HTTP only" />
+  <Node x={400} y={190} w={150} name="Services" note="business rules, queries" />
+  <Node x={200} y={290} w={170} name="Dependencies" note="JWT · roles · DB session" />
+  <Node x={640} y={76} w={170} kind="queue" name="Redis" note="db 1 · Celery queue" />
+  <Node x={640} y={190} w={170} h={62} kind="store" name="PostgreSQL" note="books, orders, customers" />
+  <Node x={640} y={300} w={170} h={62} kind="store" name="Redis" note="db 0 · book cache" />
+  <Node x={850} y={76} w={140} name="Celery worker" note="same image as api" />
+  <Node x={850} y={300} w={140} name="Mailpit" note="SMTP · web UI :8025" />
+</Diagram>

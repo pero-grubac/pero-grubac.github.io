@@ -1,0 +1,40 @@
+---
+// Store Management, from the Store-Management-System README and code:
+// Prodavnica (WinForms) on Prodavnica.Core (repositories on MySqlConnector,
+// Security/Password.cs, services), Model/DDL.sql (11 tables, the
+// InsertRacunWithStavka and InsertNabavka procedures, the prodavnica_app
+// account), docker-compose.yml and Tests/Database/MySqlFixture.cs.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+import Actor from "../diagram/Actor.astro";
+---
+
+<Diagram
+  width={1000}
+  height={490}
+  label="Architecture of Store Management"
+  caption="Administrators and cashiers sign in to one WinForms app, which does all its data work through a class library with no UI. Core reaches MySQL with parameterised SQL over MySqlConnector, and every sale or procurement is one stored procedure that locks the product rows, checks expiry and stock, and commits or rolls back. The app connects as prodavnica_app, which can't change the schema. The same DDL.sql builds the Docker Compose database and the throwaway database of the integration tests."
+>
+  <Group x={400} y={40} w={260} h={290} name="Prodavnica.Core · class library" />
+
+  <Edge points={[[112, 118], [140, 118]]} />
+  <Edge points={[[330, 118], [400, 118]]} label="via Session" at={[365, 108]} />
+  <Edge points={[[630, 174], [740, 174]]} label="parameterised SQL" at={[685, 166]} />
+  <Edge points={[[630, 202], [740, 202]]} label={"CALL procedures,\nJSON lines"} at={[685, 222]} />
+  <Edge points={[[530, 400], [530, 330]]} label="project reference" at={[538, 370]} anchor="start" />
+  <Edge points={[[630, 428], [740, 428]]} label="integration tests" at={[685, 420]} />
+  <Edge points={[[850, 280], [850, 212]]} label="Compose init" at={[858, 250]} anchor="start" />
+  <Edge points={[[850, 336], [850, 396]]} label="mysql client" at={[858, 370]} anchor="start" />
+
+  <Actor x={60} y={114} name="Admin, cashier" note="role: isAdmin" />
+  <Node x={140} y={90} w={190} name="Prodavnica" note="WinForms · 3 languages" />
+  <Node x={430} y={76} w={200} name="Services" note="cart, inventory, validators" />
+  <Node x={430} y={160} w={200} name="Repositories" note="MySqlConnector · DataErrors" />
+  <Node x={430} y={250} w={200} name="Password" note="BCrypt, work factor 11" />
+  <Node x={740} y={150} w={220} h={62} kind="store" name="MySQL 8" note="prodavnica · 11 tables" />
+  <Node x={740} y={280} w={220} kind="file" name="DDL.sql" note="tables, procedures, app user" />
+  <Node x={430} y={400} w={200} name="Prodavnica.Tests" note="xUnit · Testcontainers" />
+  <Node x={740} y={396} w={220} h={62} kind="store" name="MySQL 8" note="Testcontainers · throwaway" />
+</Diagram>

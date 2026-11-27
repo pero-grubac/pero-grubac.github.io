@@ -1,5 +1,5 @@
 ---
-order: 28
+order: 29
 slug: sedmica
 title: "Sedmica"
 kind: live

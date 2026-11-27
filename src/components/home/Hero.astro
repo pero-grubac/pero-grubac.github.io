@@ -13,9 +13,8 @@ interface Props {
 
 const { systems, indexCount, liveCount } = Astro.props;
 
-// "Online Library System" already says what it is: no "system" note after it
 const contents = [
-  ...systems.map((p) => ({ href: `#${p.slug}`, title: p.title, note: /\bsystem$/i.test(p.title) ? undefined : "system" })),
+  ...systems.map((p) => ({ href: `#${p.slug}`, title: p.title, note: "system" })),
   { href: "#projects", title: "Index of projects", note: `${indexCount} projects` },
   { href: "/apps/", title: "Browser apps", note: `${liveCount} ${liveCount === 1 ? "app" : "apps"}` },
 ];

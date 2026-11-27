@@ -146,13 +146,13 @@ test.describe("case studies at 1440", () => {
     await expect(page.locator(".primary")).toHaveCount(0);
     expect(await pager(page)).toBe("prev:/projects/secure-repository/:← Previous tool");
     await page.goto("/projects/minimal-blog/", { waitUntil: "networkidle" });
-    await expect(page.locator(".pager"), "the only web project has no prev/next").toHaveCount(0);
+    expect(await pager(page), "the second web project, after Bookstore API").toBe("prev:/projects/bookstore-api/:← Previous web project");
     await expect(page.locator(".margin a[href*='github.com']")).toHaveCount(1);
   });
 
   test("every case study is linked from home and /apps/", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    expect(await page.$$eval(".panel a[href^='/projects/']", (as) => as.length), "every index entry with a case study (all but RepoHealth)").toBe(25);
+    expect(await page.$$eval(".panel a[href^='/projects/']", (as) => as.length), "every index entry with a case study (all but RepoHealth)").toBe(26);
     await page.goto("/apps/", { waitUntil: "networkidle" });
     expect(await page.$$eval(".gallery a[href^='/projects/']", (as) => as.length), "every /apps/ card with a case study").toBe(12);
   });

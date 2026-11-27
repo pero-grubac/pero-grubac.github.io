@@ -1,0 +1,44 @@
+---
+// AssetManager, from the AssetManager README and code: lib/screens with
+// go_router, Riverpod notifiers (ListNotifier), repository_providers.dart,
+// the five repositories on DatabaseHelper (asset_manager.db, schema
+// version 2), BackupService (zip with backup.json, the database and
+// images/), GeocodingService (Nominatim reverse, at most one request a
+// second) and flutter_map with OpenStreetMap tiles.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+---
+
+<Diagram
+  width={1110}
+  height={560}
+  label="Architecture of AssetManager"
+  caption="Everything is kept on the phone except the map: tiles come from OpenStreetMap and addresses from Nominatim, at most one lookup a second. Screens work through Riverpod notifiers and five repositories, which run the SQL on asset_manager.db and keep each asset's photo in a folder of its own. A backup is one zip with a manifest, the database and the photos; a restore checks the schema version, points the photos at this device's folder and swaps the files with a rename it can roll back."
+>
+  <Group x={200} y={120} w={600} h={420} name="AssetManager · Flutter" />
+
+  <Edge points={[[240, 188], [180, 188]]} label="tiles" at={[210, 180]} />
+  <Edge points={[[270, 216], [270, 278], [180, 278]]} label="scan, GPS" at={[262, 270]} anchor="end" />
+  <Edge points={[[440, 188], [580, 188]]} label="address lookup" at={[510, 180]} />
+  <Edge points={[[665, 160], [665, 86]]} label="reverse" at={[673, 128]} anchor="start" />
+  <Edge points={[[340, 216], [340, 290]]} label="watch, change" at={[348, 258]} anchor="start" />
+  <Edge points={[[440, 318], [580, 318]]} label="load, save, delete" at={[510, 310]} />
+  <Edge points={[[750, 312], [890, 312]]} label="sqflite" at={[820, 304]} />
+  <Edge points={[[750, 334], [830, 334], [830, 408], [890, 408]]} label="copy, delete" at={[822, 372]} anchor="end" />
+  <Edge points={[[340, 346], [340, 448], [580, 448]]} label="settings" at={[460, 440]} />
+  <Edge points={[[750, 448], [780, 448], [780, 508], [890, 508]]} both label="back up, restore" at={[835, 500]} />
+
+  <Node x={10} y={160} w={170} kind="external" name="OpenStreetMap" note="map tiles" />
+  <Node x={10} y={250} w={170} kind="external" name="Camera, GPS" note="scanner, photos, location" />
+  <Node x={580} y={30} w={170} kind="external" name="Nominatim" note="reverse geocoding" />
+  <Node x={240} y={160} w={200} name="Screens" note="go_router · flutter_map" />
+  <Node x={240} y={290} w={200} name="Riverpod" note="ListNotifier, AsyncNotifier" />
+  <Node x={580} y={160} w={170} name="GeocodingService" note="http · 1 request a second" />
+  <Node x={580} y={290} w={170} name="Repositories" note="SQL and photo files" />
+  <Node x={580} y={420} w={170} name="BackupService" note="zip backup, restore" />
+  <Node x={890} y={281} w={200} h={62} kind="store" name="SQLite" note="asset_manager.db · v2" />
+  <Node x={890} y={380} w={200} kind="file" name="Photos" note="asset_images/" />
+  <Node x={890} y={480} w={200} kind="file" name="Backup zip" note="backup.json, db, images/" />
+</Diagram>

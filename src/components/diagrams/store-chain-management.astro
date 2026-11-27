@@ -1,0 +1,48 @@
+---
+// Store Chain Management, from the Store-Chain-Management-System README and
+// code: OnlineKupovinaGUI (WinForms pages per role), OnlineKupovina.Data
+// (repositories on Dapper and MySqlConnector, Lozinke.cs with BCrypt,
+// Greske.cs), OnlineKupovinaDB (domain model) and database/01–05 (17 tables,
+// 41 procedures, 11 views, 21 triggers), run by docker-compose.yml.
+// Two deletes in KorisniciRepozitorij.cs are plain SQL, so writes go
+// "mostly" through procedures.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+import Actor from "../diagram/Actor.astro";
+---
+
+<Diagram
+  width={1080}
+  height={500}
+  label="Architecture of Store Chain Management"
+  caption="The rules live in the database. Administrators, employees and customers sign in on one screen and get the pages of their role. Pages call repositories, which use Dapper over MySqlConnector to CALL stored procedures for nearly every write and SELECT from views to read. Triggers keep stock, bill totals and the stock history in sync and record who made each change; an order is one procedure in a single transaction. The same scripts build the Docker database and the Testcontainers database of the integration tests."
+>
+  <Group x={390} y={40} w={230} h={360} name="OnlineKupovina.Data" />
+  <Group x={650} y={40} w={410} h={360} name="MySQL 8.4 · prodavnica · Docker :13306" />
+
+  <Edge points={[[148, 118], [180, 118]]} />
+  <Edge points={[[360, 108], [420, 108]]} />
+  <Edge points={[[270, 136], [270, 250]]} label="validation" at={[278, 196]} anchor="start" />
+  <Edge points={[[590, 108], [670, 108]]} label="CALL" at={[630, 100]} />
+  <Edge points={[[560, 136], [560, 208], [670, 208]]} label="SELECT" at={[615, 200]} />
+  <Edge points={[[830, 108], [960, 108], [960, 176]]} />
+  <Edge points={[[830, 208], [880, 208]]} />
+  <Edge points={[[830, 318], [960, 318], [960, 238]]} both label="on every write" at={[895, 336]} />
+  <Edge points={[[750, 430], [750, 400]]} label="init scripts" at={[758, 420]} anchor="start" />
+  <Edge points={[[505, 430], [505, 400]]} />
+
+  <Actor x={78} y={114} name="Three roles" note="admin, employee, customer" />
+  <Node x={180} y={80} w={180} name="OnlineKupovinaGUI" note="WinForms · pages per role" />
+  <Node x={180} y={250} w={180} name="OnlineKupovinaDB" note="cart, barcodes, validation" />
+  <Node x={420} y={80} w={170} name="Repositories" note="Dapper · MySqlConnector" />
+  <Node x={420} y={240} w={170} name="Lozinke" note="BCrypt hash, verify" />
+  <Node x={420} y={320} w={170} name="Greske" note="SIGNAL → readable message" />
+  <Node x={670} y={80} w={160} name="Procedures" note="41 · order in one transaction" />
+  <Node x={670} y={180} w={160} name="Views" note="11 · v_* for reading" />
+  <Node x={670} y={290} w={160} name="Triggers" note="21 · stock, totals, history" />
+  <Node x={880} y={176} w={160} h={62} kind="store" name="Tables" note="17 tables" />
+  <Node x={420} y={430} w={170} name="Tests" note="xUnit · Testcontainers" />
+  <Node x={670} y={430} w={160} kind="file" name="database/*.sql" note="schema, logic, seed" />
+</Diagram>

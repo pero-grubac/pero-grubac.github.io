@@ -1,0 +1,40 @@
+---
+// e-Mobility Rental, from the e-Mobility-Rental-System README and code
+// (src/net/etfbl/pj2): EMobility.main, DataLoader with VehicleParser and
+// RentalParser, Simulation (one thread per rental, time slot by time slot),
+// SimulationListener with SwingUtilities.invokeLater, Invoice,
+// ReportFileManager and the gui/ frames. Paths, prices and rates come from
+// app.properties.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+---
+
+<Diagram
+  width={1000}
+  height={540}
+  label="Architecture of e-Mobility Rental"
+  caption="EMobility.main loads the vehicles and rentals from CSV, opens the Swing GUI and starts the simulation on its own thread. Rentals run in time slots: every rental in a slot gets its own thread, they move across the 20×20 map at the same time, and the slot ends with a join. Each ride writes its invoice and reports its position to the GUI through invokeLater. At the end of each day and of the simulation the reports are saved, and the special reports are serialized."
+>
+  <Edge points={[[350, 96], [350, 150]]} label="load" at={[358, 128]} anchor="start" />
+  <Edge points={[[440, 68], [760, 68]]} label="Swing thread" at={[600, 60]} />
+  <Edge points={[[440, 90], [590, 90], [590, 150]]} label="daemon thread" at={[598, 124]} anchor="start" />
+  <Edge points={[[200, 178], [260, 178]]} />
+  <Edge points={[[440, 178], [500, 178]]} />
+  <Edge points={[[590, 206], [590, 280]]} label="per time slot, join" at={[598, 246]} anchor="start" />
+  <Edge points={[[680, 300], [720, 300], [720, 88], [760, 88]]} label="invokeLater" at={[712, 266]} anchor="end" />
+  <Edge points={[[590, 336], [590, 430]]} label="write" at={[598, 388]} anchor="start" />
+  <Edge points={[[500, 194], [470, 194], [470, 458], [440, 458]]} label={"daily, summary,\nspecial .ser"} at={[462, 330]} anchor="end" />
+  <Edge points={[[680, 458], [870, 458], [870, 236]]} label="read every second" at={[775, 450]} />
+  <Edge points={[[350, 486], [350, 505], [930, 505], [930, 236]]} label="special reports" at={[640, 523]} />
+
+  <Node x={260} y={40} w={180} name="EMobility.main" note="loads data, starts both" />
+  <Node x={20} y={150} w={180} kind="file" name="CSV input" note="vehicles, rentals" />
+  <Node x={260} y={150} w={180} name="DataLoader" note="parsers, discounts, invoices" />
+  <Node x={500} y={150} w={180} name="Simulation" note="rentals in time slots" />
+  <Node x={500} y={280} w={180} name="Rental threads" note="one thread per rental" />
+  <Node x={760} y={40} w={220} name="MainFrame" note="MapPanel · live 20×20 map" />
+  <Node x={760} y={180} w={220} name="Swing windows" note="vehicles, breakdowns, reports" />
+  <Node x={500} y={430} w={180} kind="file" name="Invoice/*.txt" note="one per ride" />
+  <Node x={260} y={430} w={180} kind="file" name="Report/" note="daily, summary, special" />
+</Diagram>

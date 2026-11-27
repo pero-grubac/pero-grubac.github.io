@@ -419,6 +419,15 @@ const imageAlt = `${p.title}, a ${one} by Pero Grubač. ${p.flow ? `Architecture
     font-weight: 600;
   }
 
+  /* screenshots in the body: the column's width, framed like the one at the top */
+  .body :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 1.6em 0;
+    border: var(--hairline);
+  }
+
   .body :global(li) {
     margin-bottom: 0.4em;
   }

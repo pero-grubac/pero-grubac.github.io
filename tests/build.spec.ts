@@ -45,10 +45,10 @@ const studies = pages.filter((p) => p.path.startsWith("/projects/"));
 /** Every item of a JSON-LD block, @graph or not */
 const things = (p: Page) => p.ld.flatMap((block) => block["@graph"] ?? [block]);
 
-test("32 pages: home, /apps/, the 404 and 29 case studies", () => {
+test("33 pages: home, /apps/, the 404 and 30 case studies", () => {
   expect(pages.map((p) => p.path).sort()).toEqual(expect.arrayContaining(["/", "/apps/", "/404.html"]));
-  expect(pages).toHaveLength(32);
-  expect(studies).toHaveLength(29);
+  expect(pages).toHaveLength(33);
+  expect(studies).toHaveLength(30);
 });
 
 test("every internal link resolves to a file in dist/", () => {
