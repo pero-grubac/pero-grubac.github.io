@@ -21,8 +21,7 @@ test.describe("/apps/ at 1440", () => {
     await expect(page.getByRole("link", { name: "Open DevKit", exact: true })).toHaveCount(1);
     await expect(page.getByRole("link", { name: "Source code for DevKit", exact: true })).toHaveCount(1);
     const repo = page.locator('[data-item]:has(h2:text-is("RepoHealth"))');
-    await expect(repo.locator(".private")).toHaveText("Private repo");
-    await expect(repo.locator('a[href*="github.com"]'), "RepoHealth has no repo link").toHaveCount(0);
+    await expect(repo.getByRole("link", { name: "Source code for RepoHealth", exact: true }), "RepoHealth's repo is public").toHaveCount(1);
     const alts = await page.$$eval(".gallery img", (imgs) => imgs.map((i) => (i as HTMLImageElement).alt));
     expect(alts).toHaveLength(13);
     expect(alts.filter((a) => a.length <= 20), "every screenshot has its real alt").toEqual([]);
@@ -121,7 +120,7 @@ test.describe("case studies at 1440", () => {
     await expect(open, "at its absolute URL, so it works in dev too").toHaveAttribute("href", "https://pero-grubac.github.io/devkit/");
     expect(await open.evaluate((a) => getComputedStyle(a).color), "in accent").toBe("rgb(164, 50, 31)");
     expect(await crumbs(page), "back to Browser apps").toBe("/ /apps/");
-    expect(await pager(page)).toBe("next:/projects/catan-map-generator/:Next live app →");
+    expect(await pager(page)).toBe("prev:/projects/repohealth/:← Previous live app | next:/projects/catan-map-generator/:Next live app →");
     await expect(page.locator(".flowline, .architecture, .media"), "a screenshot, no flow line, diagram or video").toHaveCount(0);
     await expect(page.locator(".shot img")).toHaveCount(1);
     const margin = await page.evaluate(() => {
@@ -142,7 +141,7 @@ test.describe("case studies at 1440", () => {
     expect(await crumbs(page)).toBe("/ /#projects?kind=mobile");
     expect(await pager(page)).toBe("next:/projects/etf-oglasi/:Next mobile app →");
     await page.goto("/projects/git-discord-bot/", { waitUntil: "networkidle" });
-    await expect(page.locator(".shot .cmds li"), "the bot's commands instead of a screenshot").toHaveCount(8);
+    await expect(page.locator(".shot .cmds li"), "the bot's commands instead of a screenshot").toHaveCount(13);
     await expect(page.locator(".primary")).toHaveCount(0);
     expect(await pager(page)).toBe("prev:/projects/secure-repository/:← Previous tool");
     await page.goto("/projects/minimal-blog/", { waitUntil: "networkidle" });
@@ -152,9 +151,9 @@ test.describe("case studies at 1440", () => {
 
   test("every case study is linked from home and /apps/", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    expect(await page.$$eval(".panel a[href^='/projects/']", (as) => as.length), "every index entry with a case study (all but RepoHealth)").toBe(26);
+    expect(await page.$$eval(".panel a[href^='/projects/']", (as) => as.length), "every index entry has a case study").toBe(27);
     await page.goto("/apps/", { waitUntil: "networkidle" });
-    expect(await page.$$eval(".gallery a[href^='/projects/']", (as) => as.length), "every /apps/ card with a case study").toBe(12);
+    expect(await page.$$eval(".gallery a[href^='/projects/']", (as) => as.length), "every /apps/ card has a case study").toBe(13);
   });
 });
 

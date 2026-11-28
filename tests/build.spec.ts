@@ -45,10 +45,10 @@ const studies = pages.filter((p) => p.path.startsWith("/projects/"));
 /** Every item of a JSON-LD block, @graph or not */
 const things = (p: Page) => p.ld.flatMap((block) => block["@graph"] ?? [block]);
 
-test("33 pages: home, /apps/, the 404 and 30 case studies", () => {
+test("34 pages: home, /apps/, the 404 and 31 case studies", () => {
   expect(pages.map((p) => p.path).sort()).toEqual(expect.arrayContaining(["/", "/apps/", "/404.html"]));
-  expect(pages).toHaveLength(33);
-  expect(studies).toHaveLength(30);
+  expect(pages).toHaveLength(34);
+  expect(studies).toHaveLength(31);
 });
 
 test("every internal link resolves to a file in dist/", () => {
@@ -88,10 +88,9 @@ test("demo videos: an AV1 WebM first, the H.264 MP4 second, both in dist/", () =
   expect(figures, "the four systems on home and on their case studies").toBe(8);
 });
 
-test("one h1 per page, and the RepoHealth repo is never linked", () => {
+test("one h1 per page", () => {
   for (const p of pages) {
     expect((p.html.match(/<h1[\s>]/g) ?? []).length, `${p.path}: one h1`).toBe(1);
-    expect(p.html, `${p.path}: no link to the RepoHealth repo`).not.toMatch(/github\.com\/pero-grubac\/[^"]*repo(sitory)?-?health/i);
   }
 });
 

@@ -43,7 +43,13 @@ test.describe("home at 1440", () => {
     await expect(page.locator('[data-filter="live"] [data-count]')).not.toHaveText("");
     expect(await hash(page)).toBe("#projects?q=react");
     await expect(page.locator("[data-status]")).toHaveText("7 projects match “react”");
-    await page.click('[data-filter="live"]');
+    // the counts just changed under the buttons, so a click can land as the row
+    // settles; picking Live again is harmless, so retry until it is pressed
+    const live = page.locator('[data-filter="live"]');
+    await expect(async () => {
+      await live.click();
+      await expect(live).toHaveAttribute("aria-pressed", "true", { timeout: 500 });
+    }).toPass();
     expect(await hash(page)).toBe("#projects?kind=live&q=react");
     expect(await visibleKinds(page), "systems leave the list under a kind filter").not.toContain("system");
     await page.fill("#q", "zzzz");
@@ -97,7 +103,7 @@ test.describe("home at 1440", () => {
     await page.click('[data-slug="fitforge"] [data-toggle]');
     await expect(page.getByRole("link", { name: "Source code for FitForge", exact: true })).toHaveCount(1);
     await expect(page.locator('a[href*="repository-health"]').first()).toBeAttached();
-    await expect(page.locator('a[href*="github.com/pero-grubac/repo"]'), "RepoHealth: no repo link").toHaveCount(0);
+    await expect(page.locator('a[href="https://github.com/pero-grubac/repository-health-monitor"]').first(), "RepoHealth: its source link").toBeAttached();
     await expect(page.locator(".stack dt")).toHaveText(["Languages", "Frameworks", "Infrastructure", "Tools"]);
     await expect(page.locator('[data-term="FastAPI"]'), "FastAPI finds Bookstore API").toHaveCount(1);
     await expect(page.locator(".stack .plain"), "every stack term has a project").toHaveCount(0);
@@ -131,7 +137,7 @@ test.describe("home at 1440", () => {
     await expect(page.locator("#d-anova"), "clicking the row again closes it").toBeHidden();
     await page.fill("#q", "discord");
     await page.click('[data-slug="git-discord-bot"] [data-toggle]');
-    await expect(page.locator("#d-git-discord-bot .cmds li"), "the bot shows its 8 commands instead of a screenshot").toHaveCount(8);
+    await expect(page.locator("#d-git-discord-bot .cmds li"), "the bot shows its 13 commands instead of a screenshot").toHaveCount(13);
     await page.fill("#q", "zzz");
     await expect(page.locator("#d-git-discord-bot"), "filtering out the open entry closes it").toBeHidden();
     await expect(page.locator('[data-slug="git-discord-bot"] [data-toggle]')).toHaveAttribute("aria-expanded", "false");
@@ -206,7 +212,7 @@ test.describe("home at 1440", () => {
     await page.click('[data-term="Java"]');
     await expect.poll(() => visible(page), { message: '"Java" finds the 4 Java projects, not JavaScript' }).toBe(4);
     await page.fill("#q", "java");
-    expect(await visible(page), 'typing "java" matches any part of a word').toBe(15);
+    expect(await visible(page), 'typing "java" matches any part of a word').toBe(14);
     expect(await hash(page)).toBe("#projects?q=java");
     await page.goto("about:blank");
     await page.goto("/#projects?tech=Java", { waitUntil: "networkidle" });
@@ -215,7 +221,7 @@ test.describe("home at 1440", () => {
     await page.press("#q", "End");
     await page.keyboard.type("S");
     expect(await page.inputValue("#q")).toBe("JavaS");
-    expect(await visible(page), "editing the box turns the technology into a typed query").toBe(11);
+    expect(await visible(page), "editing the box turns the technology into a typed query").toBe(10);
     expect(await hash(page)).toBe("#projects?q=JavaS");
   });
 
@@ -225,8 +231,8 @@ test.describe("home at 1440", () => {
     expect(hrefs).toContain("mailto:pero.grubac00@gmail.com");
     expect(hrefs).toContain("https://github.com/pero-grubac");
     expect(hrefs).toContain("https://www.linkedin.com/in/perogrubac/");
-    // the systems, every index entry but RepoHealth, and the palette
-    expect(new Set(hrefs.filter((h) => h?.startsWith("/projects/"))).size, "links to all 30 case studies").toBe(30);
+    // the systems, every index entry and the palette
+    expect(new Set(hrefs.filter((h) => h?.startsWith("/projects/"))).size, "links to all 31 case studies").toBe(31);
   });
 });
 

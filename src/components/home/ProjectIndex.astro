@@ -359,9 +359,16 @@ const tally = `${projects.length} projects: ${listOf(kinds.map((k) => countOf(k.
       top: 92px;
       max-height: calc(100vh - 112px);
       overflow: auto;
+      /* A long entry still scrolls (wheel, touch, keyboard), but without a scrollbar */
+      scrollbar-width: none;
       padding: 22px var(--s-5);
       border: var(--hairline);
       background: var(--card);
+    }
+
+    .reader::-webkit-scrollbar,
+    .panel-body::-webkit-scrollbar {
+      display: none;
     }
 
     .reader {

@@ -1,0 +1,42 @@
+---
+// RepoHealth, from the repository-health-monitor README (architecture,
+// deployment), RepoHealthMonitor.Client/vercel.json (the /api/* rewrite to
+// Render) and render.yaml (the API as a Docker web service with a /health
+// check). The database is PostgreSQL on Neon; UptimeRobot keeps the free
+// Render service awake.
+import Diagram from "../diagram/Diagram.astro";
+import Node from "../diagram/Node.astro";
+import Edge from "../diagram/Edge.astro";
+import Group from "../diagram/Group.astro";
+import Actor from "../diagram/Actor.astro";
+---
+
+<Diagram
+  width={1070}
+  height={420}
+  label="Architecture of RepoHealth"
+  caption="The browser only ever talks to Vercel, which serves the static SvelteKit app and forwards /api/* to the API on Render, so the session cookie stays first-party and there is no CORS. The API owns the database and is the only part that talks to GitHub: the background jobs read with a read-only scan token, and the admin's GitHub issues and draft pull requests go out with tokens of their own."
+>
+  <Group x={180} y={60} w={240} h={180} name="Vercel" />
+  <Group x={480} y={40} w={520} h={200} name="Render · Docker" />
+
+  <Edge points={[[98, 76], [150, 76], [150, 136], [200, 136]]} />
+  <Edge points={[[112, 148], [200, 148]]} />
+  <Edge points={[[110, 220], [150, 220], [150, 160], [200, 160]]} />
+  <Edge points={[[400, 148], [505, 148]]} label="/api/* rewrite" at={[452, 140]} />
+  <Edge points={[[610, 176], [610, 330]]} label="EF Core" at={[618, 260]} anchor="start" />
+  <Edge points={[[800, 176], [800, 361], [700, 361]]} label="scores, issues" at={[808, 270]} anchor="start" />
+  <Edge points={[[910, 176], [910, 330]]} label="read · scan token" at={[918, 300]} anchor="start" />
+  <Edge points={[[680, 120], [680, 85], [1050, 85], [1050, 358], [1040, 358]]} label="sign-in, issues, draft PRs" at={[865, 77]} />
+  <Edge points={[[410, 358], [460, 358], [460, 162], [505, 162]]} kind="side" label="/health, every 5 min" at={[452, 300]} anchor="end" />
+
+  <Actor x={65} y={80} name="Guest" note="no sign-in" />
+  <Actor x={65} y={152} name="Friend" note="passcode" />
+  <Actor x={65} y={224} name="Admin" note="GitHub sign-in" />
+  <Node x={200} y={120} w={200} name="SvelteKit app" note="static SPA · TanStack Query" />
+  <Node x={505} y={120} w={210} name="RepoHealthMonitor.Api" note="ASP.NET Core 10 · 3 audiences" />
+  <Node x={750} y={120} w={220} name="Background jobs" note="weekly scan · hourly repo sync" />
+  <Node x={520} y={330} w={180} h={62} kind="store" name="PostgreSQL" note="Neon · EF Core migrations" />
+  <Node x={860} y={330} w={180} kind="external" name="GitHub API" note="Octokit · OAuth" />
+  <Node x={230} y={330} w={180} kind="external" name="UptimeRobot" note="keeps Render awake" />
+</Diagram>

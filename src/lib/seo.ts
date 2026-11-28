@@ -1,7 +1,6 @@
 // Structured data and absolute URLs for the <Seo>
-// component. Every list here comes from the projects collection. The
-// RepoHealth repo is private, so nothing here may link to it: its
-// SoftwareApplication has no codeRepository, and it has no case study.
+// component. Every list here comes from the projects collection. A
+// project with a private repo (links.privateRepo) gets no codeRepository.
 import { site } from "./site";
 import { languagesOf, parentOf, type Project } from "./projects";
 

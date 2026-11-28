@@ -76,9 +76,9 @@ test.describe("palette at 1440", () => {
     await expect(page.locator('#pal-list a[href="https://pero-grubac.github.io/brick-breaker/"]')).toHaveCount(1);
     // every case study is in it
     const studies = await page.$$eval('#pal-list a[href^="/projects/"]', (as) => as.length);
-    expect(studies).toBe(30);
-    // RepoHealth's repo is private: its row shows its details in the index, its app opens
-    await expect(page.locator('#pal-list a:has(.label:text-is("RepoHealth"))')).toHaveAttribute("href", "/#p-repohealth");
+    expect(studies).toBe(31);
+    // a live app's row opens its case study, and its Open row the app
+    await expect(page.locator('#pal-list a:has(.label:text-is("RepoHealth"))')).toHaveAttribute("href", "/projects/repohealth/");
     await expect(page.locator('#pal-list a[target=_blank][href="https://repository-health-monitor.vercel.app/"] .label')).toContainText("Open RepoHealth app");
     await expect(page.locator('#pal-list a[href*="github.com"]')).toHaveCount(0);
   });
@@ -134,14 +134,14 @@ test.describe("palette at 1440", () => {
     expect(inSection, "the next Tab stop is in the section").toBe(true);
   });
 
-  test("a project without a case study opens its entry in the index", async ({ page }) => {
+  test("a project's row opens its case study", async ({ page }) => {
     await page.goto("/projects/devkit/", { waitUntil: "networkidle" });
     await openWithKeys(page);
     await input(page).fill("repohealth");
     expect(await selected(page)).toBe("RepoHealth");
     await page.keyboard.press("Enter");
-    await page.waitForURL("**/#p-repohealth");
-    await expect(page.locator("#d-repohealth")).toBeVisible();
+    await page.waitForURL("**/projects/repohealth/");
+    await expect(page.locator("h1")).toHaveText("RepoHealth");
   });
 
   test("Open … app opens the app in a new tab", async ({ page, context }) => {
