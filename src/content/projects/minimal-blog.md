@@ -1,5 +1,5 @@
 ---
-order: 13
+order: 17
 slug: minimal-blog
 title: "Minimal Blog"
 kind: web

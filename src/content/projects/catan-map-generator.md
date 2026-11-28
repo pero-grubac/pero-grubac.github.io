@@ -1,5 +1,5 @@
 ---
-order: 12
+order: 18
 slug: catan-map-generator
 title: "Catan Map Generator"
 kind: live

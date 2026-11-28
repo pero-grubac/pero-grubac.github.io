@@ -1,5 +1,5 @@
 ---
-order: 25
+order: 6
 slug: git-discord-bot
 title: "GitHub Discord Bot"
 kind: tool

@@ -1,5 +1,5 @@
 ---
-order: 20
+order: 24
 slug: anova
 title: "ANOVA"
 kind: desktop

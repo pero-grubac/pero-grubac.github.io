@@ -1,5 +1,5 @@
 ---
-order: 7
+order: 15
 slug: store-chain-management
 title: "Store Chain Management"
 kind: desktop

@@ -1,5 +1,5 @@
 ---
-order: 26
+order: 14
 slug: github-dashboard
 title: "GitHub Dashboard"
 kind: live

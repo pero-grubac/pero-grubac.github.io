@@ -120,7 +120,7 @@ test.describe("case studies at 1440", () => {
     await expect(open, "at its absolute URL, so it works in dev too").toHaveAttribute("href", "https://pero-grubac.github.io/devkit/");
     expect(await open.evaluate((a) => getComputedStyle(a).color), "in accent").toBe("rgb(164, 50, 31)");
     expect(await crumbs(page), "back to Browser apps").toBe("/ /apps/");
-    expect(await pager(page)).toBe("prev:/projects/repohealth/:← Previous live app | next:/projects/catan-map-generator/:Next live app →");
+    expect(await pager(page)).toBe("prev:/projects/repohealth/:← Previous live app | next:/projects/dev-timeline/:Next live app →");
     await expect(page.locator(".flowline, .architecture, .media"), "a screenshot, no flow line, diagram or video").toHaveCount(0);
     await expect(page.locator(".shot img")).toHaveCount(1);
     const margin = await page.evaluate(() => {
@@ -139,11 +139,11 @@ test.describe("case studies at 1440", () => {
     await page.goto("/projects/fitforge/", { waitUntil: "networkidle" });
     await expect(page.locator(".primary a")).toContainText("Download APK");
     expect(await crumbs(page)).toBe("/ /#projects?kind=mobile");
-    expect(await pager(page)).toBe("next:/projects/etf-oglasi/:Next mobile app →");
+    expect(await pager(page)).toBe("next:/projects/asset-manager/:Next mobile app →");
     await page.goto("/projects/git-discord-bot/", { waitUntil: "networkidle" });
     await expect(page.locator(".shot .cmds li"), "the bot's commands instead of a screenshot").toHaveCount(13);
     await expect(page.locator(".primary")).toHaveCount(0);
-    expect(await pager(page)).toBe("prev:/projects/secure-repository/:← Previous tool");
+    expect(await pager(page)).toBe("next:/projects/secure-repository/:Next tool →");
     await page.goto("/projects/minimal-blog/", { waitUntil: "networkidle" });
     expect(await pager(page), "the second web project, after Bookstore API").toBe("prev:/projects/bookstore-api/:← Previous web project");
     await expect(page.locator(".margin a[href*='github.com']")).toHaveCount(1);

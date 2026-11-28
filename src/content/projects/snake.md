@@ -1,5 +1,5 @@
 ---
-order: 17
+order: 31
 slug: snake
 title: "Snake (Blavor)"
 kind: desktop

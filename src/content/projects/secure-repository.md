@@ -1,5 +1,5 @@
 ---
-order: 23
+order: 16
 slug: secure-repository
 title: "Secure Repository"
 kind: tool

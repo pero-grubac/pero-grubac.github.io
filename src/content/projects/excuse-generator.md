@@ -1,5 +1,5 @@
 ---
-order: 31
+order: 27
 slug: excuse-generator
 title: "excuse.exe"
 kind: live

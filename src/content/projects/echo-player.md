@@ -1,5 +1,5 @@
 ---
-order: 22
+order: 25
 slug: echo-player
 title: "Echo Player"
 kind: desktop

@@ -1,5 +1,5 @@
 ---
-order: 27
+order: 10
 slug: store-management
 title: "Store Management"
 kind: desktop

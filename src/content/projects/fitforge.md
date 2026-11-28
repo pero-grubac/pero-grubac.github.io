@@ -1,5 +1,5 @@
 ---
-order: 6
+order: 8
 slug: fitforge
 title: "FitForge"
 kind: mobile

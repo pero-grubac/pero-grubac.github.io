@@ -1,5 +1,5 @@
 ---
-order: 16
+order: 20
 slug: brick-breaker
 title: "Brick Breaker"
 kind: live

@@ -1,5 +1,5 @@
 ---
-order: 8
+order: 11
 slug: etf-oglasi
 title: "ETF Oglasi"
 kind: mobile

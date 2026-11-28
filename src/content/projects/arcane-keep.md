@@ -1,5 +1,5 @@
 ---
-order: 18
+order: 21
 slug: arcane-keep
 title: "Arcane Keep"
 kind: live

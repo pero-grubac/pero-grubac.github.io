@@ -1,5 +1,5 @@
 ---
-order: 9
+order: 7
 slug: bookstore-api
 title: "Bookstore API"
 kind: web

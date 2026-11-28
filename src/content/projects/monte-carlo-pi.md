@@ -1,5 +1,5 @@
 ---
-order: 21
+order: 26
 slug: monte-carlo-pi
 title: "Monte Carlo π"
 kind: desktop
